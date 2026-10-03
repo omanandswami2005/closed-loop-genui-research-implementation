@@ -12,6 +12,11 @@ Configuration (environment):
     GENUI_GEMINI_TIMEOUT   seconds (default 30)
     GENUI_GEMINI_THINKING  thinking level LOW or HIGH (default LOW; HIGH is
                            about 3x slower)
+    GENUI_GEMINI_MODE      "free": the model chooses the layout that meets the
+                           budget; "guided": the deterministic planner
+                           (``plant.plan``) fixes the layout and the model
+                           writes the content. Guided removes the model's
+                           budget arithmetic, which is most of the latency.
 
 Auth: on Cloud Run the access token comes from the metadata server. Elsewhere
 no header is added, which suits an environment whose egress proxy injects
@@ -23,6 +28,7 @@ from __future__ import annotations
 import json
 import os
 import random
+import threading
 import time
 from dataclasses import dataclass
 
@@ -31,7 +37,7 @@ import httpx
 from .ast_schema import SCHEMA_VERSION, Equation, UIDocument
 from . import metric
 from .metric import DELTA_MAX, DELTA_MIN, RHO_MAX, RHO_MIN
-from .plant import EPSILON, Emission
+from .plant import EPSILON, Emission, plan
 from .policy import PolicyDecision
 
 _METADATA_TOKEN = "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
@@ -71,6 +77,18 @@ Pedagogical decisions you must respect:
 Return exactly: {{"schema_version": "{SCHEMA_VERSION}", "equation": {{"a": {eq.a}, "b": {eq.b}, "c": {eq.c}}}, "root": <node>}}"""
 
 
+def _layout(budget: float, decision: PolicyDecision) -> str:
+    bp = plan(budget, decision)
+    return (
+        "\n\nLayout to realize exactly (it already meets the budget): a primary manipulative with "
+        f"alpha = {bp.alpha} and exactly {bp.primary} interactive elements; "
+        + (f"a SteppedHintAccordion with exactly {bp.hint_tiers} hints; " if bp.hint_tiers else "no hints; ")
+        + (f"a WorkedSolutionStep with {bp.worked_steps} steps; " if bp.worked_steps else "no worked example; ")
+        + f"total tree depth exactly {bp.depth} (wrap in Stacks with a MathText prompt for extra depth). "
+        "Write the instructional content (hints, worked steps, prompts) yourself."
+    )
+
+
 @dataclass(frozen=True)
 class GeminiConfig:
     project: str = os.environ.get("GOOGLE_CLOUD_PROJECT", "omni-505707")
@@ -78,6 +96,7 @@ class GeminiConfig:
     model: str = os.environ.get("GENUI_GEMINI_MODEL", "gemini-3.7-flash")
     timeout_s: float = float(os.environ.get("GENUI_GEMINI_TIMEOUT", "30"))
     thinking_level: str = os.environ.get("GENUI_GEMINI_THINKING", "LOW")
+    mode: str = os.environ.get("GENUI_GEMINI_MODE", "free")
     temperature: float = 0.4
 
     @property
@@ -94,7 +113,16 @@ class GeminiPlant:
         self.config = config or GeminiConfig()
         self.client = client or httpx.Client(timeout=self.config.timeout_s)
         self._token: tuple[str, float] | None = None
-        self.last_latency_ms: float | None = None
+        self._local = threading.local()  # per-thread, so concurrent callers read their own call
+
+    @property
+    def last_latency_ms(self) -> float | None:
+        return getattr(self._local, "latency_ms", None)
+
+    @property
+    def last_usage(self) -> dict:
+        """Token counts of this thread's last call (prompt, output, thinking)."""
+        return getattr(self._local, "usage", {})
 
     def _headers(self) -> dict[str, str]:
         headers = {"Content-Type": "application/json"}
@@ -111,8 +139,11 @@ class GeminiPlant:
         return headers
 
     def generate(self, budget: float, decision: PolicyDecision, eq: Equation, rng: random.Random) -> Emission:
+        prompt = _prompt(budget, decision, eq)
+        if self.config.mode == "guided":
+            prompt += _layout(budget, decision)
         body = {
-            "contents": [{"role": "user", "parts": [{"text": _prompt(budget, decision, eq)}]}],
+            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {
                 "responseMimeType": "application/json",
                 "temperature": self.config.temperature,
@@ -121,16 +152,24 @@ class GeminiPlant:
             },
         }
         t0 = time.perf_counter()
+        self._local.usage = {}
         try:
             r = self.client.post(self.config.url, headers=self._headers(), json=body)
             r.raise_for_status()
-            parts = r.json()["candidates"][0]["content"]["parts"]
+            data = r.json()
+            usage = data.get("usageMetadata", {})
+            self._local.usage = {
+                "prompt_tokens": usage.get("promptTokenCount", 0),
+                "output_tokens": usage.get("candidatesTokenCount", 0),
+                "thought_tokens": usage.get("thoughtsTokenCount", 0),
+            }
+            parts = data["candidates"][0]["content"]["parts"]
             text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
             fault = None
         except (httpx.HTTPError, KeyError, IndexError, ValueError) as exc:
             status = exc.response.status_code if isinstance(exc, httpx.HTTPStatusError) else None
             text, fault = "", f"plant_error: {type(exc).__name__}" + (f" {status}" if status else "")
-        self.last_latency_ms = (time.perf_counter() - t0) * 1000
+        self._local.latency_ms = (time.perf_counter() - t0) * 1000
         return Emission(text, fault)
 
 

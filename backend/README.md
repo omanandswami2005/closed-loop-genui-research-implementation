@@ -122,22 +122,33 @@ Cloud Run the token comes from the metadata server). Its output goes through
 the same `admit` gate as the surrogate's.
 
 ```
-python -m closedloop.sim.gemini_eval --out ../results/gemini --n 300
+python -m closedloop.sim.gemini_eval --out ../results/gemini --n 300 --workers 4
+python -m closedloop.sim.gemini_eval --out ../results/gemini_guided --n 300 --workers 4 --mode guided
 ```
 
-300 calls at budgets drawn uniformly from [0.02, 0.98], thinking level LOW
-(`results/gemini/summary.json`):
+Two modes (`GENUI_GEMINI_MODE`). In **free** mode (the default) the model
+chooses a layout that meets the budget from the M_I formula. In **guided**
+mode the deterministic planner (`plant.plan`) fixes the layout (primary
+manipulative, interactive count, hints, worked steps, depth) and the model
+writes the instructional content. 300 calls each, budgets drawn uniformly
+from [0.02, 0.98], thinking level LOW, 4 concurrent calls, same seed:
 
-| Measure | Value |
-|---|---|
-| Schema compliance | 0.937 (19 rejections: 9 transport errors or timeouts, 10 trees with no interactive element) |
-| Drift, valid but off budget by > 0.05 | 2.8% of valid outputs |
-| Within budget overall | 0.91 (fallback 0.09) |
-| abs(M_I - M_I*), valid outputs | median 0.012, mean 0.014 |
-| Latency | p50 5.6 s, p95 7.8 s |
+| Measure | Free | Guided |
+|---|---|---|
+| Schema compliance | 0.947 (6 transport errors, 10 trees with no interactive element) | 0.987 (4 transport errors, 0 content errors) |
+| Drift, valid but off budget by > 0.05 | 2.8% of valid outputs | 0% |
+| Within budget overall (fallback) | 0.92 (0.08) | 0.987 (0.013) |
+| abs(M_I - M_I*), valid outputs | median 0.012, mean 0.014 | median 0.007, mean 0.009 |
+| Latency | p50 7.7 s, p95 18.6 s | p50 2.7 s, p95 5.1 s |
+| Thinking / output tokens, median | 696 / 210 | 0 / 215 |
 
-Level 1 is the weakest (schema 0.85, budget 0.82): near the budget floor
-the model sometimes emits a screen with nothing to interact with.
+Most of the free-mode latency is the model's hidden reasoning about the
+budget arithmetic (about 700 thinking tokens); a minimal call to the same
+endpoint takes about 1.2 s. Given the layout, the model stops thinking.
+In free mode level 1 is the weakest (schema 0.87, budget 0.85): near the
+budget floor the model sometimes emits a screen with nothing to interact
+with. An earlier free-mode run (p50 5.6 s) read latencies from a shared
+attribute across threads; latency is now recorded per thread.
 
 ## Recovery metrics
 

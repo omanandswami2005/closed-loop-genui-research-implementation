@@ -16,6 +16,7 @@ import csv
 import json
 import random
 import statistics
+from dataclasses import replace
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -39,6 +40,7 @@ def _call(i: int, seed: int, plant: GeminiPlant) -> dict:
     eq = _problem(rng)
     emission = plant.generate(budget, decision, eq, rng)
     latency = plant.last_latency_ms
+    usage = plant.last_usage
     adm = admit(emission.text, budget, decision, eq)
     m_i = None
     if adm.schema_valid:
@@ -55,6 +57,9 @@ def _call(i: int, seed: int, plant: GeminiPlant) -> dict:
         "equation": eq.latex(),
         "latency_ms": round(latency or 0.0, 1),
         "plant_error": emission.fault or "",
+        "prompt_tokens": usage.get("prompt_tokens", ""),
+        "output_tokens": usage.get("output_tokens", ""),
+        "thought_tokens": usage.get("thought_tokens", ""),
         "schema_valid": adm.schema_valid,
         "m_i": "" if m_i is None else round(m_i, 4),
         "abs_error": "" if m_i is None else round(abs(m_i - budget), 4),
@@ -70,10 +75,12 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    ap.add_argument("--mode", choices=("free", "guided"), default="free")
     args = ap.parse_args(argv)
     args.out.mkdir(parents=True, exist_ok=True)
 
-    plant = GeminiPlant()
+    cfg = replace(GeminiConfig(), mode=args.mode)
+    plant = GeminiPlant(cfg)
     with ThreadPoolExecutor(args.workers) as pool:
         rows = list(pool.map(lambda i: _call(i, args.seed, plant), range(args.n)))
     with (args.out / "calls.csv").open("w", newline="") as fh:
@@ -98,11 +105,11 @@ def main(argv: list[str] | None = None) -> None:
                 "schema_compliance": sum(r["schema_valid"] for r in sub) / len(sub),
                 "budget_compliance": sum(r["within_budget"] for r in sub) / len(sub),
             }
-    cfg = GeminiConfig()
     summary = {
         "model": cfg.model,
         "location": cfg.location,
         "thinking_level": cfg.thinking_level,
+        "mode": cfg.mode,
         "temperature": cfg.temperature,
         "seed": args.seed,
         "calls": n,
@@ -117,6 +124,8 @@ def main(argv: list[str] | None = None) -> None:
         "abs_error_mean": statistics.fmean(errors) if errors else None,
         "latency_ms_p50": percentile(latencies, 0.50) if latencies else None,
         "latency_ms_p95": percentile(latencies, 0.95) if latencies else None,
+        "thought_tokens_median": statistics.median(r["thought_tokens"] for r in rows if r["thought_tokens"] != "") if latencies else None,
+        "output_tokens_median": statistics.median(r["output_tokens"] for r in rows if r["output_tokens"] != "") if latencies else None,
         "schema_rejections": reasons,
         "by_level": by_level,
     }

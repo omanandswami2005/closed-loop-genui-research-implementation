@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.7-flash",
+  "location": "global",
+  "thinking_level": "LOW",
+  "mode": "guided",
+  "temperature": 0.4,
+  "seed": 20261003,
+  "calls": 300,
+  "epsilon": 0.05,
+  "plant_errors": 4,
+  "schema_compliance": 0.9866666666666667,
+  "malformed_rate": 0.013333333333333308,
+  "budget_compliance": 0.9866666666666667,
+  "drift_rate_given_valid": 0.0,
+  "fallback_rate": 0.013333333333333334,
+  "abs_error_median": 0.00675,
+  "abs_error_mean": 0.00924831081081081,
+  "latency_ms_p50": 2734.8999999999996,
+  "latency_ms_p95": 5065.25,
+  "thought_tokens_median": 0.0,
+  "output_tokens_median": 215.0,
+  "schema_rejections": {
+    "schema: json_invalid: Invalid JSON: EOF while parsing a value at line 1 column 0": 4
+  },
+  "by_level": {
+    "1": {
+      "calls": 78,
+      "schema_compliance": 0.9871794871794872,
+      "budget_compliance": 0.9871794871794872
+    },
+    "2": {
+      "calls": 61,
+      "schema_compliance": 1.0,
+      "budget_compliance": 1.0
+    },
+    "3": {
+      "calls": 78,
+      "schema_compliance": 0.9871794871794872,
+      "budget_compliance": 0.9871794871794872
+    },
+    "4": {
+      "calls": 83,
+      "schema_compliance": 0.9759036144578314,
+      "budget_compliance": 0.9759036144578314
+    }
+  }
+}
