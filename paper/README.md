@@ -7,4 +7,4 @@ pdflatex main && bibtex main && pdflatex main && pdflatex main
 ```
 
 References come from `../docs/references.bib`; see `../docs/source-check.md` for which claim each source supports.
-Red `[TBD: ...]` marks are numbers or details that wait on the final benchmark run.
+Every number comes from `../results/`. Charts are regenerated with `python3 figures/make_figures.py`; the architecture diagram is TikZ (`figures/architecture.tex`); the two screens are cropped captures of the testbed client.

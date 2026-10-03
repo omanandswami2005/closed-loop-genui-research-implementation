@@ -1,0 +1,25 @@
+% Architecture of the closed loop (TikZ, grayscale).
+\begin{tikzpicture}[
+  font=\scriptsize, >=latex, node distance=5mm and 8.5mm,
+  box/.style={draw, rounded corners=1.5pt, align=center, minimum height=8mm, text width=11.5mm, inner sep=1pt},
+  ext/.style={box, fill=black!8},
+  lab/.style={font=\tiny, inner sep=1pt}]
+\node[ext] (learner) {Learner\\(simulated)};
+\node[box, right=of learner] (bkt) {Mastery\\estimator\\(BKT)};
+\node[box, right=of bkt] (pid) {PID\\governor};
+\node[box, right=of pid] (pol) {Fast\\policy};
+\node[box, below=10mm of pol] (plant) {Generative\\plant\\(Gemini)};
+\node[box, left=of plant] (gate) {Validation\\gate};
+\node[box, left=of gate] (render) {Client\\renderer};
+\node[box, below=4mm of gate, text width=18mm, minimum height=5.5mm] (fb) {Fallback catalog};
+\draw[->] (learner) -- node[lab, above]{$r_n$} (bkt);
+\draw[->] (bkt) -- node[lab, above]{$P(L_n)$} (pid);
+\draw[->] (pid) -- node[lab, above]{$M_I^*,\ell_n$} (pol);
+\draw[->] (pol) -- node[lab, right]{affordances} (plant);
+\draw[->] (plant) -- node[lab, above]{JSON} (gate);
+\draw[->] (gate) -- node[lab, above]{pass} (render);
+\draw[->] (gate) -- node[lab, right]{fail} (fb);
+\draw[->] (fb) -| (render);
+\draw[->] (render) -| node[lab, pos=0.75, left]{screen} (learner);
+\draw[->, dashed] (pid) -- node[lab, right]{$M_I^*$} (gate);
+\end{tikzpicture}

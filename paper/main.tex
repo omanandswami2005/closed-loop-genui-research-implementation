@@ -7,6 +7,8 @@
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{xurl}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 
 % Placeholder for numbers that must come from the confirmed benchmark run.
@@ -31,26 +33,20 @@ Intelligent tutoring systems estimate what a learner knows but present a
 fixed interface, while generative user interfaces (GenUI) synthesize
 interfaces at runtime without any model of the learner. We propose a
 closed-loop architecture that couples the two. Bayesian Knowledge Tracing
-estimates mastery of a knowledge component; a discrete-time PID governor with
-anti-windup clamping and a filtered derivative converts the mastery deficit
-into a structural complexity budget; a fast policy selects discrete
-scaffolding affordances; and a foundation model emits a declarative JSON
+estimates mastery; a PID governor with anti-windup and a filtered derivative
+converts the mastery deficit into a structural complexity budget; a fast
+policy selects scaffolding affordances; and a foundation model emits a JSON
 component tree that must satisfy the budget, with a deterministic fallback
-when schema or budget checks fail. A computable metric of interface
-complexity closes the loop between the budget and the rendered tree. We
-evaluate the architecture in silico on 1,000 synthetic learner trajectories
-drawn from three learner archetypes and replayed through four experimental
-arms. We report constraint adherence, interface jitter, recovery after error
-streaks and ground-truth over- and underload. The closed loop keeps the
-rendered interface within 0.012 of the governor's budget on average, against 0.131 for unconstrained GenUI and 0.123 for a
-rule-based baseline, with 3.5 times less jitter than unconstrained GenUI.
-Unconstrained GenUI matches latent mastery slightly better but skips levels
-three times as often. We further show that
-standard BKT saturates after long success runs, so that a subsequent streak
-of errors leaves the interface unchanged, and evaluate forgetting and a
-CUSUM lapse detector as remedies; the detector cuts overload in a
-forgetting cohort by 25\%. In 300 calls to the real model, 3.4\% of outputs
-were malformed and 2.8\% of valid outputs missed the budget, against
+when schema or budget checks fail. We evaluate the architecture in silico on
+1,000 synthetic learners from three archetypes, replayed through four arms.
+The closed loop keeps the rendered interface within 0.012 of the governor's
+budget on average, against 0.131 for unconstrained GenUI and 0.123 for a
+rule-based baseline, with 3.5 times less jitter than unconstrained GenUI,
+which matches latent mastery slightly better but skips levels three times as
+often. Standard BKT saturates after long success runs, so a later streak of
+errors leaves the interface unchanged; a CUSUM lapse detector cuts overload
+in a forgetting cohort by 25\%. In 300 calls to the real model, 3.4\% of
+outputs were malformed and 2.8\% of valid outputs missed the budget, against
 simulated rates of 3\% and 15\%. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
@@ -145,7 +141,17 @@ reliable in practice \cite{geng2025jsonschemabench}.
 % ---------------------------------------------------------------------------
 \section{Architecture}
 
-The loop has four layers: a psychometric
+\begin{figure}[t]
+\centering
+\input{figures/architecture.tex}
+\caption{The closed loop. The governor's budget $M_I^*$ drives both the
+policy and the gate (dashed); a tree that fails the schema or budget check
+is replaced from a precompiled fallback catalog. The learner (shaded) is
+simulated in this work.}
+\label{fig:arch}
+\end{figure}
+
+The loop has four layers (Fig.~\ref{fig:arch}): a psychometric
 estimator, a complexity governor, a fast policy, and a generative plant whose
 output passes a validation gate before a deterministic client renders it.
 
@@ -228,7 +234,19 @@ drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
 directly and never executes generated code. Each emission is parsed against
 the schema; if parsing fails, or if
 $|M_I-M_I^*|>\varepsilon$ with $\varepsilon=0.05$, a precompiled fallback
-tree nearest to the budget is rendered instead.
+tree nearest to the budget is rendered instead. A web client renders the
+trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[height=5.0cm]{figures/screen_l1.png}\hfill
+\includegraphics[height=5.0cm]{figures/screen_l4.png}
+\caption{Two screens rendered by the client. Left: a level-1 tree emitted by
+Gemini 3.7 Flash for $P(L)=0.15$, a worked example with the balance-scale
+manipulative. Right: a level-4 tree from the surrogate plant for
+$P(L)=0.999$, a symbolic workspace with graph verification.}
+\label{fig:screens}
+\end{figure*}
 
 \subsection{Structural complexity metric}
 For a tree with $\rho$ interactive elements, abstraction level $\alpha$ and
@@ -309,7 +327,7 @@ content-malformed rate of 3.4\%. Of the 281 valid trees, eight (2.8\%) missed
 the budget by more than $\varepsilon$; the median error was 0.012. Counting
 all failures, 91\% of calls met the budget and 9\% would fall back. Compliance
 was lowest at level 1 (82\% within budget) and 93--95\% at levels 2--4.
-Median latency was 5.6\,s (95th percentile 7.8\,s). The surrogate's 3\%
+Median latency of completed calls was 5.6\,s (95th percentile 7.8\,s). The surrogate's 3\%
 malformed rate is therefore close to the measured one, and its 15\% drift
 rate is a stress setting about five times the measured rate.
 
@@ -341,7 +359,8 @@ normal-approximation 95\% confidence intervals over the 1,000 learners.
 \begin{table*}[t]
 \centering
 \caption{Main results and ablations on the test cohort (1,000 learners, 40 items each).
-$\Delta M$ is measured against the closed-loop reference budget. Overload,
+$\Delta M$ and ``within $\varepsilon$'' are measured against the closed-loop
+reference budget; every closed-loop variant meets its own budget at every step. Overload,
 underload and ITAE use the latent learner state and exist only in simulation.
 Fallback rates follow from the surrogate's fault rates; its drift rate is
 about five times that measured on the real model.}
@@ -355,15 +374,24 @@ Unconstrained GenUI & 0.131 (0.128--0.134) & 0.321 & 0.123 & 2.06 & 0.024 & 0.05
 Rule-based & 0.123 (0.119--0.128) & 0.596 & 0.025 & 0.00 & 0.000 & 0.245 & 0.180 & --\\
 Closed loop & 0.0122 (0.0119--0.0124) & 1.000 & 0.035 & 0.67 & 0.002 & 0.121 & 0.073 & 0.154\\
 \midrule
-\quad no derivative filter & 0.031 (0.030--0.033) & 1.000 & 0.044 & 1.19 & 0.002 & 0.124 & 0.076 & 0.156\\
-\quad no anti-windup & 0.107 (0.102--0.112) & 1.000 & 0.024 & 0.42 & 0.001 & 0.217 & 0.174 & 0.159\\
-\quad one-level slew limit & 0.025 (0.023--0.026) & 1.000 & 0.034 & 0.02 & 0.002 & 0.121 & 0.073 & 0.153\\
+\quad no derivative filter & 0.031 (0.030--0.033) & 0.811 & 0.044 & 1.19 & 0.002 & 0.124 & 0.076 & 0.156\\
+\quad no anti-windup & 0.107 (0.102--0.112) & 0.549 & 0.024 & 0.42 & 0.001 & 0.217 & 0.174 & 0.159\\
+\quad one-level slew limit & 0.025 (0.023--0.026) & 0.875 & 0.034 & 0.02 & 0.002 & 0.121 & 0.073 & 0.153\\
 \bottomrule
 \end{tabular}
 \end{table*}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/results.pdf}
+\caption{Main comparison on the test cohort (means with 95\% CIs). The
+closed loop (dark) has the lowest constraint error; the rule-based arm is
+smoother but underloads (Table~\ref{tab:main}).}
+\label{fig:results}
+\end{figure}
+
 \subsection{Main comparison}
-Table~\ref{tab:main} shows that the closed loop keeps the rendered interface
+Table~\ref{tab:main} and Fig.~\ref{fig:results} show that the closed loop keeps the rendered interface
 within 0.012 of its budget on average. Every rendered tree is within
 $\varepsilon$, but this holds by construction, since the gate substitutes a
 fallback whenever a tree misses the budget; with the surrogate's 15\% drift rate,
@@ -378,16 +406,17 @@ is mixed. Unconstrained GenUI has the lowest ITAE mismatch (0.043 against
 0.073) and the least underload (5.4\% of steps against 12.1\%), but shows an
 abstract interface to a learner who does not know the skill twelve times as
 often (2.4\% against 0.2\%). The rule-based arm underloads on 24.5\% of steps
-and the static arm on 80\%. After a streak of five or more errors, the
-closed loop returns to its pre-streak level after a median of 5 items
-(51 events), the rule-based arm after 12 (19 events).
+and the static arm on 80\%. After a streak of five or more errors that lowered the level, the
+closed loop returned to its pre-streak level within the horizon in 34 of
+51 cases, after a median of 5 items; the rule-based arm did so in 9 of
+19 cases, after a median of 12.
 
 \subsection{Ablations}
 Removing the derivative filter raises jitter from 0.035 to 0.044 and nearly
 doubles level skips (1.19 per run). Removing anti-windup lets the integral
 grow without bound: underload rises from 12.1\% to 21.7\%, only 84\% of
 learners reach level 4 against 95\%, and median recovery after an error
-streak grows from 5 to 14 items. In a scripted probe of prolonged struggle,
+streak grows from 5 to 14 items (only 4 recoveries within the horizon). In a scripted probe of prolonged struggle,
 the unclamped integral reached 22.9 (clamp 1.25) and the interface never
 reached level 4. A one-level slew limit removes nearly all skips (0.02 per
 run) and leaves the ground-truth measures unchanged.
@@ -419,8 +448,16 @@ which resets the estimate to 0.5 when the sum exceeds $h=6.5$. Because
 it accumulates only when a confident estimate is contradicted, isolated
 slips are absorbed. The tracker with forgetting uses $P(F)=0.02$.
 
-In a scripted probe with a long success run followed by five errors, the
-plain closed loop never lowers the interface; the CUSUM variant drops a
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/probe.pdf}
+\caption{Scripted probe: 15 correct responses, five errors, then correct
+again. With plain BKT the estimate is saturated and the budget never moves.}
+\label{fig:probe}
+\end{figure}
+
+In a scripted probe with fifteen correct responses followed by five errors
+(Fig.~\ref{fig:probe}), the plain closed loop never lowers the interface; the CUSUM variant drops a
 level 3 items after the streak begins and forgetting after 1. To test this
 at scale, a second cohort of 1,000 learners can forget the skill with
 probability 0.02--0.06 per item. There the plain closed loop shows an
@@ -459,11 +496,11 @@ We coupled a learner model to a generative interface through a PID
 governor, a fast policy and a validation gate, and tested the loop in
 simulation. The governor's budget is met at every step, with the gate
 absorbing plant faults, and the interface changes 3.5 times less than an
-unconstrained generator while rarely showing abstract screens to learners
-who have not mastered the skill. Anti-windup and the derivative filter each
+unconstrained generator while rarely showing abstract screens to simulated
+learners who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
-little cost, while forgetting overcorrects. In 300 real calls the
+a modest cost in jitter, while forgetting overcorrects. In 300 real calls the
 generative model met the budget 91\% of the time. The next steps are
 running full trajectories with the real model, a learned fast policy
 trained on real interaction data, and a study with learners.
