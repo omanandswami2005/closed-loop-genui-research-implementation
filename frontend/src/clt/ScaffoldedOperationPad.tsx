@@ -80,7 +80,7 @@ export function ScaffoldedOperationPad({ node }: { node: ScaffoldedOperationPadN
               onKeyDown={(e) => e.key === "Enter" && op && run(op, parseValue())}
               placeholder="value"
               aria-label="value to apply to both sides"
-              className="w-24 border border-zinc-800 px-2 py-1 font-mono text-sm outline-none focus:border-cobalt"
+              className="w-24 border border-zinc-800 px-2 py-1 font-mono text-sm focus:border-cobalt"
             />
             <Btn disabled={!op || busy} onClick={() => op && run(op, parseValue())}>
               apply to both sides

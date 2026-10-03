@@ -40,7 +40,7 @@ export function SymbolicEquationWorkspace({ node }: { node: SymbolicEquationWork
                 onKeyDown={(e) => e.key === "Enter" && check(i)}
                 placeholder={i === 0 ? "e.g. 3x = 15" : ""}
                 aria-label={`step ${i + 1}`}
-                className="flex-1 border border-zinc-800 px-2 py-1 font-mono text-sm outline-none focus:border-cobalt"
+                className="flex-1 border border-zinc-800 px-2 py-1 font-mono text-sm focus:border-cobalt"
               />
               <span className={`w-20 font-mono text-[11px] ${color}`} title={c?.message}>
                 {mark}

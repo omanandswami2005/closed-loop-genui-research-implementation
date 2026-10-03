@@ -125,7 +125,7 @@ def _worked_steps(eq: Equation, n: int) -> WorkedSolutionStep:
     rhs = eq.c - eq.b
     steps = [
         WorkedStep(
-            operation=f"subtract {eq.b} from both sides",
+            operation=f"subtract {eq.b} from both sides" if eq.b >= 0 else f"add {-eq.b} to both sides",
             result_latex=f"{eq.a}x = {rhs}",
             explanation="Undo the constant term so only the x-term remains on the left.",
         ),
@@ -136,7 +136,7 @@ def _worked_steps(eq: Equation, n: int) -> WorkedSolutionStep:
         ),
         WorkedStep(
             operation="substitute back",
-            result_latex=f"{eq.a}\\cdot\\frac{{{rhs}}}{{{eq.a}}} + {eq.b} = {eq.c}",
+            result_latex=f"{eq.a}\\cdot\\frac{{{rhs}}}{{{eq.a}}} {'+' if eq.b >= 0 else '-'} {abs(eq.b)} = {eq.c}",
             explanation="Check that both sides of the balance are equal.",
         ),
     ]

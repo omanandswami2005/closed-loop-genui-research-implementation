@@ -46,8 +46,18 @@ export function CartesianVerificationPlane({ node }: { node: CartesianVerificati
         className={`w-full border border-zinc-300 bg-white ${node.draggable ? "cursor-ew-resize" : ""}`}
         onPointerDown={(e) => node.draggable && (e.currentTarget.setPointerCapture(e.pointerId), drag(e.clientX))}
         onPointerMove={(e) => node.draggable && e.buttons === 1 && drag(e.clientX)}
-        role="img"
-        aria-label="Cartesian plane"
+        onKeyDown={(e) => {
+          const step = { ArrowLeft: -0.1, ArrowRight: 0.1, ArrowDown: -1, ArrowUp: 1 }[e.key];
+          if (!node.draggable || step === undefined) return;
+          e.preventDefault();
+          setProbe((p) => Math.round(Math.min(10, Math.max(-10, p + step)) * 10) / 10);
+        }}
+        tabIndex={node.draggable ? 0 : undefined}
+        role={node.draggable ? "slider" : "img"}
+        aria-label={node.draggable ? "probe x on the Cartesian plane (arrow keys move it)" : "Cartesian plane"}
+        aria-valuemin={node.draggable ? -10 : undefined}
+        aria-valuemax={node.draggable ? 10 : undefined}
+        aria-valuenow={node.draggable ? probe : undefined}
       >
         {Array.from({ length: 21 }, (_, i) => {
           const gx = Math.round(-xr + panX) + i * Math.max(1, Math.round(xr / 10));

@@ -17,7 +17,7 @@ export function TracePlot({ history, responses, setpoint }: { history: Telemetry
   ] as const;
   return (
     <figure className="border border-zinc-800 bg-slatebase">
-      <figcaption className="flex justify-between border-b border-zinc-800 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-slate-500">
+      <figcaption className="flex justify-between border-b border-zinc-800 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-slate-400">
         <span>trace</span>
         <span className="flex gap-3 normal-case tracking-normal">
           {series.map((s) => (

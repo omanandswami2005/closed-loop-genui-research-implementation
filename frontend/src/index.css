@@ -29,3 +29,9 @@ body {
 .katex {
   font-size: 1.05em;
 }
+
+/* Keyboard focus: a square cobalt ring on every control (inputs keep their border change too). */
+:focus-visible {
+  outline: 2px solid var(--color-cobalt);
+  outline-offset: 2px;
+}

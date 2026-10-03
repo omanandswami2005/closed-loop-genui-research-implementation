@@ -79,7 +79,7 @@ export function App() {
           <h1 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Closed-loop GenUI · linear equations testbed</h1>
         </div>
         <div className="flex items-center gap-2 font-mono text-xs">
-          <span className="text-slate-500">plant</span>
+          <span className="text-slate-400">plant</span>
           {(["surrogate", "gemini"] as const).map((p) => (
             <button
               key={p}
@@ -152,7 +152,7 @@ export function App() {
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="x = …"
-                className="flex-1 border border-zinc-800 px-2 py-1 font-mono text-sm outline-none focus:border-cobalt"
+                className="flex-1 border border-zinc-800 px-2 py-1 font-mono text-sm focus:border-cobalt"
               />
               <Btn variant="primary" disabled={busy || !answer.trim()} onClick={() => void submit(answer)}>
                 {busy ? "generating…" : "submit"}
@@ -166,27 +166,27 @@ export function App() {
 
           {t && (
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 border border-zinc-800 p-3 font-mono text-xs">
-              <dt className="col-span-2 mb-1 text-[10px] uppercase tracking-[0.14em] text-slate-500">policy (system 1)</dt>
-              <dt className="text-slate-500">mode</dt>
+              <dt className="col-span-2 mb-1 text-[10px] uppercase tracking-[0.14em] text-slate-400">policy (system 1)</dt>
+              <dt className="text-slate-400">mode</dt>
               <dd>{MODE_LABEL[t.decision.scaffolding_mode]}</dd>
-              <dt className="text-slate-500">balance scale</dt>
+              <dt className="text-slate-400">balance scale</dt>
               <dd>{t.decision.show_balance_scale ? "yes" : "no"}</dd>
-              <dt className="text-slate-500">hints</dt>
+              <dt className="text-slate-400">hints</dt>
               <dd>{t.decision.hint_enabled ? "yes" : "no"}</dd>
-              <dt className="text-slate-500">density</dt>
+              <dt className="text-slate-400">density</dt>
               <dd>{t.decision.density_limit} / 5</dd>
-              <dt className="text-slate-500">abstraction α</dt>
+              <dt className="text-slate-400">abstraction α</dt>
               <dd>{t.decision.alpha}</dd>
-              <dt className="text-slate-500">lapse alarms</dt>
+              <dt className="text-slate-400">lapse alarms</dt>
               <dd>{t.lapse_alarms}</dd>
             </dl>
           )}
 
           {view && (
             <div className="border border-zinc-800">
-              <div className="border-b border-zinc-800 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-slate-500">gate log</div>
+              <div className="border-b border-zinc-800 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-slate-400">gate log</div>
               <table className="w-full font-mono text-[11px] tabular-nums">
-                <thead className="text-slate-500">
+                <thead className="text-slate-400">
                   <tr>
                     <th className="px-2 py-1 text-left font-normal">#</th>
                     <th className="px-2 text-right font-normal">M_I*</th>
@@ -198,7 +198,7 @@ export function App() {
                 <tbody>
                   {[...view.history].reverse().slice(0, 12).map((h) => (
                     <tr key={h.item} className="border-t border-zinc-900">
-                      <td className="px-2 py-0.5 text-slate-500">{h.item + 1}</td>
+                      <td className="px-2 py-0.5 text-slate-400">{h.item + 1}</td>
                       <td className="px-2 text-right">{h.budget.toFixed(3)}</td>
                       <td className="px-2 text-right">{h.m_i.toFixed(3)}</td>
                       <td className="px-2">L{h.level}</td>
@@ -212,7 +212,7 @@ export function App() {
             </div>
           )}
 
-          <p className="text-[11px] leading-relaxed text-slate-500">
+          <p className="text-[11px] leading-relaxed text-slate-400">
             Research testbed. The interface is regenerated after every answer from the learner&apos;s mastery estimate; every generated
             screen is schema-checked and measured before it is shown.
           </p>

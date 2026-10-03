@@ -4,7 +4,7 @@ function Cell({ label, value, hint, tone }: { label: string; value: string; hint
   const color = tone === "ok" ? "text-emerald-400" : tone === "alert" ? "text-red-400" : tone === "accent" ? "text-blue-400" : "text-slate-100";
   return (
     <div className="flex min-w-0 flex-col border-r border-zinc-800 px-3 py-1.5 last:border-r-0" title={hint}>
-      <span className="font-mono text-[10px] tracking-wider text-slate-500">{label}</span>
+      <span className="font-mono text-[10px] tracking-wider text-slate-400">{label}</span>
       <span className={`font-mono text-sm tabular-nums ${color}`}>{value}</span>
     </div>
   );
