@@ -1,0 +1,83 @@
+{
+  "laya_version": "0.3.24",
+  "checkpoint": "convaiinnovations/laya (english, zero-shot, no fine-tuning)",
+  "device": "cpu",
+  "torch_threads": 4,
+  "states": 200,
+  "latency_ms": {
+    "p50": 1320.1551934994313,
+    "p95": 1457.2103826498728,
+    "max": 1769.6223350003493
+  },
+  "agreement_with_surrogate": {
+    "all": {
+      "scaffolding_mode": 0.25,
+      "show_balance_scale": 0.65,
+      "hint_enabled": 0.815,
+      "density_limit": 0.24,
+      "n": 200
+    },
+    "1": {
+      "scaffolding_mode": 1.0,
+      "show_balance_scale": 0.0,
+      "hint_enabled": 0.98,
+      "density_limit": 0.04,
+      "n": 50
+    },
+    "2": {
+      "scaffolding_mode": 0.0,
+      "show_balance_scale": 0.6,
+      "hint_enabled": 0.28,
+      "density_limit": 0.92,
+      "n": 50
+    },
+    "3": {
+      "scaffolding_mode": 0.0,
+      "show_balance_scale": 1.0,
+      "hint_enabled": 1.0,
+      "density_limit": 0.0,
+      "n": 50
+    },
+    "4": {
+      "scaffolding_mode": 0.0,
+      "show_balance_scale": 1.0,
+      "hint_enabled": 1.0,
+      "density_limit": 0.0,
+      "n": 50
+    }
+  },
+  "laya_mode_counts": {
+    "worked_example": 200,
+    "guided_scaffold": 0,
+    "open_symbolic": 0
+  },
+  "end_to_end": {
+    "surrogate": {
+      "learners": 12,
+      "steps": 480,
+      "fidelity": 1.0,
+      "mean_delta_m": 0.012598654756381217,
+      "jitter": 0.03761362094695427,
+      "fallback_rate": 0.1625,
+      "plant_budget_compliance": 0.8375,
+      "overload_rate": 0.0,
+      "underload_rate": 0.10625,
+      "system1_ms_p50": 0.0059015000000000005,
+      "system1_ms_p95": 0.007828149999999999
+    },
+    "laya": {
+      "learners": 12,
+      "steps": 480,
+      "fidelity": 0.30624999999999997,
+      "mean_delta_m": 0.22846275850414863,
+      "jitter": 0.018315018315018316,
+      "fallback_rate": 0.75,
+      "plant_budget_compliance": 0.25,
+      "overload_rate": 0.0,
+      "underload_rate": 0.10625,
+      "system1_ms_p50": 1322.409864,
+      "system1_ms_p95": 1464.4422177
+    }
+  },
+  "questions": "closedloop.policy.LAYA_QUESTIONS"
+}

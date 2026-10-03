@@ -13,9 +13,9 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 | Priors P(L0)=0.15, P(T)=0.12, P(G)=0.20, P(S)=0.08 | Assumption, within published bounds | Corbett & Anderson bound guess < 0.3 and slip < 0.1 [1]; Baker et al. use the looser guess, slip < 0.5 [2]; both are compared in [23]. P(G)+P(S) < 1 and P(T) < 1 − P(S)/(1 − P(G)) keep the model non-degenerate [21, Eqs. 15–16]; see also [3]. Values are not fitted to data. pyBKT [4] can fit them to ASSISTments logs later |
 | Per-learner parameter variation | Cited | Individualized priors [5]; individualized learning rates [22] |
 | Forgetting transition P(F) | Cited | BKT+Forgets: Qiu et al. 2011 [6]; Khajah et al. 2016 [7] |
-| Saturation after success runs (the "5 wrong answers" problem) | Cited (cause); Adapted (fix) | Under correct answers the BKT estimate converges to a stable fixed point at 1 [21, Sec. 4]. Forgetting was introduced for recency effects [7] and time between sessions [6]; using it against saturation is our application |
+| Saturation after success runs (the "5 wrong answers" problem) | Cited (cause); Adapted (fix) | Under correct answers the BKT estimate converges to a stable fixed point at 1 [21, Sec. 4]. Forgetting was introduced for recency effects [7] and time between sessions [6]; using it against saturation is our application. In float64 plain BKT reaches exactly 1.0 after 24 straight correct answers and then can never decrease (`backend/tests/test_bkt.py`) |
 | CUSUM lapse detector on the tracker (our extension) | Adapted | CUSUM change detection: Page 1954 [8], Basseville & Nikiforov 1993 [9]. Applying it to reset a BKT estimate inside a UI control loop is our contribution |
-| Lapse detector threshold h = 6.5 | Assumption | Chosen from the sensitivity sweep in `results/benchmark/lapse_sensitivity.csv` |
+| Lapse detector threshold h = 6.5 | Assumption, tested | About three straight errors from a saturated estimate; the sweep in `results/benchmark/lapse_sensitivity.csv` shows the trade-off for h = 3 to 12 |
 
 ## Simulated learners
 
@@ -31,8 +31,8 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 | Choice | Status | Source |
 |---|---|---|
 | Discrete PID, anti-windup clamp, filtered derivative | Cited | Åström & Hägglund 2006 [12]; Åström & Murray 2008 [13] |
-| Gains Kp=1.25, Ki=0.10, Kd=0.35, γ=0.10, S_max=3 | Assumption | From `start-here.md`; hand-tuned, not derived |
-| Hysteresis deadband against the last committed value | Adapted | A standard deadband against chattering (general practice; no specific page in [12], [13] is claimed). The 0.06 value is ours |
+| Kp=0.865, Ki=0.377, Kd=0.672, γ=0.398, S_max=1.253, hysteresis 0.141 | Tuned by a stated procedure | No paper can give gains for a new plant [12]. `closedloop.sim.tune search`: cost = ITAE-style time-weighted mismatch [35] between the shown level and the learner's true state + 1 × jitter; random search over 200 settings plus the spec's values on a tuning cohort (seed 20261004); slope k = ln(19)/(Kp + Ki·S_max) = 2.202. All reported numbers use the test cohort (seed 20261003). Cost surface is flat: 0.104 vs 0.110 for the spec values (rank 22 of 201). Procedure, space and chosen values: `results/tuning/tuning.json`, `search.csv`; ±50% per parameter: `parameter_sensitivity.csv` |
+| Hysteresis deadband against the last committed value | Adapted | A standard deadband against chattering (general practice; no specific page in [12], [13] is claimed). Its width is tuned as above |
 | Setpoint P* = 0.95 (changed from 0.85 on 2026-10-03) | Cited | The standard BKT mastery threshold [1]; called "the widely adopted threshold" in [26] |
 | Level slew limit (one level per step) | Adapted | Rate limiting is standard in control [12]; using it against level skips is ours |
 
@@ -44,7 +44,11 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 | Worked examples that fade into problem solving | Cited | Renkl & Atkinson 2003 [16] |
 | Scaffolding concept | Cited | Wood, Bruner & Ross 1976 [17] |
 | Balance-scale model for linear equations | Cited, with a caveat | Vlassis 2002 [18] reports the balance model helps, but students then struggle with negative numbers. Cite it as a known limitation too |
-| Structural complexity metric M_I (density, abstraction, depth; weights 0.40/0.35/0.25) | Assumption | Our own composite. Miniukovich & De Angeli 2014 [19] quantify *visual* complexity of GUIs; cite as related work, not as the source of M_I |
+| M_I term 1: number of interactive elements | Cited | Element interactivity drives cognitive load [29]; decision time grows with the number of choices [30]; element counts are standard UI complexity metrics [31], [19] |
+| M_I term 2: abstraction scale (balance scale → operation pad → symbols → graph) | Cited | Concreteness fading: start concrete, fade to abstract [32] |
+| M_I term 3: nesting depth | Cited | Deeper interface hierarchies cost more navigation and memory [33] |
+| M_I as a weighted sum of the three | Adapted | Our composite; prior layout-complexity metrics are weighted feature sums checked against human ratings [19] |
+| M_I weights: equal (1/3 each) | Cited (method), tested | No data exist to fit the weights, so the terms are weighted equally, the standard default for an unfitted linear composite [34]. `results/tuning/weight_sensitivity.csv` re-runs the main arms under the spec's original 0.40 / 0.35 / 0.25, each term dropped in turn, and density-, abstraction- and depth-heavy weights |
 | ε = 0.05 tolerance | Assumption | Our choice |
 
 ## Generation and safety
@@ -53,7 +57,7 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 |---|---|---|
 | Model emits JSON constrained by a schema | Adapted | Token-level constrained decoding: [20], [27]; reliability of schema-constrained output: [28]. Our engine checks output after generation and falls back, which is a different mechanism |
 | Schema check plus deterministic fallback template | Assumption | Our design |
-| Surrogate plant fault rates (15% off-budget, 3% malformed) | Assumption | Placeholders until measured on real Gemini output |
+| Surrogate plant fault rates (15% off-budget, 3% malformed) | Placeholder | Development only. The paper's numbers will use rates measured on real Gemini output |
 
 ## References
 
@@ -85,5 +89,12 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 26. J. Zhang, K. Vanacore, R. S. Baker, N. Ch, C. Mills, and O. Henkel, "How much mastery is enough mastery? The relationship between mastery in a lesson and the performance on the subsequent lesson," in *Proc. EDM*, 2025.
 27. S. Geng, M. Josifoski, M. Peyrard, and R. West, "Grammar-constrained decoding for structured NLP tasks without finetuning," in *Proc. EMNLP*, 2023, pp. 10932–10952.
 28. S. Geng et al., "JSONSchemaBench: A rigorous benchmark of structured outputs for language models," arXiv:2501.10868, 2025.
+29. J. Sweller, "Element interactivity and intrinsic, extraneous, and germane cognitive load," *Educational Psychology Review*, vol. 22, pp. 123–138, 2010.
+30. W. E. Hick, "On the rate of gain of information," *Quarterly Journal of Experimental Psychology*, vol. 4, no. 1, pp. 11–26, 1952.
+31. A. Riegler and C. Holzmann, "Measuring visual user interface complexity of mobile applications with metrics," *Interacting with Computers*, vol. 30, no. 3, pp. 207–223, 2018.
+32. E. R. Fyfe, N. M. McNeil, J. Y. Son, and R. L. Goldstone, "Concreteness fading in mathematics and science instruction: A systematic review," *Educational Psychology Review*, vol. 26, pp. 9–25, 2014.
+33. J. I. Kiger, "The depth/breadth trade-off in the design of menu-driven user interfaces," *International Journal of Man-Machine Studies*, vol. 20, pp. 201–213, 1984.
+34. R. M. Dawes, "The robust beauty of improper linear models in decision making," *American Psychologist*, vol. 34, no. 7, pp. 571–582, 1979.
+35. D. Graham and R. C. Lathrop, "The synthesis of 'optimum' transient response: Criteria and standard forms," *Transactions of the AIEE, Part II: Applications and Industry*, 1953, doi:10.1109/TAI.1953.6371346 (`graham1953itae`).
 
-All entries, with DOIs, are also in `docs/references.bib`; the check behind each correction is in `docs/source-check.md`.
+Entries 1–28, with DOIs, are also in `docs/references.bib` (29–34 still to be added there); the check behind each correction is in `docs/source-check.md`.

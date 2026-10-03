@@ -18,7 +18,7 @@ python -m closedloop.sim.run --out ../results/benchmark      # ~1 min on 4 cores
 | `governor.py` | 6.2, 6.3 | Normalized error, PID with anti-windup clamp and filtered derivative, inverted logistic budget, 4 levels, hysteresis against the last committed budget, optional level slew limit |
 | `metric.py` | 6.4 | Structural complexity M_I |
 | `ast_schema.py` | 4 | CLT-UI JSON AST (Pydantic, `extra="forbid"`, depth <= 4, rho <= 8); `UIDocument.model_json_schema()` is the model's response schema |
-| `policy.py` | 5 | System-1 decisions (scaffolding mode, balance scale, hints, density). `SurrogatePolicy` is a deterministic stand-in with Laya's decision signature |
+| `policy.py` | 5 | System-1 decisions (scaffolding mode, balance scale, hints, density). `LayaPolicy` asks the real Laya model; `SurrogatePolicy` is a deterministic stand-in used for the 160,000-step benchmark |
 | `plant.py` | 5, Layers 3-4 | Deterministic compiler budget -> AST, surrogate plant with fault injection, the validation gate (`admit`) and the fallback template cache |
 | `sim/` | 7, 8 | Learner archetypes, the 4 arms and 3 ablations, metrics, CLI |
 
@@ -26,8 +26,11 @@ python -m closedloop.sim.run --out ../results/benchmark      # ~1 min on 4 cores
 
 - **Timing.** The interface for item *n* is built from responses 0..n-1;
   the governor's first step uses the prior P(L_0). With this convention the
-  all-correct learner reproduces Section 6.3 exactly (0.878 at step 3,
-  settling at 0.947), see `tests/test_governor.py`.
+  all-correct learner reproduces Section 6.3 exactly (with P* = 0.95:
+  level 4 committed at step 4 at 0.905), see `tests/test_governor.py`.
+- **Mastery target P* = 0.95**, the criterion of Corbett & Anderson (1995).
+- **Equal M_I weights** (1/3 each, Dawes 1979); the spec's 0.40 / 0.35 / 0.25
+  is a sensitivity variant.
 - **Paired design.** Responses are sampled once per learner and replayed
   through every variant; the interface does not feed back into the
   simulated learner, so no result is a learning-gain claim.
@@ -52,7 +55,9 @@ python -m closedloop.sim.run --out ../results/benchmark      # ~1 min on 4 cores
 ## Lapse handling (extension)
 
 Standard BKT saturates near 1 after a success run, so a later run of errors
-barely moves the estimate and the interface stays at level 4. Two tracker
+barely moves the estimate and the interface stays at level 4. In float64 the
+plain estimate reaches exactly 1.0 after 24 straight correct answers and can
+then never decrease (van de Sande 2013; `tests/test_bkt.py`). Two tracker
 extensions are compared (`bkt.py`, `sim/arms.py: EXTENSIONS`):
 
 - `closed_loop_forgetting`: BKT+Forgets with P(F) = 0.02 (Qiu et al. 2011;
@@ -71,6 +76,25 @@ rendered level with the learner's true (simulated) knowledge state.
 
 Every parameter's source, or its status as an assumption, is listed in
 `../docs/sources.md`.
+
+## Laya, gains and weights
+
+```
+pip install -e ".[laya]"
+python -m closedloop.sim.laya_eval --out ../results/laya   # real Laya vs the surrogate
+python -m closedloop.sim.tune search --out ../results/tuning       # tune controller
+python -m closedloop.sim.tune sensitivity --out ../results/tuning  # +/-50% and weight sweeps
+```
+
+`laya_eval` asks both policies the same decisions on 200 learner states and
+runs the closed loop end to end with each on 12 paired learners.
+`tune search` picks Kp, Ki, Kd, gamma, S_max and the hysteresis band by random
+search on a tuning cohort (seed 20261004); the cost is a time-weighted
+(ITAE-style) mismatch between the shown level and the learner's true state
+plus jitter. The chosen values are the `GovernorConfig` defaults, and every
+reported number uses the test cohort (seed 20261003). `tune sensitivity`
+moves each value by +/-50% and re-runs the main arms under alternative M_I
+weightings (spec 0.40/0.35/0.25, each term dropped, each term heavy).
 
 ## Recovery metrics
 

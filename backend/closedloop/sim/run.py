@@ -104,6 +104,7 @@ def summarize(group: list[dict], streak_rows: list[dict], horizon: int) -> dict:
         "reached_level4": statistics.fmean(col("reached_level4")),
         "overload_rate": statistics.fmean(col("overload_rate")),
         "underload_rate": statistics.fmean(col("underload_rate")),
+        "itae_mismatch": statistics.fmean(col("itae_mismatch")),
         "n_react_events": len(react),
         "tau_react_median": statistics.median(react_obs) if react_obs else "",
         "tau_react_censored": (len(react) - len(react_obs)) / len(react) if react else "",

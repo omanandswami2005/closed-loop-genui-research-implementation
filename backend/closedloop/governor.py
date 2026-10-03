@@ -15,14 +15,17 @@ N_LEVELS = 4
 
 @dataclass(frozen=True)
 class GovernorConfig:
-    setpoint: float = 0.85
-    kp: float = 1.25
-    ki: float = 0.10
-    kd: float = 0.35
-    gamma: float = 0.10  # derivative low-pass coefficient; 1.0 = raw difference
-    s_max: float | None = 3.0  # integral clamp; None disables anti-windup
-    slope: float = 2.0  # sigmoid slope k
-    hysteresis: float = 0.06  # deadband against the last committed budget
+    setpoint: float = 0.95  # mastery threshold of Corbett & Anderson (1995)
+    # Gains, filter, clamp and deadband: tuned by random search on a separate
+    # tuning cohort (sim/tune.py, results/tuning/tuning.json); spec values were
+    # Kp 1.25, Ki 0.10, Kd 0.35, gamma 0.10, S_max 3, hysteresis 0.06.
+    kp: float = 0.865
+    ki: float = 0.377
+    kd: float = 0.672
+    gamma: float = 0.398  # derivative low-pass coefficient; 1.0 = raw difference
+    s_max: float | None = 1.253  # integral clamp; None disables anti-windup
+    slope: float = 2.202  # sigmoid slope k = ln(19) / (Kp + Ki * S_max)
+    hysteresis: float = 0.141  # deadband against the last committed budget
     # Optional slew limit on committed levels per step. None (the spec default)
     # lets the budget jump several levels at once, e.g. level 2 -> 4.
     max_level_step: int | None = None

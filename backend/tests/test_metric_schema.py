@@ -26,9 +26,8 @@ POLICY = SurrogatePolicy()
 def test_metric_bounds_and_weights():
     assert structural_complexity(1, 1, 1) == pytest.approx(0.0)
     assert structural_complexity(8, 4, 4) == pytest.approx(1.0)
-    assert structural_complexity(8, 1, 1) == pytest.approx(0.40)
-    assert structural_complexity(1, 4, 1) == pytest.approx(0.35)
-    assert structural_complexity(1, 1, 4) == pytest.approx(0.25)
+    for term in (structural_complexity(8, 1, 1), structural_complexity(1, 4, 1), structural_complexity(1, 1, 4)):
+        assert term == pytest.approx(1 / 3)  # equal weights (Dawes 1979)
     assert structural_complexity(50, 9, 0) == structural_complexity(8, 4, 1)  # clamped
 
 
@@ -104,3 +103,16 @@ def test_clean_surrogate_plant_always_admitted():
 def test_response_schema_exports():
     schema = UIDocument.model_json_schema()
     assert "root" in schema["properties"]
+
+
+def test_weights_can_be_swapped_for_sensitivity_runs():
+    from closedloop.metric import DEFAULT_WEIGHTS, set_weights
+
+    try:
+        set_weights((0.40, 0.35, 0.25))
+        assert structural_complexity(8, 1, 1) == pytest.approx(0.40)
+        with pytest.raises(ValueError):
+            set_weights((0.5, 0.5, 0.5))
+    finally:
+        set_weights(DEFAULT_WEIGHTS)
+    assert structural_complexity(8, 1, 1) == pytest.approx(1 / 3)

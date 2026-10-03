@@ -63,6 +63,10 @@ def failure_streaks(correct: Sequence[bool], levels: Sequence[int], min_len: int
     return events
 
 
+def _mismatch(r: StepRecord) -> int:
+    return int((not r.known and r.level >= 3) or (r.known and r.level <= 2))
+
+
 def run_summary(records: Sequence[StepRecord], epsilon: float = EPSILON) -> dict[str, float | int]:
     m_i = [r.m_i for r in records]
     levels = [r.level for r in records]
@@ -92,6 +96,9 @@ def run_summary(records: Sequence[StepRecord], epsilon: float = EPSILON) -> dict
         # skill, or a concrete one (level <= 2) shown to one who does.
         "overload_rate": sum(not r.known and r.level >= 3 for r in records) / len(records),
         "underload_rate": sum(r.known and r.level <= 2 for r in records) / len(records),
+        # ITAE-style (Graham & Lathrop 1953) time-weighted mismatch in [0, 1]:
+        # late mismatches, after the controller has had time to settle, cost more.
+        "itae_mismatch": sum((r.step + 1) * _mismatch(r) for r in records) / sum(r.step + 1 for r in records),
         "final_mastery": records[-1].mastery,
         "correct_rate": sum(r.correct for r in records) / len(records),
     }

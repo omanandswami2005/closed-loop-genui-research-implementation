@@ -1,0 +1,55 @@
+{
+  "procedure": "random search on the tuning cohort; all reported results use the test cohort",
+  "tuning_seed": 20261004,
+  "test_seed": 20261003,
+  "cost": "itae_mismatch + LAMBDA * jitter",
+  "itae_mismatch": "sum_n (n+1) * mismatch_n / sum_n (n+1), mismatch = level >= 3 while the skill is unknown or level <= 2 while known",
+  "lambda": 1.0,
+  "samples": 200,
+  "search_space": {
+    "kp": [
+      0.25,
+      2.5
+    ],
+    "ki": [
+      0.0,
+      0.4
+    ],
+    "kd": [
+      0.0,
+      1.0
+    ],
+    "gamma": [
+      0.05,
+      1.0
+    ],
+    "s_max": [
+      1.0,
+      6.0
+    ],
+    "hysteresis": [
+      0.02,
+      0.15
+    ]
+  },
+  "slope_rule": "k = ln(19) / (Kp + Ki * S_max)",
+  "spec_values": {
+    "kp": 1.25,
+    "ki": 0.1,
+    "kd": 0.35,
+    "gamma": 0.1,
+    "s_max": 3.0,
+    "hysteresis": 0.06,
+    "cost_on_tuning_cohort": 0.109541
+  },
+  "chosen_values": {
+    "kp": 0.865,
+    "ki": 0.377,
+    "kd": 0.672,
+    "gamma": 0.398,
+    "s_max": 1.253,
+    "hysteresis": 0.141,
+    "slope": 2.201645588778695,
+    "cost_on_tuning_cohort": 0.103831
+  }
+}

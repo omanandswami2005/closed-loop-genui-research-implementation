@@ -33,6 +33,21 @@ def test_tracker_saturates_after_success_run():
     assert t.mastery > 0.99
 
 
+def test_plain_bkt_reaches_exactly_one_and_never_drops():
+    # van de Sande (2013): without forgetting, P(L) can only rise. In float64
+    # it rounds to exactly 1.0 after 24 straight correct answers, and from
+    # there no number of wrong answers can lower it.
+    t = BKTTracker()
+    for _ in range(23):
+        t.observe(True)
+    assert t.mastery < 1.0
+    t.observe(True)
+    assert t.mastery == 1.0
+    for _ in range(40):
+        t.observe(False)
+        assert t.mastery == 1.0
+
+
 @pytest.mark.parametrize("kwargs", [{"p_t": 1.5}, {"p_g": -0.1}, {"p_g": 0.6, "p_s": 0.5}])
 def test_invalid_params_rejected(kwargs):
     with pytest.raises(ValueError):

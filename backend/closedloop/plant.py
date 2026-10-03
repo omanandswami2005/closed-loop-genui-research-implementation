@@ -67,21 +67,30 @@ class Blueprint:
 
 
 def plan(budget: float, decision: PolicyDecision) -> Blueprint:
-    """Closest admissible blueprint to ``budget`` under the policy decision."""
+    """Closest admissible blueprint to ``budget`` under the policy decision.
+
+    Hints and worked steps need a container, which costs one depth level. At
+    the very bottom of the budget range that may not fit, so a requested
+    worked example is dropped only when no layout with it is within EPSILON.
+    """
     hint_options = range(1, min(3, decision.density_limit) + 1) if decision.hint_enabled else (0,)
-    worked = min(3, decision.density_limit) if decision.scaffolding_mode == "worked_example" else 0
+    worked_options = (min(3, decision.density_limit), 0) if decision.scaffolding_mode == "worked_example" else (0,)
     lo, hi = PRIMARY_RANGE[decision.alpha]
-    best: tuple[float, int, int] | None = None
+    best: tuple | None = None
     best_bp: Blueprint | None = None
-    for primary in range(lo, hi + 1):
-        for hints in hint_options:
-            for d in range(1, DELTA_MAX + 1):
-                bp = Blueprint(decision.alpha, primary, hints, worked, d)
-                if not bp.is_valid():
-                    continue
-                key = (round(abs(bp.m_i - budget), 9), bp.rho, d)  # prefer simpler on ties
-                if best is None or key < best:
-                    best, best_bp = key, bp
+    for worked in worked_options:
+        for primary in range(lo, hi + 1):
+            for hints in hint_options:
+                for d in range(1, DELTA_MAX + 1):
+                    bp = Blueprint(decision.alpha, primary, hints, worked, d)
+                    if not bp.is_valid():
+                        continue
+                    err = round(abs(bp.m_i - budget), 9)
+                    # Within tolerance, honour the requested worked example;
+                    # otherwise minimise the error. Prefer simpler on ties.
+                    key = (err > EPSILON, worked == 0 and err <= EPSILON, err, bp.rho, d)
+                    if best is None or key < best:
+                        best, best_bp = key, bp
     assert best_bp is not None
     return best_bp
 

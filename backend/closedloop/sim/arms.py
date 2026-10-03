@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from ..bkt import BKTParams, BKTTracker
 from ..governor import GovernorConfig, PIDGovernor, complexity_level, level_center
 from ..plant import EPSILON, PlantConfig, SurrogatePlant, admit, fallback_document
-from ..policy import SurrogatePolicy
+from ..policy import Policy, SurrogatePolicy
 from .learners import Trajectory
 
 RECENT_WINDOW = 5
@@ -97,9 +97,9 @@ def reference_targets(mastery: list[float]) -> list[float]:
     return [gov.step(m).budget for m in mastery]
 
 
-def run_variant(variant: Variant, traj: Trajectory, seed: int) -> list[StepRecord]:
+def run_variant(variant: Variant, traj: Trajectory, seed: int, policy: Policy | None = None) -> list[StepRecord]:
     bkt = variant.bkt
-    policy = SurrogatePolicy()
+    policy = policy or SurrogatePolicy()
     plant = SurrogatePlant(variant.plant)
     plant_rng = random.Random(f"{seed}:plant:{traj.learner_id}")
     noise_rng = random.Random(f"{seed}:open_loop:{traj.learner_id}")

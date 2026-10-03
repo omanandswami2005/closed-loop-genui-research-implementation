@@ -18,14 +18,14 @@
       "name": "static",
       "kind": "static",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -47,14 +47,14 @@
       "name": "unconstrained_genui",
       "kind": "open_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -76,14 +76,14 @@
       "name": "rule_based",
       "kind": "rule_based",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -105,14 +105,14 @@
       "name": "closed_loop",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -134,14 +134,14 @@
       "name": "ablation_no_derivative_filter",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
         "gamma": 1.0,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -163,14 +163,14 @@
       "name": "ablation_no_anti_windup",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
         "s_max": null,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -192,14 +192,14 @@
       "name": "ablation_level_slew_limit",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": 1
       },
       "plant": {
@@ -221,14 +221,14 @@
       "name": "closed_loop_forgetting",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -250,14 +250,14 @@
       "name": "closed_loop_lapse_cusum",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": null
       },
       "plant": {
@@ -279,14 +279,14 @@
       "name": "closed_loop_lapse_cusum_slew",
       "kind": "closed_loop",
       "governor": {
-        "setpoint": 0.85,
-        "kp": 1.25,
-        "ki": 0.1,
-        "kd": 0.35,
-        "gamma": 0.1,
-        "s_max": 3.0,
-        "slope": 2.0,
-        "hysteresis": 0.06,
+        "setpoint": 0.95,
+        "kp": 0.865,
+        "ki": 0.377,
+        "kd": 0.672,
+        "gamma": 0.398,
+        "s_max": 1.253,
+        "slope": 2.202,
+        "hysteresis": 0.141,
         "max_level_step": 1
       },
       "plant": {
@@ -307,67 +307,67 @@
   ],
   "system1_latency_us": {
     "n": 40000,
-    "p50": 6.468,
-    "p95": 10.23509999999999,
-    "p99": 21.61004000000001,
+    "p50": 6.496,
+    "p95": 10.281,
+    "p99": 21.76234000000007,
     "note": "BKT update + PID governor + surrogate policy; excludes the Laya runtime and the plant"
   },
   "injected_faults": {
     "unconstrained_genui": {
-      "truncated_json": 250,
-      "unknown_component": 245,
-      "out_of_range": 253,
-      "depth_overflow": 209,
-      "injected_field": 255
-    },
-    "closed_loop": {
-      "truncated_json": 240,
-      "unknown_component": 232,
-      "out_of_range": 250,
-      "depth_overflow": 219,
-      "injected_field": 254
-    },
-    "ablation_no_derivative_filter": {
-      "truncated_json": 236,
+      "truncated_json": 248,
       "unknown_component": 231,
-      "out_of_range": 244,
-      "depth_overflow": 222,
-      "injected_field": 249
-    },
-    "ablation_no_anti_windup": {
-      "truncated_json": 243,
-      "unknown_component": 236,
-      "out_of_range": 247,
-      "depth_overflow": 219,
-      "injected_field": 256
-    },
-    "ablation_level_slew_limit": {
-      "truncated_json": 237,
-      "unknown_component": 231,
-      "out_of_range": 254,
-      "depth_overflow": 219,
-      "injected_field": 255
-    },
-    "closed_loop_forgetting": {
-      "truncated_json": 241,
-      "unknown_component": 230,
-      "out_of_range": 242,
-      "depth_overflow": 217,
-      "injected_field": 254
-    },
-    "closed_loop_lapse_cusum": {
-      "truncated_json": 234,
-      "unknown_component": 231,
-      "out_of_range": 249,
-      "depth_overflow": 218,
+      "out_of_range": 257,
+      "depth_overflow": 210,
       "injected_field": 252
     },
-    "closed_loop_lapse_cusum_slew": {
-      "truncated_json": 233,
+    "closed_loop": {
+      "truncated_json": 247,
+      "unknown_component": 222,
+      "out_of_range": 254,
+      "depth_overflow": 207,
+      "injected_field": 245
+    },
+    "ablation_no_derivative_filter": {
+      "truncated_json": 240,
       "unknown_component": 231,
-      "out_of_range": 253,
+      "out_of_range": 245,
+      "depth_overflow": 215,
+      "injected_field": 240
+    },
+    "ablation_no_anti_windup": {
+      "truncated_json": 248,
+      "unknown_component": 220,
+      "out_of_range": 234,
+      "depth_overflow": 211,
+      "injected_field": 243
+    },
+    "ablation_level_slew_limit": {
+      "truncated_json": 245,
+      "unknown_component": 220,
+      "out_of_range": 256,
       "depth_overflow": 218,
-      "injected_field": 251
+      "injected_field": 244
+    },
+    "closed_loop_forgetting": {
+      "truncated_json": 259,
+      "unknown_component": 225,
+      "out_of_range": 241,
+      "depth_overflow": 218,
+      "injected_field": 240
+    },
+    "closed_loop_lapse_cusum": {
+      "truncated_json": 248,
+      "unknown_component": 223,
+      "out_of_range": 250,
+      "depth_overflow": 205,
+      "injected_field": 246
+    },
+    "closed_loop_lapse_cusum_slew": {
+      "truncated_json": 243,
+      "unknown_component": 223,
+      "out_of_range": 253,
+      "depth_overflow": 217,
+      "injected_field": 240
     }
   }
 }
