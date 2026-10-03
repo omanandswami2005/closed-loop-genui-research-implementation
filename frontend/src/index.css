@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-slatebase: #0f172a;
+  --color-zincline: #27272a;
+  --color-cobalt: #2563eb;
+  --color-alert: #b91c1c;
+  --color-ok: #047857;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+}
+
+.katex {
+  font-size: 1.05em;
+}
