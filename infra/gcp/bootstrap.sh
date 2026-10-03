@@ -52,9 +52,12 @@ gc iam workload-identity-pools providers describe "$PROVIDER" \
     --attribute-mapping "google.subject=assertion.sub,attribute.repository=assertion.repository" \
     --attribute-condition "assertion.repository == '${REPO}'"
 
-gc iam service-accounts add-iam-policy-binding "$DEPLOY_SA" \
-  --role roles/iam.workloadIdentityUser \
-  --member "principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${POOL}/attribute.repository/${REPO}" >/dev/null
+# Deploy jobs act as the deployer; the Gemini measurement job acts as the runtime SA.
+for sa in "$DEPLOY_SA" "$RUNTIME_SA"; do
+  gc iam service-accounts add-iam-policy-binding "$sa" \
+    --role roles/iam.workloadIdentityUser \
+    --member "principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${POOL}/attribute.repository/${REPO}" >/dev/null
+done
 
 cat <<OUT
 GitHub repository variables:

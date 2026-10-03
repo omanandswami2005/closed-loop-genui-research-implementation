@@ -1,0 +1,48 @@
+name: Gemini plant measurement
+
+# Re-runs the real gemini-3.7-flash plant evaluation
+# (backend/closedloop/sim/gemini_eval.py) on Vertex AI and uploads the
+# results. Auth is keyless Workload Identity Federation (infra/gcp/), so no
+# key is stored in the repository or its secrets.
+
+on:
+  workflow_dispatch:
+    inputs:
+      n:
+        description: Number of plant calls
+        default: "300"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GOOGLE_CLOUD_PROJECT: omni-505707
+      GOOGLE_CLOUD_LOCATION: global
+    steps:
+      - uses: actions/checkout@v4
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/151739080904/locations/global/workloadIdentityPools/github/providers/github-oidc
+          service_account: genui-backend@omni-505707.iam.gserviceaccount.com
+          token_format: access_token
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        working-directory: backend
+        run: pip install -e ".[service]"
+      - name: Measure
+        working-directory: backend
+        env:
+          GENUI_GEMINI_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: python -m closedloop.sim.gemini_eval --out ../results/gemini --n "${{ inputs.n }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gemini-results
+          path: results/gemini/
