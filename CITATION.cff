@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite it as below."
+title: "Learner-State-Aware Generative User Interfaces: code, data and results"
+type: software
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/omanandswami2005/closed-loop-genui-research-implementation"
+authors:
+  - family-names: Swami
+    given-names: Omanand Prashant
+    affiliation: "JSPM's Rajarshi Shahu College of Engineering, Pune"
+  - family-names: Chavan
+    given-names: Sanjana Shashikant
+    affiliation: "JSPM's Rajarshi Shahu College of Engineering, Pune"
+  - family-names: Deshpande
+    given-names: K. V.
+    affiliation: "JSPM's Rajarshi Shahu College of Engineering, Pune"
+  - family-names: Patil
+    given-names: Pratik Rajendra
+    affiliation: "JSPM's Rajarshi Shahu College of Engineering, Pune"
+  - family-names: Tirpude
+    given-names: Abhishek Ganesh
+    affiliation: "JSPM's Rajarshi Shahu College of Engineering, Pune"
+keywords:
+  - generative user interfaces
+  - adaptive learning
+  - Bayesian knowledge tracing
+  - PID control
+  - cognitive load theory

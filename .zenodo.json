@@ -1,0 +1,23 @@
+{
+  "title": "Learner-State-Aware Generative User Interfaces: code, data and results",
+  "upload_type": "software",
+  "description": "Code, simulation outputs and measurements for the paper \"Learner-State-Aware Generative User Interfaces: A Closed-Loop Control Architecture for Adaptive Learning Environments\". Bayesian Knowledge Tracing estimates mastery, a PID governor turns it into a structural complexity budget, a rule-based policy selects scaffolding, a deterministic planner fixes the layout, and a foundation model (Gemini 3.7 Flash) writes the content as a JSON component tree behind a validation gate. Includes the 1,000-learner in-silico benchmark, controller tuning and sensitivity runs, the real-Gemini plant measurements, the React CLT-UI testbed and the LaTeX manuscript. All evaluation is in silico; there are no human-subject results.",
+  "creators": [
+    {"name": "Swami, Omanand Prashant", "affiliation": "JSPM's Rajarshi Shahu College of Engineering, Pune"},
+    {"name": "Chavan, Sanjana Shashikant", "affiliation": "JSPM's Rajarshi Shahu College of Engineering, Pune"},
+    {"name": "Deshpande, K. V.", "affiliation": "JSPM's Rajarshi Shahu College of Engineering, Pune"},
+    {"name": "Patil, Pratik Rajendra", "affiliation": "JSPM's Rajarshi Shahu College of Engineering, Pune"},
+    {"name": "Tirpude, Abhishek Ganesh", "affiliation": "JSPM's Rajarshi Shahu College of Engineering, Pune"}
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": [
+    "generative user interfaces",
+    "adaptive learning",
+    "Bayesian knowledge tracing",
+    "PID control",
+    "cognitive load theory",
+    "intelligent tutoring systems",
+    "large language models"
+  ]
+}
