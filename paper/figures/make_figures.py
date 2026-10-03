@@ -36,7 +36,7 @@ fig.savefig(O+'results.pdf')
 P={}
 for r in csv.DictReader(open(R+'results/benchmark/probe_steps.csv')):
     if r['probe']=='saturated_lapse': P.setdefault(r['variant'],[]).append(r)
-fig,ax=plt.subplots(figsize=(3.5,1.5))
+fig,ax=plt.subplots(figsize=(3.5,1.35))
 err=[int(r['step']) for r in P['closed_loop'] if r['correct']=='0']
 ax.axvspan(min(err)-0.5,max(err)+0.5,color='#e6e6e6',lw=0)
 ax.text((min(err)+max(err))/2,1.02,'5 errors',ha='center',va='bottom',fontsize=6.5)

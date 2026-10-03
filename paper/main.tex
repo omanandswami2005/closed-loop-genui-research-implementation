@@ -35,8 +35,9 @@ interfaces at runtime without any model of the learner. We propose a
 closed-loop architecture that couples the two. Bayesian Knowledge Tracing
 estimates mastery; a PID governor with anti-windup and a filtered derivative
 converts the mastery deficit into a structural complexity budget; a fast
-policy selects scaffolding affordances; and a foundation model emits a JSON
-component tree that must satisfy the budget, with a deterministic fallback
+policy selects scaffolding affordances; a deterministic planner fixes the
+layout whose complexity is closest to the budget; and a foundation model
+writes the content of that layout as a JSON component tree, with a fallback
 when schema or budget checks fail. We evaluate the architecture in silico on
 1,000 synthetic learners from three archetypes, replayed through four arms.
 The closed loop keeps the rendered interface within 0.012 of the governor's
@@ -45,10 +46,9 @@ rule-based baseline, with 3.5 times less jitter than unconstrained GenUI,
 which matches latent mastery slightly better but skips levels three times as
 often. Standard BKT saturates after long success runs, so a later streak of
 errors leaves the interface unchanged; a CUSUM lapse detector cuts overload
-in a forgetting cohort by 25\%. In 300 calls to the real model, 3.4\% of
-outputs were malformed and 2.8\% of valid outputs missed the budget, against
-simulated rates of 3\% and 15\%; when a planner fixes the layout, 98.7\% of
-calls are within budget. All claims concern algorithmic behavior;
+in a forgetting cohort by 25\%. In 300 calls to the real model with the
+planner, 98.7\% of screens were within budget, against 92\% when the model
+also chose the layout. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
 
@@ -87,8 +87,9 @@ to use \cite{gajos2008predictability,findlater2004menus}.
 This paper makes three contributions:
 \begin{enumerate}
 \item A closed-loop architecture in which a BKT mastery estimate drives a PID
-governor whose output is a structural complexity budget that a generative
-model must satisfy, with schema validation and a deterministic fallback.
+governor whose output is a structural complexity budget, met by a
+deterministic layout planner and a generative model that writes the content,
+with schema validation and a deterministic fallback.
 \item A computable structural complexity metric over a declarative component
 tree for linear-equation tasks, built from features linked in prior work to
 cognitive load and visual complexity.
@@ -145,16 +146,16 @@ reliable in practice \cite{geng2025jsonschemabench}.
 \begin{figure}[t]
 \centering
 \input{figures/architecture.tex}
-\caption{The closed loop. The governor's budget $M_I^*$ drives both the
-policy and the gate (dashed); a tree that fails the schema or budget check
-is replaced from a precompiled fallback catalog. The learner (shaded) is
-simulated in this work.}
+\caption{The closed loop as deployed. The gate rechecks the budget
+(dashed); failing trees are replaced from the fallback catalog. The learner
+(shaded) is simulated here.}
 \label{fig:arch}
 \end{figure}
 
-The loop has four layers (Fig.~\ref{fig:arch}): a psychometric
-estimator, a complexity governor, a fast policy, and a generative plant whose
-output passes a validation gate before a deterministic client renders it.
+The loop has five stages (Fig.~\ref{fig:arch}): a psychometric
+estimator, a complexity governor, a fast policy, a layout planner, and a
+generative plant whose output passes a validation gate before a
+deterministic client renders it.
 
 \subsection{Mastery estimation}
 After response $r_n\in\{0,1\}$ the mastery estimate is updated by Bayes' rule
@@ -223,10 +224,17 @@ and rule-based in every reported result. An open-weight decision model
 on a CPU and chose a worked example in all 200 test states, so it is not
 part of the evaluated system.
 
-\subsection{Generative plant and validation gate}
-The plant, Gemini 3.7 Flash served through Vertex AI,
-receives the budget, the
-policy decision and the equation and emits a JSON component tree. Nodes are
+\subsection{Layout planner, generative plant and validation gate}
+The planner turns the budget into a layout. The policy fixes the abstraction
+level $\alpha$; the planner then enumerates every admissible layout with
+1--8 interactive elements, 0--3 hint tiers and nesting depth 1--4 (at most
+168 candidates) and picks the one whose $M_I$ is closest to $M_I^*$. It keeps a requested worked
+example when that stays within $\varepsilon$; ties go to fewer elements,
+then shallower nesting. The plant, Gemini 3.7 Flash served
+through Vertex AI, receives this layout with the policy decision and the
+equation and writes the content as a JSON component tree. In the original
+design (\emph{free} mode) the plant also chose the layout; we measure both
+(Table~\ref{tab:gemini}). Nodes are
 drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
 \textsc{WorkedSolutionStep}, \textsc{ScaffoldedOperationPad},
 \textsc{SymbolicEquationWorkspace}, \textsc{SteppedHintAccordion} and
@@ -239,8 +247,8 @@ trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[height=5.0cm]{figures/screen_l1.png}\hfill
-\includegraphics[height=5.0cm]{figures/screen_l4.png}
+\includegraphics[height=4.7cm]{figures/screen_l1.png}\hfill
+\includegraphics[height=4.7cm]{figures/screen_l4.png}
 \caption{Two screens rendered by the client. Left: a level-1 tree emitted by
 Gemini 3.7 Flash for $P(L)=0.15$, a worked example with the balance-scale
 manipulative. Right: a level-4 tree from the surrogate plant for
@@ -311,16 +319,14 @@ anti-windup, and add a one-level slew limit.
 
 \subsection{Plant model in the benchmark}
 The benchmark replaces the foundation model with a surrogate that compiles
-the closest admissible tree and injects faults: with probability 0.15 it
+the planner's layout and injects faults: with probability 0.15 it
 drifts off budget, and with probability 0.03 it emits malformed output
 (truncated JSON, unknown component, out-of-range field, depth overflow,
 injected field). These rates were set before the real model was measured.
 The unconstrained arm uses the same surrogate without the budget check.
 
-We measured the real model in two modes: in \emph{free} mode it chooses
-layout and content; in \emph{guided} mode a deterministic planner picks the
-admissible layout closest to the budget and the model writes only the
-content. Each mode received 300 requests (JSON mode without a response
+We measured the real model in free mode, which tests the model alone, and
+in guided mode, the deployed configuration with the planner. Each mode received 300 requests (JSON mode without a response
 schema, thinking level low, temperature 0.4, 30\,s timeout) with budgets
 uniform on $[0.02,0.98]$, scored by the same gate (Table~\ref{tab:gemini}).
 
@@ -402,9 +408,8 @@ Closed loop & 0.0122 (0.0119--0.0124) & 1.000 & 0.035 & 0.67 & 0.002 & 0.121 & 0
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/results.pdf}
-\caption{Main comparison on the test cohort (means with 95\% CIs). The
-closed loop (dark) has the lowest constraint error; the rule-based arm is
-smoother but underloads (Table~\ref{tab:main}).}
+\caption{Main comparison on the test cohort (means, 95\% CIs); closed loop
+dark.}
 \label{fig:results}
 \end{figure}
 
@@ -480,9 +485,7 @@ steps. The CUSUM detector lowers this to 5.6\% ($-25\%$) at the cost of
 higher jitter (0.052 against 0.042) and an almost unchanged ITAE mismatch
 (0.189 against 0.184). Forgetting lowers overload further, to 3.0\%, but
 underloads on 25.3\% of steps against 12.8\%, raises ITAE to 0.273 and
-lets only 80\% of learners reach level 4. Neither remedy dominates. Adding
-the slew limit to the CUSUM variant removes its level skips (0.015 per
-run). Weighting recent responses more heavily
+lets only 80\% of learners reach level 4. Neither remedy dominates. Weighting recent responses more heavily
 \cite{galyardt2015recent} is a third option we leave for future work.
 
 % ---------------------------------------------------------------------------
@@ -501,22 +504,21 @@ The benchmark plant is a surrogate. Its malformed rate matches and its drift rat
 exceeds those measured on the real model, but the real-model measurement covers single
 calls, not full learner trajectories. Its latency (median 7.7\,s free,
 2.7\,s guided) calls for prefetching or caching.
-Finally, a learned fast policy would need fine-tuning on real learner
-interaction data; training it on simulator data would only imitate the rule
-policy it is meant to replace.
+A learned fast policy would need real interaction data; simulator data
+would only imitate the rule policy.
 
 \section{Conclusion}
 We coupled a learner model to a generative interface through a PID
-governor, a fast policy and a validation gate, and tested the loop in
-simulation. The governor's budget is met at every step, with the gate
+governor, a fast policy, a layout planner and a validation gate, with the
+generative model writing content into a fixed layout, and tested the loop
+in simulation. The governor's budget is met at every step, with the gate
 absorbing plant faults, and the interface changes 3.5 times less than an
 unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
-a modest cost in jitter, while forgetting overcorrects. In 300 real calls the
-generative model met the budget 92\% of the time, and 98.7\% when a
-deterministic planner fixes the layout. The next steps are
+a modest cost in jitter, while forgetting overcorrects. In 300 real calls, 98.7\% of
+screens met the budget with the planner and 92\% without it. The next steps are
 running full trajectories with the real model, a learned fast policy
 trained on real interaction data, and a study with learners.
 

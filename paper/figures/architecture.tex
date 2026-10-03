@@ -8,18 +8,20 @@
 \node[box, right=of learner] (bkt) {Mastery\\estimator\\(BKT)};
 \node[box, right=of bkt] (pid) {PID\\governor};
 \node[box, right=of pid] (pol) {Fast\\policy};
-\node[box, below=10mm of pol] (plant) {Generative\\plant\\(Gemini)};
+\node[box, below=10mm of pol] (plan) {Layout\\planner};
+\node[box, left=of plan] (plant) {Generative\\plant\\(Gemini)};
 \node[box, left=of plant] (gate) {Validation\\gate};
 \node[box, left=of gate] (render) {Client\\renderer};
 \node[box, below=4mm of gate, text width=18mm, minimum height=5.5mm] (fb) {Fallback catalog};
 \draw[->] (learner) -- node[lab, above]{$r_n$} (bkt);
 \draw[->] (bkt) -- node[lab, above]{$P(L_n)$} (pid);
 \draw[->] (pid) -- node[lab, above]{$M_I^*,\ell_n$} (pol);
-\draw[->] (pol) -- node[lab, right]{affordances} (plant);
+\draw[->] (pol) -- node[lab, right, align=left]{$M_I^*,\alpha$,\\affordances} (plan);
+\draw[->] (plan) -- node[lab, above]{layout} (plant);
 \draw[->] (plant) -- node[lab, above]{JSON} (gate);
 \draw[->] (gate) -- node[lab, above]{pass} (render);
 \draw[->] (gate) -- node[lab, right]{fail} (fb);
 \draw[->] (fb) -| (render);
-\draw[->] (render) -| node[lab, pos=0.75, left]{screen} (learner);
-\draw[->, dashed] (pid) -- node[lab, right]{$M_I^*$} (gate);
+\draw[->] (render) -- node[lab, left]{screen} (learner);
+\draw[->, dashed] (pid.south) -- ++(0,-4.5mm) -| node[lab, pos=0.25, above]{$M_I^*$} (gate.north);
 \end{tikzpicture}
