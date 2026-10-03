@@ -1,0 +1,357 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{url}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+% Placeholder for numbers that must come from the confirmed benchmark run.
+% Every \tbd{} is replaced only after the engine results are final.
+\newcommand{\tbd}[1]{\textcolor{red}{[TBD: #1]}}
+
+\begin{document}
+
+\title{Learner-State-Aware Generative User Interfaces:\\
+A Closed-Loop Control Architecture for Adaptive Learning Environments}
+
+\author{\IEEEauthorblockN{Omanand Prashant Swami, Sanjana Shashikant Chavan, K. V. Deshpande,\\
+Pratik Rajendra Patil, Abhishek Ganesh Tirpude}
+\IEEEauthorblockA{Dept. of Computer Science and Business Systems\\
+JSPM's Rajarshi Shahu College of Engineering, Pune, India\\
+\{opswami\_csbs, sschavan\_csbs, kvdeshpande\_comp, prpatil\_csbs, agtirpude\_csbs\}@jspmrscoe.edu.in}}
+
+\maketitle
+
+\begin{abstract}
+Intelligent tutoring systems estimate what a learner knows but present a
+fixed interface, while generative user interfaces (GenUI) synthesize
+interfaces at runtime without any model of the learner. We propose a
+closed-loop architecture that couples the two. Bayesian Knowledge Tracing
+estimates mastery of a knowledge component; a discrete-time PID governor with
+anti-windup clamping and a filtered derivative converts the mastery deficit
+into a structural complexity budget; a fast policy selects discrete
+scaffolding affordances; and a foundation model emits a declarative JSON
+component tree that must satisfy the budget, with a deterministic fallback
+when schema or budget checks fail. A computable metric of interface
+complexity closes the loop between the budget and the rendered tree. We
+evaluate the architecture in silico on 1,000 synthetic learner trajectories
+drawn from three learner archetypes and replayed through four experimental
+arms. We report constraint adherence, interface jitter, recovery after error
+streaks and schema compliance \tbd{headline numbers}. We further show that
+standard BKT saturates after long success runs, so that a subsequent streak
+of errors leaves the interface unchanged, and evaluate forgetting and a
+CUSUM lapse detector as remedies. All claims concern algorithmic behavior;
+no learning gains are claimed.
+\end{abstract}
+
+\begin{IEEEkeywords}
+generative user interfaces, Bayesian knowledge tracing, PID control,
+cognitive load, adaptive learning, simulation
+\end{IEEEkeywords}
+
+% ---------------------------------------------------------------------------
+\section{Introduction}
+
+Intelligent tutoring systems (ITS) have long modeled learners precisely.
+Knowledge tracing maintains a probability that a learner has mastered each
+knowledge component \cite{corbett1995knowledge}, and
+tutors built on it have been deployed at scale in mathematics
+\cite{ritter2007cognitive,vanlehn2011relative}. The interface of such
+systems, however, is authored in advance: the learner model selects the next
+problem, not the form in which the problem is presented.
+
+Generative user interfaces take the opposite position. A foundation model
+produces a task-specific interface for each request
+\cite{leviathan2026genui}, including interactive courseware
+\cite{tu2026maicui}. These systems are open loop: the model does not observe
+the learner's state, and nothing bounds how complex the generated interface
+becomes.
+
+Cognitive load theory explains why this matters. The same material can help
+a novice and hinder an expert (the expertise reversal effect)
+\cite{kalyuga2003expertise}, and guidance should fade as
+competence grows \cite{renkl2003structuring,salden2010expertise}. An
+interface that adapts to the learner therefore needs both a learner model and
+a mechanism that holds the interface to a complexity appropriate to that
+model, without the abrupt layout changes that make adaptive interfaces hard
+to use \cite{gajos2008predictability,findlater2004menus}.
+
+This paper makes three contributions:
+\begin{enumerate}
+\item A closed-loop architecture in which a BKT mastery estimate drives a PID
+governor whose output is a structural complexity budget that a generative
+model must satisfy, with schema validation and a deterministic fallback.
+\item A computable structural complexity metric over a declarative component
+tree for linear-equation tasks, built from features linked in prior work to
+cognitive load and visual complexity.
+\item An in-silico benchmark of 1,000 synthetic learners across four arms
+and ablations, including an analysis of BKT saturation after success runs
+and two remedies.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+\section{Related Work}
+
+\subsection{Learner modeling}
+Bayesian Knowledge Tracing (BKT) models each knowledge component as a
+two-state hidden Markov model with prior, learning, guess and slip parameters
+\cite{corbett1995knowledge}. Extensions individualize parameters per learner
+\cite{pardos2010individualization}, add forgetting \cite{khajah2016deep},
+or contextualize guess and slip \cite{baker2008contextual}, and its
+fixed points and parameter constraints have been analyzed
+\cite{vandesande2013properties}. Logistic and deep alternatives exist
+\cite{pelanek2017bkt}; BKT remains competitive when extended
+\cite{khajah2016deep}. We use BKT because its state is a
+calibrated probability that can serve directly as a control variable.
+
+\subsection{Adaptive and generative interfaces}
+Model-based interface generation \cite{gajos2010supple} adapt presentation to users, but
+adaptation has costs: unpredictable changes reduce usability
+\cite{gajos2008predictability,findlater2004menus}. Recent GenUI
+systems let a large language model produce the interface itself
+\cite{leviathan2026genui,tu2026maicui}. To our knowledge, none of these
+systems bounds the generated interface by a learner model.
+
+\subsection{Cognitive load and scaffolding}
+Cognitive load theory \cite{sweller1988cognitive}
+attributes intrinsic load to element interactivity \cite{sweller2010element}.
+Worked examples reduce load for algebra novices \cite{sweller1985worked} and
+should fade into problem solving \cite{renkl2003structuring,salden2010expertise};
+concrete representations should fade into symbolic ones
+\cite{fyfe2014concreteness}. For linear equations, the balance model supports
+early understanding but breaks down with negative quantities
+\cite{vlassis2002balance}, and learners hold persistent
+misconceptions about equality and operating on the unknown
+\cite{kieran1981equality,booth2014persistent}.
+
+\subsection{Control and constrained generation}
+PID control with anti-windup and derivative filtering is standard practice
+\cite{astrom2006advanced,astrom1989windup}. Constrained
+decoding guarantees well-formed model output
+\cite{willard2023guided}, though schema-constrained output is not perfectly
+reliable in practice \cite{geng2025jsonschemabench}.
+
+% ---------------------------------------------------------------------------
+\section{Architecture}
+
+The loop has four layers (Fig.~\tbd{architecture figure}): a psychometric
+estimator, a complexity governor, a fast policy, and a generative plant whose
+output passes a validation gate before a deterministic client renders it.
+
+\subsection{Mastery estimation}
+After response $r_n\in\{0,1\}$ the mastery estimate is updated by Bayes' rule
+and the learning transition \cite{corbett1995knowledge}:
+\begin{align}
+P(L_n\mid r_n{=}1) &= \frac{P(L_{n})(1-P(S))}{P(L_{n})(1-P(S)) + (1-P(L_{n}))P(G)},\\
+P(L_n\mid r_n{=}0) &= \frac{P(L_{n})P(S)}{P(L_{n})P(S) + (1-P(L_{n}))(1-P(G))},\\
+P(L_{n+1}) &= P(L_n\mid r_n)\,(1-P(F)) + \bigl(1-P(L_n\mid r_n)\bigr)P(T),
+\end{align}
+where $P(F)=0$ gives standard BKT and $P(F)>0$ adds forgetting
+\cite{khajah2016deep}. Default parameters are $P(L_0)=0.15$, $P(T)=0.12$,
+$P(G)=0.20$, $P(S)=0.08$. They are design values, not fitted; they satisfy
+the bounds $P(G)<0.3$, $P(S)<0.1$ \cite{corbett1995knowledge} and the
+non-degeneracy conditions $P(G)+P(S)<1$, $P(T)<1-P(S)/(1-P(G))$
+\cite{vandesande2013properties}.
+
+\subsection{Complexity governor}
+The setpoint is the conventional mastery threshold $P^*=0.95$
+\cite{corbett1995knowledge,zhang2025mastery}. The tracking error is normalized
+on each side of the setpoint so that deficit and surplus have equal
+authority:
+\begin{equation}
+e_n=\begin{cases}(P^*-P(L_n))/P^* & P(L_n)\le P^*\\
+(P^*-P(L_n))/(1-P^*) & P(L_n)>P^*\end{cases},\quad e_n\in[-1,1].
+\end{equation}
+The control effort is
+\begin{equation}
+u_n = K_p e_n + K_i S_n + K_d D_n,
+\end{equation}
+with the clamped integral $S_n=\mathrm{clamp}(S_{n-1}+e_n,\,-S_{\max},\,S_{\max})$
+for anti-windup \cite{astrom1989windup} and the first-order filtered derivative
+$D_n=\gamma(e_n-e_{n-1})+(1-\gamma)D_{n-1}$ \cite{astrom2006advanced}. An
+inverted logistic maps effort to the complexity budget,
+\begin{equation}
+M_I^* = \bigl(1+e^{k u_n}\bigr)^{-1},
+\end{equation}
+which is quantized into four levels $\ell_n=\min(4,1+\lfloor 4M_I^*\rfloor)$. A
+hysteresis deadband $\Delta_h$ commits a new budget only when it differs from
+the last committed budget by at least $\Delta_h$.
+
+\paragraph*{Gain selection}
+Classical tuning rules \cite{ziegler1942optimum,skogestad2003simple}
+assume an identified plant response. In our benchmark the interface does not
+alter the simulated learner's responses (Section~\ref{sec:method}), so there is
+no plant response to identify. Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
+$S_{\max}$ and $\Delta_h$ were selected by minimizing an ITAE-type tracking
+cost \cite{graham1953itae} plus a jitter penalty on a separate tuning cohort;
+all reported results use a disjoint test cohort. Selected values:
+\tbd{tuned gains from results/}. The logistic slope $k$ is chosen so that the
+steady-state effort range maps to approximately $[0.05,0.95]$
+\tbd{re-derive $k$ for $P^*=0.95$}.
+
+\subsection{Fast policy}
+A fast policy maps $(P(L_n), M_I^*, \ell_n, \text{recent errors})$ to discrete
+affordances: scaffolding mode (worked example, guided scaffold, open
+symbolic), whether to show the balance-scale manipulative, whether hints are
+enabled, and an instructional density limit. The intended implementation is
+an open-weight decision model \cite{laya2026}; the benchmark uses a
+deterministic rule-based stand-in with the same interface, so no latency
+claims about that model are made.
+
+\subsection{Generative plant and validation gate}
+The plant (\tbd{Gemini model and configuration}) receives the budget, the
+policy decision and the equation and emits a JSON component tree. Nodes are
+drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
+\textsc{WorkedSolutionStep}, \textsc{ScaffoldedOperationPad},
+\textsc{SymbolicEquationWorkspace}, \textsc{SteppedHintAccordion} and
+\textsc{CartesianVerificationPlane}. The client renders these components
+directly and never executes generated code. Each emission is parsed against
+the schema; if parsing fails, or if
+$|M_I-M_I^*|>\varepsilon$ with $\varepsilon=0.05$, a precompiled fallback
+tree nearest to the budget is rendered instead.
+
+\subsection{Structural complexity metric}
+For a tree with $\rho$ interactive elements, abstraction level $\alpha$ and
+nesting depth $\delta$,
+\begin{equation}
+M_I = w_1\frac{\rho-1}{7} + w_2\frac{\alpha-1}{3} + w_3\frac{\delta-1}{3},
+\quad \rho\in[1,8],\ \alpha,\delta\in[1,4].
+\end{equation}
+Each feature has a basis in prior work: element interactivity raises load \cite{sweller2010element}
+and display density is a classic complexity measure \cite{tullis1983formatting};
+the abstraction ladder from balance scale to operation pad to symbolic
+workspace follows concreteness fading \cite{fyfe2014concreteness}; and
+deeper structures cost users more \cite{kiger1984depth}.
+Placing the Cartesian plane at the top of the ladder is our design choice.
+With no data to fit weights, we use equal weights $w_i=1/3$, which are robust
+in that setting \cite{dawes1979robust}, and test sensitivity to the weights
+(Section~\ref{sec:results}). $M_I$ is a structural proxy; it has not been
+validated against measured cognitive load.
+
+% ---------------------------------------------------------------------------
+\section{Method}
+\label{sec:method}
+
+\subsection{Synthetic learners}
+Simulated learners are an established way to test instructional designs
+before human studies \cite{vanlehn1994simulated,kaser2024simulated}, and
+BKT-generated data have been used to evaluate mastery assessment
+\cite{fancsali2013optimal}. Each learner is a two-state
+HMM whose parameters are drawn uniformly from archetype ranges
+(Table~\ref{tab:archetypes}). The ranges for the novice and guesser
+archetypes exceed the tighter bounds of \cite{corbett1995knowledge} by design
+to represent noisy learners, while respecting the non-degeneracy conditions
+of \cite{vandesande2013properties}. The cohort has 1,000 learners
+(300/400/300) with 40 items each. Responses are sampled once per learner and
+replayed unchanged through every arm (paired design). The interface therefore
+does not influence the simulated responses: the benchmark measures controller
+behavior, not learning.
+
+\begin{table}[t]
+\centering
+\caption{Learner archetypes (uniform parameter ranges).}
+\label{tab:archetypes}
+\begin{tabular}{lcccc}
+\toprule
+Archetype & $P(L_0)$ & $P(T)$ & $P(G)$ & $P(S)$\\
+\midrule
+Struggling novice & .02--.08 & .03--.07 & .10--.20 & .20--.30\\
+Inconsistent guesser & .05--.20 & .10--.20 & .15--.40 & .08--.30\\
+Fast master & .15--.30 & .30--.40 & .15--.25 & .01--.03\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Arms}
+(1) \emph{Static}: a fixed level-2 interface. (2) \emph{Unconstrained GenUI}:
+the plant chooses complexity from a noisy reading of mastery with no budget
+check. (3) \emph{Rule-based}: step up after three consecutive correct
+responses and down after two consecutive errors, an up-down rule in the
+spirit of \cite{levitt1971updown}. (4) \emph{Closed loop}:
+the full architecture. Ablations remove the derivative filter, remove
+anti-windup, and add a one-level slew limit.
+
+\subsection{Plant model in the benchmark}
+\tbd{If real Gemini rates are measured: describe them here. Otherwise:} The
+benchmark replaces the foundation model with a surrogate that compiles the
+closest admissible tree and injects faults: with probability
+\tbd{0.15} it drifts off budget, and with probability \tbd{0.03} it emits
+malformed output (truncated JSON, unknown component, out-of-range field,
+depth overflow, injected field). These rates are assumptions, not
+measurements.
+
+\subsection{Metrics}
+Constraint error $\Delta M=|M_I-M_I^*|$; schema compliance (valid trees over
+attempts); interface jitter $J=\frac{1}{N-1}\sum_n|M_I(n)-M_I(n-1)|$; recovery
+time after a five-error streak; and fallback rate. Jitter operationalizes the
+stability concern of \cite{gajos2008predictability}; the formula is ours.
+
+% ---------------------------------------------------------------------------
+\section{Results}
+\label{sec:results}
+
+\tbd{All numbers in this section come from the confirmed final benchmark run
+(commit, seed and CSV columns to be supplied by the engine).}
+
+\begin{table}[t]
+\centering
+\caption{Main results on the test cohort (mean $\pm$ 95\% CI).}
+\label{tab:main}
+\begin{tabular}{lcccc}
+\toprule
+Arm & $\Delta M$ & Jitter $J$ & Schema ok & Fallback\\
+\midrule
+Static & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
+Unconstrained GenUI & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
+Rule-based & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
+Closed loop & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ablations}
+\tbd{derivative filter, anti-windup, slew limit}.
+
+\subsection{Sensitivity}
+\tbd{gains at $\pm 50\%$; metric weights: equal, $0.40/0.35/0.25$, and each
+term dropped}.
+
+\subsection{BKT saturation and lapse handling}
+Under correct responses the BKT estimate converges to a stable fixed point at
+one \cite{vandesande2013properties}. With the default parameters the estimate
+exceeds $1-10^{-6}$ after ten correct responses and five subsequent errors
+lower it only to about $0.98$; after roughly forty correct responses it
+equals $1.0$ in double precision and no further evidence can lower it. The
+interface therefore stays at its highest level through a streak of errors.
+We compare two remedies: forgetting, $P(F)>0$ \cite{khajah2016deep},
+and a CUSUM detector \cite{page1954cusum} on the
+log-likelihood ratio between ``not known'' and the tracker's prediction,
+which resets the estimate when an alarm fires. \tbd{results on the
+forgetting cohort}. Weighting recent responses more heavily
+\cite{galyardt2015recent} is a third option we leave for future work.
+
+% ---------------------------------------------------------------------------
+\section{Discussion and Limitations}
+
+The benchmark tests whether the controller does what it is designed to do; it
+does not test whether learners benefit. Because simulated responses do not
+depend on the interface, the loop is closed only through the mastery
+estimate, not through the learner. $M_I$ is a structural proxy that has not
+been validated against measured load, for which instruments exist
+\cite{leppink2013instrument}. BKT
+parameters are design values rather than fits to tutor data. Long error
+streaks may reflect misconceptions rather than slips
+\cite{booth2014persistent}; the controller does not distinguish these.
+\tbd{plant: surrogate vs.\ measured Gemini rates}.
+
+\section{Conclusion}
+\tbd{one paragraph after results are final}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{../docs/references}
+
+\end{document}
