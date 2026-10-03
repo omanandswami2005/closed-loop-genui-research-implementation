@@ -37,3 +37,31 @@ def test_tracker_saturates_after_success_run():
 def test_invalid_params_rejected(kwargs):
     with pytest.raises(ValueError):
         BKTParams(**kwargs)
+
+
+def test_forgetting_keeps_estimate_below_one():
+    t = BKTTracker(BKTParams(p_f=0.02))
+    for _ in range(40):
+        t.observe(True)
+    assert 0.95 < t.mastery < 0.99
+
+
+def test_lapse_detector_absorbs_a_slip_and_trips_on_a_run():
+    params = BKTParams(lapse_threshold=6.5)
+    t = BKTTracker(params)
+    for _ in range(15):
+        t.observe(True)
+    t.observe(False)  # one slip: no alarm, estimate stays high
+    assert t.alarms == 0 and t.mastery > 0.9
+    for _ in range(3):
+        t.observe(True)
+    for _ in range(3):
+        t.observe(False)
+    assert t.alarms == 1 and t.mastery < 0.25
+
+
+def test_lapse_detector_is_silent_for_a_struggling_learner():
+    t = BKTTracker(BKTParams(lapse_threshold=6.5))
+    for _ in range(30):
+        t.observe(False)
+    assert t.alarms == 0  # errors are expected when the estimate is already low

@@ -87,6 +87,11 @@ def run_summary(records: Sequence[StepRecord], epsilon: float = EPSILON) -> dict
         "fallbacks": sum(r.fallback for r in records),
         "reached_level4": int(4 in levels),
         "first_level4_step": next((r.step for r in records if r.level == 4), -1),
+        # Ground-truth mismatch, only measurable in simulation: an abstract
+        # interface (level >= 3) shown to a learner who does not know the
+        # skill, or a concrete one (level <= 2) shown to one who does.
+        "overload_rate": sum(not r.known and r.level >= 3 for r in records) / len(records),
+        "underload_rate": sum(r.known and r.level <= 2 for r in records) / len(records),
         "final_mastery": records[-1].mastery,
         "correct_rate": sum(r.correct for r in records) / len(records),
     }

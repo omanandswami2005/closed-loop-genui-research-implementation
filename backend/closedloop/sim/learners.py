@@ -41,9 +41,19 @@ def _problem(rng: random.Random) -> Equation:
     return Equation(a=a, b=b, c=a * x + b)
 
 
-def sample_trajectory(learner_id: int, archetype: str, seed: int, horizon: int = HORIZON) -> Trajectory:
+def sample_trajectory(
+    learner_id: int,
+    archetype: str,
+    seed: int,
+    horizon: int = HORIZON,
+    forget: tuple[float, float] | None = None,
+) -> Trajectory:
+    """``forget`` gives a (low, high) range for a true per-item forgetting
+    probability; None (the main cohort) means learners never forget."""
     rng = random.Random(f"{seed}:learner:{learner_id}")
     params = {name: rng.uniform(lo, hi) for name, (lo, hi) in ARCHETYPES[archetype].items()}
+    if forget is not None:
+        params["p_f"] = rng.uniform(*forget)
     known = rng.random() < params["p_l0"]
     responses, latent, problems = [], [], []
     for _ in range(horizon):
@@ -53,14 +63,21 @@ def sample_trajectory(learner_id: int, archetype: str, seed: int, horizon: int =
         problems.append(_problem(rng))
         if not known and rng.random() < params["p_t"]:
             known = True
+        elif known and forget is not None and rng.random() < params["p_f"]:
+            known = False
     return Trajectory(learner_id, archetype, params, tuple(responses), tuple(latent), tuple(problems))
 
 
-def cohort(seed: int, sizes: dict[str, int] | None = None, horizon: int = HORIZON) -> list[Trajectory]:
+def cohort(
+    seed: int,
+    sizes: dict[str, int] | None = None,
+    horizon: int = HORIZON,
+    forget: tuple[float, float] | None = None,
+) -> list[Trajectory]:
     sizes = sizes or COHORT
     out, next_id = [], 0
     for archetype, n in sizes.items():
         for _ in range(n):
-            out.append(sample_trajectory(next_id, archetype, seed, horizon))
+            out.append(sample_trajectory(next_id, archetype, seed, horizon, forget))
             next_id += 1
     return out

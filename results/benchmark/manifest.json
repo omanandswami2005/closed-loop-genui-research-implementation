@@ -7,6 +7,12 @@
   },
   "horizon": 40,
   "epsilon": 0.05,
+  "tracker_forgetting_p": 0.02,
+  "tracker_lapse_threshold": 6.5,
+  "lapse_cohort_true_forgetting": [
+    0.02,
+    0.06
+  ],
   "variants": [
     {
       "name": "static",
@@ -25,6 +31,15 @@
       "plant": {
         "p_malformed": 0.03,
         "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
       },
       "open_loop_sigma": 0.15
     },
@@ -46,6 +61,15 @@
         "p_malformed": 0.03,
         "p_drift": 0.15
       },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
+      },
       "open_loop_sigma": 0.15
     },
     {
@@ -65,6 +89,15 @@
       "plant": {
         "p_malformed": 0.03,
         "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
       },
       "open_loop_sigma": 0.15
     },
@@ -86,6 +119,15 @@
         "p_malformed": 0.03,
         "p_drift": 0.15
       },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
+      },
       "open_loop_sigma": 0.15
     },
     {
@@ -105,6 +147,15 @@
       "plant": {
         "p_malformed": 0.03,
         "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
       },
       "open_loop_sigma": 0.15
     },
@@ -126,6 +177,15 @@
         "p_malformed": 0.03,
         "p_drift": 0.15
       },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
+      },
       "open_loop_sigma": 0.15
     },
     {
@@ -146,20 +206,110 @@
         "p_malformed": 0.03,
         "p_drift": 0.15
       },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
+      },
+      "open_loop_sigma": 0.15
+    },
+    {
+      "name": "closed_loop_forgetting",
+      "kind": "closed_loop",
+      "governor": {
+        "setpoint": 0.85,
+        "kp": 1.25,
+        "ki": 0.1,
+        "kd": 0.35,
+        "gamma": 0.1,
+        "s_max": 3.0,
+        "slope": 2.0,
+        "hysteresis": 0.06,
+        "max_level_step": null
+      },
+      "plant": {
+        "p_malformed": 0.03,
+        "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.02,
+        "lapse_threshold": null,
+        "lapse_reset": 0.5
+      },
+      "open_loop_sigma": 0.15
+    },
+    {
+      "name": "closed_loop_lapse_cusum",
+      "kind": "closed_loop",
+      "governor": {
+        "setpoint": 0.85,
+        "kp": 1.25,
+        "ki": 0.1,
+        "kd": 0.35,
+        "gamma": 0.1,
+        "s_max": 3.0,
+        "slope": 2.0,
+        "hysteresis": 0.06,
+        "max_level_step": null
+      },
+      "plant": {
+        "p_malformed": 0.03,
+        "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": 6.5,
+        "lapse_reset": 0.5
+      },
+      "open_loop_sigma": 0.15
+    },
+    {
+      "name": "closed_loop_lapse_cusum_slew",
+      "kind": "closed_loop",
+      "governor": {
+        "setpoint": 0.85,
+        "kp": 1.25,
+        "ki": 0.1,
+        "kd": 0.35,
+        "gamma": 0.1,
+        "s_max": 3.0,
+        "slope": 2.0,
+        "hysteresis": 0.06,
+        "max_level_step": 1
+      },
+      "plant": {
+        "p_malformed": 0.03,
+        "p_drift": 0.15
+      },
+      "bkt": {
+        "p_l0": 0.15,
+        "p_t": 0.12,
+        "p_g": 0.2,
+        "p_s": 0.08,
+        "p_f": 0.0,
+        "lapse_threshold": 6.5,
+        "lapse_reset": 0.5
+      },
       "open_loop_sigma": 0.15
     }
   ],
-  "bkt_tracker": {
-    "p_l0": 0.15,
-    "p_t": 0.12,
-    "p_g": 0.2,
-    "p_s": 0.08
-  },
   "system1_latency_us": {
     "n": 40000,
-    "p50": 6.173,
-    "p95": 10.406049999999997,
-    "p99": 22.01204000000001,
+    "p50": 6.468,
+    "p95": 10.23509999999999,
+    "p99": 21.61004000000001,
     "note": "BKT update + PID governor + surrogate policy; excludes the Laya runtime and the plant"
   },
   "injected_faults": {
@@ -197,6 +347,27 @@
       "out_of_range": 254,
       "depth_overflow": 219,
       "injected_field": 255
+    },
+    "closed_loop_forgetting": {
+      "truncated_json": 241,
+      "unknown_component": 230,
+      "out_of_range": 242,
+      "depth_overflow": 217,
+      "injected_field": 254
+    },
+    "closed_loop_lapse_cusum": {
+      "truncated_json": 234,
+      "unknown_component": 231,
+      "out_of_range": 249,
+      "depth_overflow": 218,
+      "injected_field": 252
+    },
+    "closed_loop_lapse_cusum_slew": {
+      "truncated_json": 233,
+      "unknown_component": 231,
+      "out_of_range": 253,
+      "depth_overflow": 218,
+      "injected_field": 251
     }
   }
 }

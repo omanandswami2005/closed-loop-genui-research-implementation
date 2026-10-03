@@ -11,7 +11,7 @@ import random
 import time
 from dataclasses import dataclass, field
 
-from ..bkt import BKTParams, update
+from ..bkt import BKTParams, BKTTracker
 from ..governor import GovernorConfig, PIDGovernor, complexity_level, level_center
 from ..plant import EPSILON, PlantConfig, SurrogatePlant, admit, fallback_document
 from ..policy import SurrogatePolicy
@@ -30,6 +30,7 @@ class Variant:
     static_level: int = 2
     rule_up: int = 3  # consecutive correct to step up
     rule_down: int = 2  # consecutive incorrect to step down
+    bkt: BKTParams = field(default_factory=BKTParams)  # the tracker's parameters
 
 
 ARMS = (
@@ -43,12 +44,29 @@ ABLATIONS = (
     Variant("ablation_no_anti_windup", "closed_loop", governor=GovernorConfig(s_max=None)),
     Variant("ablation_level_slew_limit", "closed_loop", governor=GovernorConfig(max_level_step=1)),
 )
+# Lapse handling. Standard BKT saturates after a success run, so a later run
+# of errors does not lower complexity. Two tracker extensions are compared:
+# BKT+Forgets from the literature, and the CUSUM lapse detector proposed here
+# (see closedloop.bkt). The slew limit stops the resulting drops skipping levels.
+FORGET_P = 0.02
+LAPSE_H = 6.5  # about three consecutive errors from a saturated estimate
+EXTENSIONS = (
+    Variant("closed_loop_forgetting", "closed_loop", bkt=BKTParams(p_f=FORGET_P)),
+    Variant("closed_loop_lapse_cusum", "closed_loop", bkt=BKTParams(lapse_threshold=LAPSE_H)),
+    Variant(
+        "closed_loop_lapse_cusum_slew",
+        "closed_loop",
+        governor=GovernorConfig(max_level_step=1),
+        bkt=BKTParams(lapse_threshold=LAPSE_H),
+    ),
+)
 
 
 @dataclass(frozen=True)
 class StepRecord:
     step: int
     correct: bool
+    known: bool  # true latent state of the simulated learner on this item
     mastery: float
     target: float  # budget this variant aimed at
     ref_target: float
@@ -67,10 +85,10 @@ class StepRecord:
 
 def mastery_series(responses: tuple[bool, ...], params: BKTParams) -> list[float]:
     """Mastery estimate *before* each item: the value its interface is built from."""
-    p, out = params.p_l0, []
+    tracker, out = BKTTracker(params), []
     for r in responses:
-        out.append(p)
-        p = update(p, r, params)
+        out.append(tracker.mastery)
+        tracker.observe(r)
     return out
 
 
@@ -79,18 +97,19 @@ def reference_targets(mastery: list[float]) -> list[float]:
     return [gov.step(m).budget for m in mastery]
 
 
-def run_variant(variant: Variant, traj: Trajectory, seed: int, bkt: BKTParams | None = None) -> list[StepRecord]:
-    bkt = bkt or BKTParams()
+def run_variant(variant: Variant, traj: Trajectory, seed: int) -> list[StepRecord]:
+    bkt = variant.bkt
     policy = SurrogatePolicy()
     plant = SurrogatePlant(variant.plant)
     plant_rng = random.Random(f"{seed}:plant:{traj.learner_id}")
     noise_rng = random.Random(f"{seed}:open_loop:{traj.learner_id}")
     gov = PIDGovernor(variant.governor)
-    ref = reference_targets(mastery_series(traj.responses, bkt))
+    ref = reference_targets(mastery_series(traj.responses, BKTParams()))
 
     # Item n's interface is built from responses 0..n-1, then response n is observed.
     records: list[StepRecord] = []
-    p = bkt.p_l0
+    tracker = BKTTracker(bkt)
+    p = tracker.mastery
     rule_level, streak_ok, streak_bad = 1, 0, 0
     for n, (correct, eq) in enumerate(zip(traj.responses, traj.problems)):
         window = traj.responses[max(0, n - RECENT_WINDOW) : n]
@@ -102,7 +121,7 @@ def run_variant(variant: Variant, traj: Trajectory, seed: int, bkt: BKTParams | 
         if variant.kind == "closed_loop":
             t0 = time.perf_counter_ns()
             if n:
-                p = update(p, traj.responses[n - 1], bkt)
+                p = tracker.observe(traj.responses[n - 1])
             out = gov.step(p)
             decision = policy.decide(p, out.budget, out.level, recent_errors)
             s1_ns = time.perf_counter_ns() - t0
@@ -112,7 +131,7 @@ def run_variant(variant: Variant, traj: Trajectory, seed: int, bkt: BKTParams | 
             attempted, fault = True, emission.fault
         else:
             if n:
-                p = update(p, traj.responses[n - 1], bkt)
+                p = tracker.observe(traj.responses[n - 1])
             target = ref[n]
             if variant.kind == "open_loop":
                 own = min(1.0, max(0.0, p + noise_rng.gauss(0.0, variant.open_loop_sigma)))
@@ -144,6 +163,7 @@ def run_variant(variant: Variant, traj: Trajectory, seed: int, bkt: BKTParams | 
             StepRecord(
                 step=n,
                 correct=correct,
+                known=traj.latent[n],
                 mastery=p,
                 target=target,
                 ref_target=ref[n],
@@ -163,4 +183,4 @@ def run_variant(variant: Variant, traj: Trajectory, seed: int, bkt: BKTParams | 
     return records
 
 
-__all__ = ["ABLATIONS", "ARMS", "EPSILON", "StepRecord", "Variant", "reference_targets", "run_variant"]
+__all__ = ["ABLATIONS", "ARMS", "EXTENSIONS", "EPSILON", "StepRecord", "Variant", "reference_targets", "run_variant"]

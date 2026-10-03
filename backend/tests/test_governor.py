@@ -89,3 +89,15 @@ def test_level_slew_limit_moves_one_level_per_step():
         p = update(p, True, params)
     assert max(abs(b - a) for a, b in zip(levels, levels[1:])) == 1
     assert levels[-1] == 4
+
+
+def test_lapse_detector_restores_reaction_after_saturation():
+    from closedloop.sim.arms import mastery_series
+    from closedloop.sim.metrics import failure_streaks
+
+    responses = [True] * 15 + [False] * 5 + [True] * 20
+    for params, reacts in ((BKTParams(), False), (BKTParams(lapse_threshold=6.5), True)):
+        gov = PIDGovernor()
+        levels = [gov.step(m).level for m in mastery_series(tuple(responses), params)]
+        (ev,) = failure_streaks(responses, levels)
+        assert (ev.tau_react is not None) is reacts
