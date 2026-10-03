@@ -11,8 +11,8 @@ In this research architecture, **the learner's mind and the user interface const
 
 *   **The Setpoint ($P^*$):** The target mastery threshold defining pedagogical competence for a given knowledge component (typically set to $P^* = 0.85$).
 *   **The Process Variable ($P(L_n)$):** The real-time, probabilistic latent mastery calculated by Bayesian Knowledge Tracing after interaction step $n$.
-*   **The Error Signal ($e_n$):** The instantaneous cognitive deficit between the pedagogical target and current student state:
-    $$e_n = P^* - P(L_n)$$
+*   **The Error Signal ($e_n$):** The instantaneous cognitive deficit between the pedagogical target and current student state, normalized asymmetrically so that a full deficit and a full surplus carry equal control authority ($e_n \in [-1, 1]$; see Section 6.2):
+    $$e_n = \frac{P^* - P(L_n)}{P^*} \text{ if } P(L_n) \le P^*, \qquad e_n = \frac{P^* - P(L_n)}{1 - P^*} \text{ otherwise}$$
 
 ```
                                THE CLOSED-LOOP CONTROL TOPOLOGY
@@ -91,7 +91,7 @@ The implementation complexity is **negligible**. While control theory sounds mat
                                            ▼
                        ┌────────────────────────────────────────┐
                        │     FAST DISCRETE DECISION LAYER       │
-                       │  Laya Local Engine (Sub-50ms System 1) │
+                       │  Laya Local Engine (<35 ms, p95)       │
                        │  Categorical Scaffolding & Hint Policy │
                        └───────────────────┬────────────────────┘
                                            │
@@ -128,14 +128,14 @@ The implementation complexity is **negligible**. While control theory sounds mat
 *   **Proposed Solution:** A multi-tier, closed-loop educational interface architecture wherein:
     1.  An explicit Bayesian Knowledge Tracing (BKT) engine tracks real-time latent skill acquisition ($P(L_n)$).
     2.  A discrete-time PID controller converts cognitive error into a continuous structural complexity budget ($M_I^*$).
-    3.  A fast local decision model (**Laya**) evaluates micro-affordance states (scaffolding category, hint availability) in a sub-50ms regime.
+    3.  A fast local decision model (**Laya**) evaluates micro-affordance states (scaffolding category, hint availability) within a $<50\text{ ms}$ System-1 budget (Laya's own allocation: $<35\text{ ms}$ p95).
     4.  A schema-constrained foundation model compiles interactive, declarative STEM manipulables strictly within the generated complexity bounds.
 *   **Main Research Question (RQ):** *Can a closed-loop control framework dynamically regulate the structural complexity and instructional scaffolding of schema-constrained Generative UIs to maintain alignment with a learner's continuous mastery state while preventing interface thrashing?*
 *   **Sub-Research Questions:**
     *   **SRQ1 (Algorithmic Fidelity):** How effectively does the closed-loop controller enforce structural complexity bounds ($M_I$) across simulated learner trajectories compared to open-loop generation?
     *   **SRQ2 (Control Stability):** To what extent do anti-windup clamping and low-pass derivative filtering prevent interface chattering and visual oscillation during non-linear learning phases?
     *   **SRQ3 (Architectural Decoupling):** How effectively does delegating micro-affordance policies to a fast local decision model (Laya) reduce foundation model generation overhead and eliminate prompt drift?
-*   **Evaluation Strategy (Zero-Human, In-Silico Experimental Benchmark):** A rigorous 4-arm technical simulation benchmark comparing (1) Static Pre-Authored Manipulables, (2) Unconstrained Open-Loop GenUI, (3) Rule-Based Adaptive UI, and (4) Proposed Closed-Loop BKT-PID-GenUI across 1,000 synthetic student interaction trajectories, measuring constraint compliance, structural stability, and failure recovery [INFERENCE].
+*   **Evaluation Strategy (Zero-Human, In-Silico Experimental Benchmark):** A rigorous 4-arm technical simulation benchmark comparing (1) Static Pre-Authored Manipulables, (2) Unconstrained Open-Loop GenUI, (3) Rule-Based Adaptive UI, and (4) Proposed Closed-Loop BKT-PID-GenUI across 1,000 synthetic learner trajectories (each replayed through all four arms with identical seeds), measuring constraint compliance, structural stability, and failure recovery [INFERENCE].
 *   **Publication Strategy:** Target an **IEEE Conference** (e.g., IEEE ICALT, IEEE FIE, IEEE TALE) or an **IEEE/ACM Conference Track** (e.g., AIED, ACM IUI) indexed in **Scopus** and **IEEE Xplore**, structured as an architectural and systems-control paper requiring zero human-subject trial approvals.
 
 ---
@@ -165,7 +165,7 @@ Financial Token Cost        Dollar-per-session calculations.    Omit commercial 
                                                                 computational efficiency and token constraints.
 Model Comparisons           Broad bake-offs (Gemini vs. GPT     Scope strictly to one primary foundation engine
                             vs. Claude vs. Distilled).          validating the closed-loop control architecture.
-Human Evaluation            24-subject lab study (NASA-TLX).    Pivot to 1,000-run in-silico Monte Carlo
+Human Evaluation            24-subject lab study (NASA-TLX).    Pivot to 1,000-trajectory in-silico Monte Carlo
                                                                 synthetic learner simulations.
 Educational Domain          Python Recursion (Coding/CS).       Middle/High School Mathematics: Multi-Step
                                                                 Linear Equations and System Balancing.
@@ -214,7 +214,7 @@ In the manuscript, we deliberately formalize why raw latency and token costs are
 ### Why the Zero-Human Synthetic Benchmark is Fully Defensible
 In educational data mining and systems engineering (e.g., IEEE Transactions on Learning Technologies, AIED, EDM), validating adaptive control architectures via **simulated student cohorts (Monte Carlo Knowledge Tracing)** is an established, highly respected methodology [SUPPORTED]. 
 
-By simulating well-characterized learner archetypes (Novices, Inconsistent Learners, Fast Masters) across 1,000 algorithmic sessions, you can report:
+By simulating well-characterized learner archetypes (Novices, Inconsistent Learners, Fast Masters) across 1,000 synthetic learner trajectories, you can report:
 1.  **Mathematical Convergence:** Proving that the PID control effort $u_n$ settles as mastery approaches $P^*$.
 2.  **Structural Adherence:** Demonstrating that the achieved interface complexity $M_I$ matches target budgets ($|M_I - M_I^*| \le \epsilon$) with $>98\%$ fidelity.
 3.  **Anti-Chattering Stability:** Proving that the derivative filter and hysteresis prevent jarring UI layout flips.
@@ -329,7 +329,7 @@ Student Action ──► pyBKT Engine ──► Posterior Mastery P(L_n)
                                            │
                                            ▼
 [Layer 1: Continuous Complexity Regulation]
-Error e_n = 0.85 - P(L_n) ──► Discrete PID Governor ──► Scalar Complexity Budget M_I*
+Error e_n = (0.85 - P(L_n)) / span ──► Discrete PID Governor ──► Scalar Complexity Budget M_I*
                                                                │
                                                                ▼
 [Layer 2: Fast Micro-Affordance Policy (Laya System 1)]
@@ -354,7 +354,8 @@ Laya operates locally via its Python package. It does **not** generate the UI, n
     1.  `choice("scaffolding_mode", ["worked_example", "guided_scaffold", "open_symbolic"])`
     2.  `noul("display_balance_scale_manipulative")`
     3.  `score("instructional_density_limit", min=1, max=5)`
-*   *Advantage:* Laya evaluates these policy questions in single-digit milliseconds ($<35\text{ ms}$) with calibrated probabilities, preventing the large generative model from having to reason about high-level pedagogical rules.
+*   *Advantage:* Laya evaluates these policy questions within a $<35\text{ ms}$ (p95) allocation with calibrated probabilities, preventing the large generative model from having to reason about high-level pedagogical rules.
+*   *Latency budget (single source of truth):* the full System-1 path (BKT update + PID governor + Laya policy, Layers 0–2) must complete in $<50\text{ ms}$ at p95. Within it, Laya is allocated $<35\text{ ms}$ p95, BKT + PID $<1\text{ ms}$ (the PID arithmetic alone is $<0.05\text{ ms}$), and the remainder is serialization headroom. The System-2 Gemini call is outside this budget.
 
 ---
 
@@ -373,8 +374,10 @@ $$P(L_{n+1}) = P(L_n \mid r_n) + (1 - P(L_n \mid r_n))P(T)$$
 *Standard Calibrated Priors:* $P(L_0) = 0.15, P(T) = 0.12, P(G) = 0.20, P(S) = 0.08$.
 
 ### 2. The Discrete-Time PID Control Algorithm
-The tracking error at interaction step $n$ is:
-$$e_n = P^* - P(L_n)$$
+The tracking error at interaction step $n$ is normalized asymmetrically about the setpoint:
+$$e_n = \begin{cases} \dfrac{P^* - P(L_n)}{P^*} & P(L_n) \le P^* \\[6pt] \dfrac{P^* - P(L_n)}{1 - P^*} & P(L_n) > P^* \end{cases} \qquad e_n \in [-1, 1]$$
+
+*Why normalize:* with the raw error $P^* - P(L_n)$ and $P^* = 0.85$, the error range is the lopsided interval $[-0.15, +0.85]$. A fully mastered learner can therefore drive the control effort no lower than $u = K_p(-0.15) - K_i S_{\text{max}} = -0.4875$ at steady state, which the sigmoid below maps to $M_I^* \le 0.706$; the top quarter of the complexity range (level 4, $M_I^* \ge 0.75$) is unreachable for every learner. Dividing each side of the setpoint by its own span makes the error symmetric, so mastery surplus has the same authority to expand the interface as deficit has to contract it. The mapping is continuous at $P(L_n) = P^*$ ($e_n = 0$) and monotone. Initialize $S_0 = 0$, $D_0 = 0$, $e_{-1} = e_0$ (no derivative kick on the first step).
 
 The control signal $u_n$ is computed as:
 $$u_n = K_p \cdot e_n + K_i \cdot S_n + K_d \cdot D_n$$
@@ -390,9 +393,19 @@ Where:
 ### 3. Complexity Budget Mapping ($M_I^*$)
 The raw control effort $u_n$ is projected onto a normalized target complexity budget $M_I^* \in [0.0, 1.0]$ using an inverted logistic function (high error $e_n$ yields low complexity budget):
 
-$$M_I^* = \frac{1}{1 + e^{1.8 \cdot u_n}}$$
+$$M_I^* = \frac{1}{1 + e^{k \cdot u_n}}, \qquad k = 2.0$$
 
-A hysteresis deadband ($\Delta_{\text{hyst}} = 0.06$) prevents layout jitter if $|M_I^*(n) - M_I^*(n-1)| < \Delta_{\text{hyst}}$.
+*Reachable range.* At steady state ($D_n \to 0$, integral saturated) the control effort spans $u \in [-(K_p + K_i S_{\text{max}}),\ +(K_p + K_i S_{\text{max}})] = [-1.55, +1.55]$, so
+
+$$M_I^* \in [\sigma(-3.1),\ \sigma(3.1)] = [0.043,\ 0.957],$$
+
+covering all four complexity levels. The slope $k$ is chosen so the steady-state extremes sit at about 5% and 95%: $k = \ln(19)/1.55 \approx 1.90$, rounded to $2.0$. Transient derivative action ($|D_n| \le \max|\Delta e| \le 2$) can push $u$ to at most $\pm 2.25$, i.e. $M_I^* \in [0.011, 0.989]$, so the budget never saturates numerically.
+
+*Discrete complexity levels.* The budget is quantized into four equal bands, $\ell_n = \min(4,\ 1 + \lfloor 4 M_I^* \rfloor)$, aligned with the abstraction scale $\alpha$ in Section 6.4 (level 4 $\Leftrightarrow M_I^* \ge 0.75$).
+
+*Hysteresis.* A deadband ($\Delta_{\text{hyst}} = 0.06$) holds the committed budget $\hat{M}_I^*$: the plant receives a new budget only when $|M_I^*(n) - \hat{M}_I^*(n-1)| \ge \Delta_{\text{hyst}}$. The comparison is against the last *committed* value, not the previous raw value; otherwise a slow monotone drift (consecutive raw changes below $0.06$) would never be committed and would itself act as a ceiling.
+
+*Numerical verification.* `scripts/verify_budget_range.py` (standard library only) reproduces both specifications. Under the raw-error specification, an all-correct learner reaches $P(L_n) \approx 1$ by step 7 yet its committed budget stalls at $0.666$ (level 3), and 0 of 300 Fast Master trajectories ever reach level 4. Under the corrected specification the same learner commits $M_I^* = 0.878$ (level 4) at step 3 and settles at $0.947$, and 300 of 300 Fast Master trajectories reach level 4 within 40 steps.
 
 ### 4. Computable Structural Complexity Metric ($M_I$)
 The achieved interface complexity of the generated JSON component tree is deterministically computed by parsing the AST:
@@ -410,7 +423,7 @@ Where:
 ## SECTION 7 — IN-SILICO EXPERIMENTAL DESIGN & METRICS
 
 ### The 4-Arm Technical Evaluation Benchmark
-Because no human testing is conducted, the empirical core of the paper consists of a **1,000-interaction Monte Carlo simulation suite**:
+Because no human testing is conducted, the empirical core of the paper consists of a **1,000-trajectory Monte Carlo simulation suite**. Terminology used throughout: a *trajectory* is one synthetic learner's session of $T$ interaction steps (default $T = 40$); an *interaction* is one step. The cohort is 1,000 trajectories ($300 + 400 + 300$ across the three archetypes below), and every trajectory is replayed through all four arms with the same random seed (paired design), giving $4{,}000$ arm-runs and $160{,}000$ interaction steps:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -501,5 +514,5 @@ References                 1.0 pages            25–30 verified archival citati
 *   **Frontend:** React 19 + TypeScript, Tailwind CSS, Lucide Icons, Scientific Research Apparatus Theme.
 *   **Backend:** Python 3.11, FastAPI, `pyBKT`, `laya`, Pydantic v2.
 *   **Plant Model:** Gemini 3.7 Flash (`google-genai` SDK, `response_mime_type="application/json"`, strict Pydantic output schema).
-*   **State Parameters:** $P^* = 0.85$, $K_p = 1.25$, $K_i = 0.10$, $K_d = 0.35$, $\gamma = 0.10$, $S_{\text{max}} = 3.0$, $\Delta_{\text{hyst}} = 0.06$.
-*   **Primary Experiments:** 1,000 automated interaction runs evaluating $\Delta M$, Jitter ($J$), and recovery steps across the 4 experimental arms.
+*   **State Parameters:** $P^* = 0.85$ (asymmetric error normalization, $e_n \in [-1, 1]$), $K_p = 1.25$, $K_i = 0.10$, $K_d = 0.35$, $\gamma = 0.10$, $S_{\text{max}} = 3.0$, sigmoid slope $k = 2.0$, $\Delta_{\text{hyst}} = 0.06$ (against last committed budget), 4 complexity levels.
+*   **Primary Experiments:** 1,000 synthetic learner trajectories ($T = 40$ steps each), each replayed through all 4 experimental arms, evaluating $\Delta M$, Jitter ($J$), and recovery steps.
