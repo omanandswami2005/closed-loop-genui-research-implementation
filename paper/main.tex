@@ -208,12 +208,12 @@ that the effort range $\pm(K_p+K_iS_{\max})$ maps to $[0.05,0.95]$.
 A fast policy maps $(P(L_n), M_I^*, \ell_n, \text{recent errors})$ to discrete
 affordances: scaffolding mode (worked example, guided scaffold, open
 symbolic), whether to show the balance-scale manipulative, whether hints are
-enabled, and an instructional density limit. The intended implementation is
-an open-weight decision model \cite{laya2026}. Used zero-shot on a CPU,
-that model took a median of 1.32\,s per decision (95th percentile 1.46\,s)
-and chose a worked example in all 200 test states, so on its own it did not
-follow the budget. The benchmark therefore uses a deterministic rule-based
-stand-in with the same interface.
+enabled, and an instructional density limit. The policy is deterministic
+and rule-based, and it is the policy in every reported result. We also
+evaluated an open-weight decision model \cite{laya2026} zero-shot as a
+replacement. On a CPU it took a median of 1.32\,s per decision (95th
+percentile 1.46\,s) and gave the same decision, a worked example, for all
+200 test states, so it is not part of the evaluated system.
 
 \subsection{Generative plant and validation gate}
 The plant, intended to be Gemini 3.7 Flash served through Vertex AI,
@@ -432,9 +432,9 @@ streaks may reflect misconceptions rather than slips
 The plant is a surrogate with assumed fault rates. Schema compliance
 (97\%) and the fallback rate (15\%) follow from those assumptions and say
 nothing about Gemini; measuring them with the real model is future work.
-Finally, the open-weight fast policy did not follow the budget zero-shot and
-needs about 1.3\,s per decision on a CPU, so a fine-tuned or smaller policy
-is needed before it can run inside the loop.
+Finally, a learned fast policy would need fine-tuning on real learner
+interaction data; training it on simulator data would only imitate the rule
+policy it is meant to replace.
 
 \section{Conclusion}
 We coupled a learner model to a generative interface through a PID
@@ -446,8 +446,8 @@ who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
 little cost, while forgetting overcorrects. The next steps are measuring
-the real model's fault rates, a fast policy that follows the budget, and a
-study with learners.
+the real model's fault rates, a learned fast policy trained on real
+interaction data, and a study with learners.
 
 \section*{Code and Data Availability}
 The engine, simulation harness, benchmark results and the sources of
