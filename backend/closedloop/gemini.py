@@ -12,11 +12,12 @@ Configuration (environment):
     GENUI_GEMINI_TIMEOUT   seconds (default 30)
     GENUI_GEMINI_THINKING  thinking level LOW or HIGH (default LOW; HIGH is
                            about 3x slower)
-    GENUI_GEMINI_MODE      "free": the model chooses the layout that meets the
-                           budget; "guided": the deterministic planner
+    GENUI_GEMINI_MODE      "guided" (default): the deterministic planner
                            (``plant.plan``) fixes the layout and the model
-                           writes the content. Guided removes the model's
-                           budget arithmetic, which is most of the latency.
+                           writes the content; "free": the model chooses the
+                           layout that meets the budget. Guided removes the
+                           model's budget arithmetic, which is most of the
+                           latency.
 
 Auth: on Cloud Run the access token comes from the metadata server. Elsewhere
 no header is added, which suits an environment whose egress proxy injects
@@ -96,7 +97,7 @@ class GeminiConfig:
     model: str = os.environ.get("GENUI_GEMINI_MODEL", "gemini-3.7-flash")
     timeout_s: float = float(os.environ.get("GENUI_GEMINI_TIMEOUT", "30"))
     thinking_level: str = os.environ.get("GENUI_GEMINI_THINKING", "LOW")
-    mode: str = os.environ.get("GENUI_GEMINI_MODE", "free")
+    mode: str = os.environ.get("GENUI_GEMINI_MODE", "guided")
     temperature: float = 0.4
 
     @property

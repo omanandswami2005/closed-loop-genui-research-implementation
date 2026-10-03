@@ -126,9 +126,9 @@ python -m closedloop.sim.gemini_eval --out ../results/gemini --n 300 --workers 4
 python -m closedloop.sim.gemini_eval --out ../results/gemini_guided --n 300 --workers 4 --mode guided
 ```
 
-Two modes (`GENUI_GEMINI_MODE`). In **free** mode (the default) the model
-chooses a layout that meets the budget from the M_I formula. In **guided**
-mode the deterministic planner (`plant.plan`) fixes the layout (primary
+Two modes (`GENUI_GEMINI_MODE`). In **free** mode the model chooses a layout
+that meets the budget from the M_I formula. In **guided** mode (the live
+app's default) the deterministic planner (`plant.plan`) fixes the layout (primary
 manipulative, interactive count, hints, worked steps, depth) and the model
 writes the instructional content. 300 calls each, budgets drawn uniformly
 from [0.02, 0.98], thinking level LOW, 4 concurrent calls, same seed:
