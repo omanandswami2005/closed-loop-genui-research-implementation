@@ -10,7 +10,7 @@ plt.rcParams.update({'font.family':'serif','font.serif':['STIXGeneral','DejaVu S
  'pdf.fonttype':42})
 rows={r['variant']:r for r in csv.DictReader(open(R+'results/benchmark/summary.csv')) if r['archetype']=='all'}
 arms=[('static','Static'),('unconstrained_genui','Unconstr.\nGenUI'),('rule_based','Rule-\nbased'),('closed_loop','Closed\nloop')]
-fig,axs=plt.subplots(1,3,figsize=(3.5,1.55),sharey=True)
+fig,axs=plt.subplots(1,3,figsize=(3.5,1.4),sharey=True)
 y=list(range(len(arms)))[::-1]
 panels=[('mean_delta_m_ref','Constraint error $\\Delta M$',True),('jitter','Jitter $J$',True),('level_skips_per_run','Level skips per run',False)]
 for ax,(k,t,ci) in zip(axs,panels):

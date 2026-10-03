@@ -47,7 +47,8 @@ often. Standard BKT saturates after long success runs, so a later streak of
 errors leaves the interface unchanged; a CUSUM lapse detector cuts overload
 in a forgetting cohort by 25\%. In 300 calls to the real model, 3.4\% of
 outputs were malformed and 2.8\% of valid outputs missed the budget, against
-simulated rates of 3\% and 15\%. All claims concern algorithmic behavior;
+simulated rates of 3\% and 15\%; when a planner fixes the layout, 98.7\% of
+calls are within budget. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
 
@@ -217,11 +218,10 @@ A fast policy maps $(P(L_n), M_I^*, \ell_n, \text{recent errors})$ to discrete
 affordances: scaffolding mode (worked example, guided scaffold, open
 symbolic), whether to show the balance-scale manipulative, whether hints are
 enabled, and an instructional density limit. The policy is deterministic
-and rule-based, and it is the policy in every reported result. We also
-evaluated an open-weight decision model \cite{laya2026} zero-shot as a
-replacement. On a CPU it took a median of 1.32\,s per decision (95th
-percentile 1.46\,s) and gave the same decision, a worked example, for all
-200 test states, so it is not part of the evaluated system.
+and rule-based in every reported result. An open-weight decision model
+\cite{laya2026}, evaluated zero-shot, took a median of 1.32\,s per decision
+on a CPU and chose a worked example in all 200 test states, so it is not
+part of the evaluated system.
 
 \subsection{Generative plant and validation gate}
 The plant, Gemini 3.7 Flash served through Vertex AI,
@@ -317,19 +317,37 @@ drifts off budget, and with probability 0.03 it emits malformed output
 injected field). These rates were set before the real model was measured.
 The unconstrained arm uses the same surrogate without the budget check.
 
-To check them, we sent 300 requests to the real model (JSON output mode
-without a response schema, thinking level low, temperature 0.4, 30\,s
-timeout) with budgets drawn uniformly from $[0.02,0.98]$ and passed
-every output through the same gate. Nine calls failed in transport (six HTTP
-errors, three 30\,s timeouts). Of the remaining 291, ten were valid JSON
-that broke a structural rule (a tree with no interactive element), a
-content-malformed rate of 3.4\%. Of the 281 valid trees, eight (2.8\%) missed
-the budget by more than $\varepsilon$; the median error was 0.012. Counting
-all failures, 91\% of calls met the budget and 9\% would fall back. Compliance
-was lowest at level 1 (82\% within budget) and 93--95\% at levels 2--4.
-Median latency of completed calls was 5.6\,s (95th percentile 7.8\,s). The surrogate's 3\%
-malformed rate is therefore close to the measured one, and its 15\% drift
-rate is a stress setting about five times the measured rate.
+We measured the real model in two modes: in \emph{free} mode it chooses
+layout and content; in \emph{guided} mode a deterministic planner picks the
+admissible layout closest to the budget and the model writes only the
+content. Each mode received 300 requests (JSON mode without a response
+schema, thinking level low, temperature 0.4, 30\,s timeout) with budgets
+uniform on $[0.02,0.98]$, scored by the same gate (Table~\ref{tab:gemini}).
+
+\begin{table}[t]
+\centering
+\caption{Gemini 3.7 Flash, 300 calls per mode.}
+\label{tab:gemini}
+\begin{tabular}{lcc}
+\toprule
+ & Free & Guided\\
+\midrule
+Transport failures (HTTP error, timeout) & 6 & 4\\
+Content-malformed, of completed calls & 3.4\% & 0\%\\
+Off budget, of valid trees & 2.8\% & 0\%\\
+Within budget, of all calls & 92.0\% & 98.7\%\\
+Median $|M_I-M_I^*|$ of valid trees & 0.012 & 0.007\\
+Median thinking tokens & 696 & 0\\
+Latency of completed calls, median / p95 & 7.7 / 18.6\,s & 2.7 / 5.1\,s\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In free mode, ten of 294 completed calls lacked an interactive element
+and eight of 284 valid trees missed the budget, most often at level 1; in
+guided mode all failures were in transport. The surrogate's 3\% malformed
+rate thus matches free mode, and its 15\% drift rate is a stress setting.
+Free mode's latency comes largely from hidden reasoning (our reading).
 
 \subsection{Metrics}
 Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
@@ -391,14 +409,11 @@ smoother but underloads (Table~\ref{tab:main}).}
 \end{figure}
 
 \subsection{Main comparison}
-Table~\ref{tab:main} and Fig.~\ref{fig:results} show that the closed loop keeps the rendered interface
-within 0.012 of its budget on average. Every rendered tree is within
-$\varepsilon$, but this holds by construction, since the gate substitutes a
-fallback whenever a tree misses the budget; with the surrogate's 15\% drift rate,
-15.4\% of steps are fallbacks. Unconstrained GenUI and the rule-based arm
-track the same reference budget less closely (0.131 and 0.123).
-
-The closed loop's jitter (0.035) is 3.5 times lower than that of
+The closed loop keeps the rendered interface within 0.012 of its budget
+on average (Table~\ref{tab:main}, Fig.~\ref{fig:results}), against 0.131
+and 0.123 for unconstrained GenUI and the rule-based arm. Every rendered tree
+is within $\varepsilon$ by construction, since the gate substitutes a
+fallback (15.4\% of steps at the surrogate's drift rate). The closed loop's jitter (0.035) is 3.5 times lower than that of
 unconstrained GenUI (0.123), which also skips levels 2.06 times per run
 against 0.67. The rule-based arm is smoother still (0.025, no skips), because
 it moves one level at a time. Against the latent learner state, the picture
@@ -423,16 +438,15 @@ run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
 Changing each controller parameter by $\pm 50\%$ raised the test cost
-($\mathrm{ITAE}+J$) from 0.108 to at most 0.118. One change,
-$1.5\Delta_h$, lowered it to 0.104 but more than doubled level skips (1.51
-per run), so the cost does not capture every property we care about. For the
+($\mathrm{ITAE}+J$) from 0.108 to at most 0.118, except $1.5\Delta_h$,
+which lowered it to 0.104 but more than doubled level skips. For the
 metric weights, the closed loop's $\Delta M$ stays between 0.007 and 0.017
 under equal weights, the initial $0.40/0.35/0.25$ split and three
 single-feature-heavy splits ($0.6/0.2/0.2$). Dropping abstraction or depth
 roughly doubles it (0.023 and 0.022) while keeping more than 99\% of steps
-within $\varepsilon$. Dropping element density breaks the loop: the fallback rate rises to
-84\% and even then only 18\% of rendered screens are within $\varepsilon$,
-because the remaining two features cannot reach most budgets (our reading). ITAE mismatch is about 0.072 under every weighting.
+within $\varepsilon$. Dropping element density breaks the loop: fallbacks rise to 84\% and only
+18\% of screens are within $\varepsilon$. ITAE mismatch is about 0.072 under
+every weighting.
 
 \subsection{BKT saturation and lapse handling}
 Under correct responses the BKT estimate converges to a stable fixed point at
@@ -485,8 +499,8 @@ streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
 The benchmark plant is a surrogate. Its malformed rate matches and its drift rate
 exceeds those measured on the real model, but the real-model measurement covers single
-calls, not full learner trajectories, and its 5.6\,s median latency is too
-slow for per-item regeneration without caching or prefetching.
+calls, not full learner trajectories. Its latency (median 7.7\,s free,
+2.7\,s guided) calls for prefetching or caching.
 Finally, a learned fast policy would need fine-tuning on real learner
 interaction data; training it on simulator data would only imitate the rule
 policy it is meant to replace.
@@ -501,7 +515,8 @@ learners who have not mastered the skill. Anti-windup and the derivative filter 
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
 a modest cost in jitter, while forgetting overcorrects. In 300 real calls the
-generative model met the budget 91\% of the time. The next steps are
+generative model met the budget 92\% of the time, and 98.7\% when a
+deterministic planner fixes the layout. The next steps are
 running full trajectories with the real model, a learned fast policy
 trained on real interaction data, and a study with learners.
 
