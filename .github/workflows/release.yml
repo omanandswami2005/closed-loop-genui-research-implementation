@@ -1,11 +1,15 @@
-# Publishes a GitHub release for every pushed version tag (v*), with the
-# annotated tag message as the notes and the paper PDF attached. Zenodo
-# archives each published release and mints its DOI.
+# Publishes a GitHub release: run it by hand with a version (e.g. v1.0.0).
+# It tags the current commit, uses .github/release-notes/<version>.md as the
+# notes and attaches the paper PDF. Zenodo archives each published release
+# and mints its DOI.
 name: release
 
 on:
-  push:
-    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag, e.g. v1.0.0"
+        required: true
 
 permissions:
   contents: write
@@ -18,7 +22,8 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
         run: |
-          git fetch --force origin "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"
-          gh release create "$GITHUB_REF_NAME" paper/main.pdf#paper.pdf \
-            --title "$GITHUB_REF_NAME" --notes-from-tag --verify-tag
+          gh release create "$VERSION" paper/main.pdf#paper.pdf \
+            --target "$GITHUB_SHA" --title "$VERSION" \
+            --notes-file ".github/release-notes/$VERSION.md"
