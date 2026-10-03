@@ -299,8 +299,9 @@ drifts off budget, and with probability 0.03 it emits malformed output
 injected field). These rates were set before the real model was measured.
 The unconstrained arm uses the same surrogate without the budget check.
 
-To check them, we sent 300 requests to the real model (thinking level low,
-temperature 0.4) with budgets drawn uniformly from $[0.02,0.98]$ and passed
+To check them, we sent 300 requests to the real model (JSON output mode
+without a response schema, thinking level low, temperature 0.4, 30\,s
+timeout) with budgets drawn uniformly from $[0.02,0.98]$ and passed
 every output through the same gate. Nine calls failed in transport (six HTTP
 errors, three 30\,s timeouts). Of the remaining 291, ten were valid JSON
 that broke a structural rule (a tree with no interactive element), a
