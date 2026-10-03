@@ -118,7 +118,7 @@ moves it a tiny amount, because the model reads the error as a slip.
 | 20 | 0.99999999999998 | 1.0 (no visible change) |
 | 40 | exactly 1.0 in the computer | 1.0, and it can never move again |
 
-After about 40 correct answers the number becomes exactly 1.0 in floating
+After 24 correct answers the number becomes exactly 1.0 in floating
 point. At exactly 1.0 the Bayes update cannot lower it, so plain BKT is stuck
 for good. This is worth one sentence in Limitations.
 

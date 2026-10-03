@@ -41,10 +41,15 @@ complexity closes the loop between the budget and the rendered tree. We
 evaluate the architecture in silico on 1,000 synthetic learner trajectories
 drawn from three learner archetypes and replayed through four experimental
 arms. We report constraint adherence, interface jitter, recovery after error
-streaks and schema compliance \tbd{headline numbers}. We further show that
+streaks and ground-truth over- and underload. The closed loop keeps the
+rendered interface within 0.012 of the governor's budget on average, against 0.131 for unconstrained GenUI and 0.123 for a
+rule-based baseline, with 3.5 times less jitter than unconstrained GenUI.
+Unconstrained GenUI matches latent mastery slightly better but skips levels
+three times as often. We further show that
 standard BKT saturates after long success runs, so that a subsequent streak
 of errors leaves the interface unchanged, and evaluate forgetting and a
-CUSUM lapse detector as remedies. All claims concern algorithmic behavior;
+CUSUM lapse detector as remedies; the detector cuts overload in a
+forgetting cohort by 25\%. Plant fault rates are assumed, not measured. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
 
@@ -138,17 +143,18 @@ reliable in practice \cite{geng2025jsonschemabench}.
 % ---------------------------------------------------------------------------
 \section{Architecture}
 
-The loop has four layers (Fig.~\tbd{architecture figure}): a psychometric
+The loop has four layers: a psychometric
 estimator, a complexity governor, a fast policy, and a generative plant whose
 output passes a validation gate before a deterministic client renders it.
 
 \subsection{Mastery estimation}
 After response $r_n\in\{0,1\}$ the mastery estimate is updated by Bayes' rule
-and the learning transition \cite{corbett1995knowledge}:
+and the learning transition \cite{corbett1995knowledge}. Writing
+$p=P(L_n)$, $g=P(G)$, $s=P(S)$ and $\hat p=P(L_n\mid r_n)$,
 \begin{align}
-P(L_n\mid r_n{=}1) &= \frac{P(L_{n})(1-P(S))}{P(L_{n})(1-P(S)) + (1-P(L_{n}))P(G)},\\
-P(L_n\mid r_n{=}0) &= \frac{P(L_{n})P(S)}{P(L_{n})P(S) + (1-P(L_{n}))(1-P(G))},\\
-P(L_{n+1}) &= P(L_n\mid r_n)\,(1-P(F)) + \bigl(1-P(L_n\mid r_n)\bigr)P(T),
+P(L_n\mid r_n{=}1) &= \frac{p(1-s)}{p(1-s) + (1-p)g},\\
+P(L_n\mid r_n{=}0) &= \frac{ps}{ps + (1-p)(1-g)},\\
+P(L_{n+1}) &= \hat p\,(1-P(F)) + (1-\hat p)\,P(T),
 \end{align}
 where $P(F)=0$ gives standard BKT and $P(F)>0$ adds forgetting
 \cite{khajah2016deep}. Default parameters are $P(L_0)=0.15$, $P(T)=0.12$,
@@ -164,8 +170,9 @@ on each side of the setpoint so that deficit and surplus have equal
 authority:
 \begin{equation}
 e_n=\begin{cases}(P^*-P(L_n))/P^* & P(L_n)\le P^*\\
-(P^*-P(L_n))/(1-P^*) & P(L_n)>P^*\end{cases},\quad e_n\in[-1,1].
+(P^*-P(L_n))/(1-P^*) & P(L_n)>P^*\end{cases}
 \end{equation}
+so that $e_n\in[-1,1]$.
 The control effort is
 \begin{equation}
 u_n = K_p e_n + K_i S_n + K_d D_n,
@@ -188,22 +195,29 @@ alter the simulated learner's responses (Section~\ref{sec:method}), so there is
 no plant response to identify. Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
 $S_{\max}$ and $\Delta_h$ were selected by minimizing an ITAE-type tracking
 cost \cite{graham1953itae} plus a jitter penalty on a separate tuning cohort;
-all reported results use a disjoint test cohort. Selected values:
-\tbd{tuned gains from results/}. The logistic slope $k$ is chosen so that the
-steady-state effort range maps to approximately $[0.05,0.95]$
-\tbd{re-derive $k$ for $P^*=0.95$}.
+all reported results use a disjoint test cohort. A random search of 200
+samples over $K_p\in[0.25,2.5]$, $K_i\in[0,0.4]$, $K_d\in[0,1]$,
+$\gamma\in[0.05,1]$, $S_{\max}\in[1,6]$ and $\Delta_h\in[0.02,0.15]$ selected
+$K_p=0.865$, $K_i=0.377$, $K_d=0.672$, $\gamma=0.398$, $S_{\max}=1.253$ and
+$\Delta_h=0.141$. The cost surface is flat: the selected point scores 0.104
+on the tuning cohort against 0.110 for hand-set initial values, which rank
+22nd of 201. The logistic slope is $k=\ln 19/(K_p+K_iS_{\max})=2.202$, so
+that the effort range $\pm(K_p+K_iS_{\max})$ maps to $[0.05,0.95]$.
 
 \subsection{Fast policy}
 A fast policy maps $(P(L_n), M_I^*, \ell_n, \text{recent errors})$ to discrete
 affordances: scaffolding mode (worked example, guided scaffold, open
 symbolic), whether to show the balance-scale manipulative, whether hints are
 enabled, and an instructional density limit. The intended implementation is
-an open-weight decision model \cite{laya2026}; the benchmark uses a
-deterministic rule-based stand-in with the same interface, so no latency
-claims about that model are made.
+an open-weight decision model \cite{laya2026}. Used zero-shot on a CPU,
+that model took a median of 1.32\,s per decision (95th percentile 1.46\,s)
+and chose a worked example in all 200 test states, so on its own it did not
+follow the budget. The benchmark therefore uses a deterministic rule-based
+stand-in with the same interface.
 
 \subsection{Generative plant and validation gate}
-The plant (\tbd{Gemini model and configuration}) receives the budget, the
+The plant, intended to be Gemini 3.7 Flash served through Vertex AI,
+receives the budget, the
 policy decision and the equation and emits a JSON component tree. Nodes are
 drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
 \textsc{WorkedSolutionStep}, \textsc{ScaffoldedOperationPad},
@@ -219,8 +233,8 @@ For a tree with $\rho$ interactive elements, abstraction level $\alpha$ and
 nesting depth $\delta$,
 \begin{equation}
 M_I = w_1\frac{\rho-1}{7} + w_2\frac{\alpha-1}{3} + w_3\frac{\delta-1}{3},
-\quad \rho\in[1,8],\ \alpha,\delta\in[1,4].
 \end{equation}
+with $\rho\in[1,8]$ and $\alpha,\delta\in[1,4]$.
 Each feature has a basis in prior work: element interactivity raises load \cite{sweller2010element}
 and display density is a classic complexity measure \cite{tullis1983formatting};
 the abstraction ladder from balance scale to operation pad to symbolic
@@ -276,62 +290,131 @@ the full architecture. Ablations remove the derivative filter, remove
 anti-windup, and add a one-level slew limit.
 
 \subsection{Plant model in the benchmark}
-\tbd{If real Gemini rates are measured: describe them here. Otherwise:} The
-benchmark replaces the foundation model with a surrogate that compiles the
-closest admissible tree and injects faults: with probability
-\tbd{0.15} it drifts off budget, and with probability \tbd{0.03} it emits
-malformed output (truncated JSON, unknown component, out-of-range field,
-depth overflow, injected field). These rates are assumptions, not
-measurements.
+The benchmark replaces the foundation model with a surrogate that compiles
+the closest admissible tree and injects faults: with probability 0.15 it
+drifts off budget, and with probability 0.03 it emits malformed output
+(truncated JSON, unknown component, out-of-range field, depth overflow,
+injected field). These rates are assumptions, not measurements of Gemini.
+The unconstrained arm uses the same surrogate without the budget check.
 
 \subsection{Metrics}
-Constraint error $\Delta M=|M_I-M_I^*|$; schema compliance (valid trees over
-attempts); interface jitter $J=\frac{1}{N-1}\sum_n|M_I(n)-M_I(n-1)|$; recovery
-time after a five-error streak; and fallback rate. Jitter operationalizes the
+Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
+budget the closed-loop governor commits for the same responses, so that all
+arms share one reference; ``within $\varepsilon$'' is the share of steps with
+$\Delta M\le 0.05$. Interface jitter is
+$J=\frac{1}{N-1}\sum_n|M_I(n)-M_I(n-1)|$, and a skip is a change of two or
+more levels between consecutive items. Jitter operationalizes the
 stability concern of \cite{gajos2008predictability}; the formula is ours.
+Recovery time is the number of items after a streak of five or more errors
+until the level returns to its pre-streak value. Fallback rate is the share
+of steps rendered from the fallback catalog. Because the simulator knows the
+learner's latent state, we also report \emph{overload} (level 3 or 4 shown
+while the skill is not known), \emph{underload} (level 1 or 2 shown while it
+is known) and an ITAE-weighted mismatch $\sum_n (n{+}1)m_n/\sum_n(n{+}1)$
+\cite{graham1953itae}, where $m_n$ marks either case. These three measures
+are available only in simulation.
 
 % ---------------------------------------------------------------------------
 \section{Results}
 \label{sec:results}
 
-\tbd{All numbers in this section come from the confirmed final benchmark run
-(commit, seed and CSV columns to be supplied by the engine).}
+All numbers come from one benchmark run on the test cohort (seed 20261003;
+tuning seed 20261004), released with the code. Intervals are
+normal-approximation 95\% confidence intervals over the 1,000 learners.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{Main results on the test cohort (mean $\pm$ 95\% CI).}
+\caption{Main results and ablations on the test cohort (1,000 learners, 40 items each).
+$\Delta M$ is measured against the closed-loop reference budget. Overload,
+underload and ITAE use the latent learner state and exist only in simulation.
+Fallback rates follow from the assumed surrogate fault rates.}
 \label{tab:main}
-\begin{tabular}{lcccc}
+\begin{tabular}{lcccccccc}
 \toprule
-Arm & $\Delta M$ & Jitter $J$ & Schema ok & Fallback\\
+Arm & $\Delta M$ (95\% CI) & Within $\varepsilon$ & Jitter $J$ & Skips/run & Overload & Underload & ITAE & Fallback\\
 \midrule
-Static & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
-Unconstrained GenUI & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
-Rule-based & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
-Closed loop & \tbd{} & \tbd{} & \tbd{} & \tbd{}\\
+Static & 0.426 (0.422--0.430) & 0.004 & 0.000 & 0.00 & 0.000 & 0.800 & 0.892 & --\\
+Unconstrained GenUI & 0.131 (0.128--0.134) & 0.321 & 0.123 & 2.06 & 0.024 & 0.054 & 0.043 & 0.030\\
+Rule-based & 0.123 (0.119--0.128) & 0.596 & 0.025 & 0.00 & 0.000 & 0.245 & 0.180 & --\\
+Closed loop & 0.0122 (0.0119--0.0124) & 1.000 & 0.035 & 0.67 & 0.002 & 0.121 & 0.073 & 0.154\\
+\midrule
+\quad no derivative filter & 0.031 (0.030--0.033) & 1.000 & 0.044 & 1.19 & 0.002 & 0.124 & 0.076 & 0.156\\
+\quad no anti-windup & 0.107 (0.102--0.112) & 1.000 & 0.024 & 0.42 & 0.001 & 0.217 & 0.174 & 0.159\\
+\quad one-level slew limit & 0.025 (0.023--0.026) & 1.000 & 0.034 & 0.02 & 0.002 & 0.121 & 0.073 & 0.153\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
+
+\subsection{Main comparison}
+Table~\ref{tab:main} shows that the closed loop keeps the rendered interface
+within 0.012 of its budget on average. Every rendered tree is within
+$\varepsilon$, but this holds by construction, since the gate substitutes a
+fallback whenever a tree misses the budget; with the assumed 15\% drift rate,
+15.4\% of steps are fallbacks. Unconstrained GenUI and the rule-based arm
+track the same reference budget less closely (0.131 and 0.123).
+
+The closed loop's jitter (0.035) is 3.5 times lower than that of
+unconstrained GenUI (0.123), which also skips levels 2.06 times per run
+against 0.67. The rule-based arm is smoother still (0.025, no skips), because
+it moves one level at a time. Against the latent learner state, the picture
+is mixed. Unconstrained GenUI has the lowest ITAE mismatch (0.043 against
+0.073) and the least underload (5.4\% of steps against 12.1\%), but shows an
+abstract interface to a learner who does not know the skill twelve times as
+often (2.4\% against 0.2\%). The rule-based arm underloads on 24.5\% of steps
+and the static arm on 80\%. After a streak of five or more errors, the
+closed loop returns to its pre-streak level after a median of 5 items
+(51 events), the rule-based arm after 12 (19 events).
 
 \subsection{Ablations}
-\tbd{derivative filter, anti-windup, slew limit}.
+Removing the derivative filter raises jitter from 0.035 to 0.044 and nearly
+doubles level skips (1.19 per run). Removing anti-windup lets the integral
+grow without bound: underload rises from 12.1\% to 21.7\%, only 84\% of
+learners reach level 4 against 95\%, and median recovery after an error
+streak grows from 5 to 14 items. In a scripted probe of prolonged struggle,
+the unclamped integral reached 22.9 (clamp 1.25) and the interface never
+reached level 4. A one-level slew limit removes nearly all skips (0.02 per
+run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
-\tbd{gains at $\pm 50\%$; metric weights: equal, $0.40/0.35/0.25$, and each
-term dropped}.
+Changing each controller parameter by $\pm 50\%$ raised the test cost
+($\mathrm{ITAE}+J$) from 0.108 to at most 0.118. One change,
+$1.5\Delta_h$, lowered it to 0.104 but more than doubled level skips (1.51
+per run), so the cost does not capture every property we care about. For the
+metric weights, the closed loop's $\Delta M$ stays between 0.007 and 0.017
+under equal weights, the initial $0.40/0.35/0.25$ split and three
+single-feature-heavy splits ($0.6/0.2/0.2$). Dropping abstraction or depth
+roughly doubles it (0.023 and 0.022) while keeping more than 99\% of steps
+within $\varepsilon$. Dropping element density breaks the loop: the fallback rate rises to
+84\% and even then only 18\% of rendered screens are within $\varepsilon$,
+because the remaining two features cannot reach most budgets (our reading). ITAE mismatch is about 0.072 under every weighting.
 
 \subsection{BKT saturation and lapse handling}
 Under correct responses the BKT estimate converges to a stable fixed point at
 one \cite{vandesande2013properties}. With the default parameters the estimate
 exceeds $1-10^{-6}$ after ten correct responses and five subsequent errors
-lower it only to about $0.98$; after roughly forty correct responses it
+lower it only to about $0.98$; after 24 correct responses it
 equals $1.0$ in double precision and no further evidence can lower it. The
 interface therefore stays at its highest level through a streak of errors.
 We compare two remedies: forgetting, $P(F)>0$ \cite{khajah2016deep},
 and a CUSUM detector \cite{page1954cusum} on the
 log-likelihood ratio between ``not known'' and the tracker's prediction,
-which resets the estimate when an alarm fires. \tbd{results on the
-forgetting cohort}. Weighting recent responses more heavily
+which resets the estimate to 0.5 when the sum exceeds $h=6.5$. Because
+it accumulates only when a confident estimate is contradicted, isolated
+slips are absorbed. The tracker with forgetting uses $P(F)=0.02$.
+
+In a scripted probe with a long success run followed by five errors, the
+plain closed loop never lowers the interface; the CUSUM variant drops a
+level 3 items after the streak begins and forgetting after 1. To test this
+at scale, a second cohort of 1,000 learners can forget the skill with
+probability 0.02--0.06 per item. There the plain closed loop shows an
+abstract interface to a learner who does not know the skill on 7.6\% of
+steps. The CUSUM detector lowers this to 5.6\% ($-25\%$) at the cost of
+higher jitter (0.052 against 0.042) and an almost unchanged ITAE mismatch
+(0.189 against 0.184). Forgetting lowers overload further, to 3.0\%, but
+underloads on 25.3\% of steps against 12.8\%, raises ITAE to 0.273 and
+lets only 80\% of learners reach level 4. Neither remedy dominates. Adding
+the slew limit to the CUSUM variant removes its level skips (0.015 per
+run). Weighting recent responses more heavily
 \cite{galyardt2015recent} is a third option we leave for future work.
 
 % ---------------------------------------------------------------------------
@@ -346,10 +429,25 @@ been validated against measured load, for which instruments exist
 parameters are design values rather than fits to tutor data. Long error
 streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
-\tbd{plant: surrogate vs.\ measured Gemini rates}.
+The plant is a surrogate with assumed fault rates. Schema compliance
+(97\%) and the fallback rate (15\%) follow from those assumptions and say
+nothing about Gemini; measuring them with the real model is future work.
+Finally, the open-weight fast policy did not follow the budget zero-shot and
+needs about 1.3\,s per decision on a CPU, so a fine-tuned or smaller policy
+is needed before it can run inside the loop.
 
 \section{Conclusion}
-\tbd{one paragraph after results are final}.
+We coupled a learner model to a generative interface through a PID
+governor, a fast policy and a validation gate, and tested the loop in
+simulation. The governor's budget is met at every step, with the gate
+absorbing plant faults, and the interface changes 3.5 times less than an
+unconstrained generator while rarely showing abstract screens to learners
+who have not mastered the skill. Anti-windup and the derivative filter each
+matter, and a slew limit removes level skips. Standard BKT stops reacting
+after long success runs; a CUSUM lapse detector restores the reaction at
+little cost, while forgetting overcorrects. The next steps are measuring
+the real model's fault rates, a fast policy that follows the budget, and a
+study with learners.
 
 \section*{Code and Data Availability}
 The engine, simulation harness, benchmark results and the sources of
