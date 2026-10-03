@@ -1,0 +1,11 @@
+{
+  "setpoint": 0.95,
+  "kp": 0.865,
+  "ki": 0.377,
+  "kd": 0.672,
+  "gamma": 0.398,
+  "s_max": 1.253,
+  "slope": 2.202,
+  "hysteresis": 0.141,
+  "max_level_step": null
+}

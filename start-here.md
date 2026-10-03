@@ -9,7 +9,7 @@ In classical engineering, a Proportional-Integral-Derivative (PID) controller is
 
 In this research architecture, **the learner's mind and the user interface constitute the physical plant**, while the **PID algorithm acts as the dynamic complexity governor**.
 
-*   **The Setpoint ($P^*$):** The target mastery threshold defining pedagogical competence for a given knowledge component (typically set to $P^* = 0.85$).
+*   **The Setpoint ($P^*$):** The target mastery threshold defining pedagogical competence for a given knowledge component (set to $P^* = 0.95$, the mastery criterion of Corbett & Anderson, 1995).
 *   **The Process Variable ($P(L_n)$):** The real-time, probabilistic latent mastery calculated by Bayesian Knowledge Tracing after interaction step $n$.
 *   **The Error Signal ($e_n$):** The instantaneous cognitive deficit between the pedagogical target and current student state, normalized asymmetrically so that a full deficit and a full surplus carry equal control authority ($e_n \in [-1, 1]$; see Section 6.2):
     $$e_n = \frac{P^* - P(L_n)}{P^*} \text{ if } P(L_n) \le P^*, \qquad e_n = \frac{P^* - P(L_n)}{1 - P^*} \text{ otherwise}$$
@@ -17,7 +17,7 @@ In this research architecture, **the learner's mind and the user interface const
 ```
                                THE CLOSED-LOOP CONTROL TOPOLOGY
                                
-       Target Mastery Setpoint (P* = 0.85)
+       Target Mastery Setpoint (P* = 0.95)
                        │
                        ▼
                      ( + ) <── [ Error: e_n = P* - P(L_n) ] <────────────────────────┐
@@ -329,7 +329,7 @@ Student Action ──► pyBKT Engine ──► Posterior Mastery P(L_n)
                                            │
                                            ▼
 [Layer 1: Continuous Complexity Regulation]
-Error e_n = (0.85 - P(L_n)) / span ──► Discrete PID Governor ──► Scalar Complexity Budget M_I*
+Error e_n = (0.95 - P(L_n)) / span ──► Discrete PID Governor ──► Scalar Complexity Budget M_I*
                                                                │
                                                                ▼
 [Layer 2: Fast Micro-Affordance Policy (Laya System 1)]
@@ -377,35 +377,37 @@ $$P(L_{n+1}) = P(L_n \mid r_n) + (1 - P(L_n \mid r_n))P(T)$$
 The tracking error at interaction step $n$ is normalized asymmetrically about the setpoint:
 $$e_n = \begin{cases} \dfrac{P^* - P(L_n)}{P^*} & P(L_n) \le P^* \\[6pt] \dfrac{P^* - P(L_n)}{1 - P^*} & P(L_n) > P^* \end{cases} \qquad e_n \in [-1, 1]$$
 
-*Why normalize:* with the raw error $P^* - P(L_n)$ and $P^* = 0.85$, the error range is the lopsided interval $[-0.15, +0.85]$. A fully mastered learner can therefore drive the control effort no lower than $u = K_p(-0.15) - K_i S_{\text{max}} = -0.4875$ at steady state, which the sigmoid below maps to $M_I^* \le 0.706$; the top quarter of the complexity range (level 4, $M_I^* \ge 0.75$) is unreachable for every learner. Dividing each side of the setpoint by its own span makes the error symmetric, so mastery surplus has the same authority to expand the interface as deficit has to contract it. The mapping is continuous at $P(L_n) = P^*$ ($e_n = 0$) and monotone. Initialize $S_0 = 0$, $D_0 = 0$, $e_{-1} = e_0$ (no derivative kick on the first step).
+*Why normalize:* with the raw error $P^* - P(L_n)$ and $P^* = 0.95$, the error range is the lopsided interval $[-0.05, +0.95]$. With the original gains, a fully mastered learner can therefore drive the control effort no lower than $u = K_p(-0.05) - K_i S_{\text{max}} = -0.3625$ at steady state, which the sigmoid below maps to $M_I^* \le 0.674$; the top quarter of the complexity range (level 4, $M_I^* \ge 0.75$) is unreachable for every learner. Dividing each side of the setpoint by its own span makes the error symmetric, so mastery surplus has the same authority to expand the interface as deficit has to contract it. The mapping is continuous at $P(L_n) = P^*$ ($e_n = 0$) and monotone. Initialize $S_0 = 0$, $D_0 = 0$, $e_{-1} = e_0$ (no derivative kick on the first step).
 
 The control signal $u_n$ is computed as:
 $$u_n = K_p \cdot e_n + K_i \cdot S_n + K_d \cdot D_n$$
 
 Where:
-*   **Proportional:** $P_n = K_p \cdot e_n$ ($K_p = 1.25$)
+*Gain selection.* $K_p$, $K_i$, $K_d$, $\gamma$, $S_{\text{max}}$ and $\Delta_{\text{hyst}}$ are not taken from literature; they are tuned by a stated procedure (`backend/closedloop/sim/tune.py`, `results/tuning/tuning.json`). (a) Cost $= \text{ITAE}_{\text{mismatch}} + \lambda J$ with $\lambda = 1$, where $\text{ITAE}_{\text{mismatch}} = \sum_n (n+1)\,m_n / \sum_n (n+1)$ is a time-weighted (ITAE-style, Graham & Lathrop 1953) mismatch, $m_n = 1$ when level $\ge 3$ is shown to a learner who does not know the skill or level $\le 2$ to one who does, and $J$ is interface jitter. (b) Random search over 200 settings plus the original values ($K_p \in [0.25, 2.5]$, $K_i \in [0, 0.4]$, $K_d \in [0, 1]$, $\gamma \in [0.05, 1]$, $S_{\text{max}} \in [1, 6]$, $\Delta_{\text{hyst}} \in [0.02, 0.15]$) on a tuning cohort (seed 20261004), with the slope rule below. (c) All reported results use the separate test cohort (seed 20261003). (d) Each tuned value is moved by $\pm 50\%$ on the test cohort (`results/tuning/parameter_sensitivity.csv`). The cost surface is flat: the selected point costs 0.104 against 0.110 for the original values ($K_p = 1.25$, $K_i = 0.10$, $K_d = 0.35$, $\gamma = 0.10$, $S_{\text{max}} = 3$, $\Delta_{\text{hyst}} = 0.06$), which rank 22nd of 201.
+
+*   **Proportional:** $P_n = K_p \cdot e_n$ ($K_p = 0.865$)
 *   **Integral with Anti-Windup Clamping:**
     $$S_n = \text{clamp}(S_{n-1} + e_n, -S_{\text{max}}, S_{\text{max}})$$
-    $$I_n = K_i \cdot S_n \quad (K_i = 0.10, S_{\text{max}} = 3.0)$$
+    $$I_n = K_i \cdot S_n \quad (K_i = 0.377, S_{\text{max}} = 1.253)$$
 *   **Filtered Derivative:**
-    $$D_n = \gamma \cdot (e_n - e_{n-1}) + (1 - \gamma) \cdot D_{n-1} \quad (\gamma = 0.10, K_d = 0.35)$$
+    $$D_n = \gamma \cdot (e_n - e_{n-1}) + (1 - \gamma) \cdot D_{n-1} \quad (\gamma = 0.398, K_d = 0.672)$$
 
 ### 3. Complexity Budget Mapping ($M_I^*$)
 The raw control effort $u_n$ is projected onto a normalized target complexity budget $M_I^* \in [0.0, 1.0]$ using an inverted logistic function (high error $e_n$ yields low complexity budget):
 
-$$M_I^* = \frac{1}{1 + e^{k \cdot u_n}}, \qquad k = 2.0$$
+$$M_I^* = \frac{1}{1 + e^{k \cdot u_n}}, \qquad k = 2.202$$
 
-*Reachable range.* At steady state ($D_n \to 0$, integral saturated) the control effort spans $u \in [-(K_p + K_i S_{\text{max}}),\ +(K_p + K_i S_{\text{max}})] = [-1.55, +1.55]$, so
+*Reachable range.* At steady state ($D_n \to 0$, integral saturated) the control effort spans $u \in [-(K_p + K_i S_{\text{max}}),\ +(K_p + K_i S_{\text{max}})] = [-1.337, +1.337]$, so
 
-$$M_I^* \in [\sigma(-3.1),\ \sigma(3.1)] = [0.043,\ 0.957],$$
+$$M_I^* \in [0.050,\ 0.950],$$
 
-covering all four complexity levels. The slope $k$ is chosen so the steady-state extremes sit at about 5% and 95%: $k = \ln(19)/1.55 \approx 1.90$, rounded to $2.0$. Transient derivative action ($|D_n| \le \max|\Delta e| \le 2$) can push $u$ to at most $\pm 2.25$, i.e. $M_I^* \in [0.011, 0.989]$, so the budget never saturates numerically.
+covering all four complexity levels. The slope $k$ is chosen so the steady-state extremes sit at 5% and 95%: $k = \ln(19)/(K_p + K_i S_{\text{max}}) = \ln(19)/1.337 \approx 2.202$ (with the original gains, $\ln(19)/1.55 \approx 1.90$, rounded to $2.0$). Transient derivative action ($|D_n| \le \max|\Delta e| \le 2$) can push $u$ to at most $\pm 2.68$, i.e. $M_I^* \in [0.003, 0.997]$, so the budget never saturates numerically.
 
 *Discrete complexity levels.* The budget is quantized into four equal bands, $\ell_n = \min(4,\ 1 + \lfloor 4 M_I^* \rfloor)$, aligned with the abstraction scale $\alpha$ in Section 6.4 (level 4 $\Leftrightarrow M_I^* \ge 0.75$).
 
-*Hysteresis.* A deadband ($\Delta_{\text{hyst}} = 0.06$) holds the committed budget $\hat{M}_I^*$: the plant receives a new budget only when $|M_I^*(n) - \hat{M}_I^*(n-1)| \ge \Delta_{\text{hyst}}$. The comparison is against the last *committed* value, not the previous raw value; otherwise a slow monotone drift (consecutive raw changes below $0.06$) would never be committed and would itself act as a ceiling.
+*Hysteresis.* A deadband ($\Delta_{\text{hyst}} = 0.141$) holds the committed budget $\hat{M}_I^*$: the plant receives a new budget only when $|M_I^*(n) - \hat{M}_I^*(n-1)| \ge \Delta_{\text{hyst}}$. The comparison is against the last *committed* value, not the previous raw value; otherwise a slow monotone drift (consecutive raw changes below $\Delta_{\text{hyst}}$) would never be committed and would itself act as a ceiling.
 
-*Numerical verification.* A direct simulation of both specifications (standard BKT priors, all-correct learner; 300 Fast Master trajectories of 40 steps) gives the following. Under the raw-error specification, an all-correct learner reaches $P(L_n) \approx 1$ by step 7 yet its committed budget stalls at $0.666$ (level 3), and 0 of 300 Fast Master trajectories ever reach level 4. Under the corrected specification the same learner commits $M_I^* = 0.878$ (level 4) at step 3 and settles at $0.947$, and 300 of 300 Fast Master trajectories reach level 4 within 40 steps.
+*Numerical verification.* A direct simulation of both specifications (standard BKT priors, all-correct learner; 300 Fast Master trajectories of 40 steps) gives the following. Values are for $P^* = 0.95$; the raw-error comparison uses the original gains. Under the raw-error specification, an all-correct learner reaches $P(L_n) > 0.999$ by step 6 yet its committed budget stalls at $0.519$ (level 3), and 0 of 300 Fast Master trajectories ever reach level 4. Under the corrected specification the same learner climbs through every level without skipping one (levels 1, 1, 2, 3, 4 at steps 0 to 4), commits $M_I^* = 0.905$ (level 4) at step 4 and holds it (the raw budget settles at $0.957$, inside the hysteresis band), and 300 of 300 Fast Master trajectories reach level 4 within 40 steps. With the tuned values the climb is the same (levels 1, 1, 2, 3, 4), the committed budget is $0.903$ (raw $0.950$), and 300 of 300 Fast Master trajectories reach level 4.
 
 ### 4. Computable Structural Complexity Metric ($M_I$)
 The achieved interface complexity of the generated JSON component tree is deterministically computed by parsing the AST:
@@ -416,7 +418,7 @@ Where:
 *   $\rho$: Count of interactive elements (buttons, draggable objects, input fields), bounded $[1, 8]$.
 *   $\alpha$: Semantic abstraction score ($1$: Visual Balance Scale, $2$: Scaffolded Operation Pad, $3$: Symbolic Equation, $4$: Cartesian Plane).
 *   $\delta$: Tree nesting depth, bounded $[1, 4]$.
-*   *Weights:* $w_1 = 0.40, w_2 = 0.35, w_3 = 0.25$.
+*   *Weights:* $w_1 = w_2 = w_3 = 1/3$ (equal weights, the standard default for an unfitted linear composite; Dawes, 1979). The earlier $0.40 / 0.35 / 0.25$ is kept as a sensitivity variant.
 
 ---
 
@@ -514,5 +516,5 @@ References                 1.0 pages            25–30 verified archival citati
 *   **Frontend:** React 19 + TypeScript, Tailwind CSS, Lucide Icons, Scientific Research Apparatus Theme.
 *   **Backend:** Python 3.11, FastAPI, `pyBKT`, `laya`, Pydantic v2.
 *   **Plant Model:** Gemini 3.7 Flash (`google-genai` SDK, `response_mime_type="application/json"`, strict Pydantic output schema).
-*   **State Parameters:** $P^* = 0.85$ (asymmetric error normalization, $e_n \in [-1, 1]$), $K_p = 1.25$, $K_i = 0.10$, $K_d = 0.35$, $\gamma = 0.10$, $S_{\text{max}} = 3.0$, sigmoid slope $k = 2.0$, $\Delta_{\text{hyst}} = 0.06$ (against last committed budget), 4 complexity levels.
+*   **State Parameters:** $P^* = 0.95$ (asymmetric error normalization, $e_n \in [-1, 1]$), $K_p = 0.865$, $K_i = 0.377$, $K_d = 0.672$, $\gamma = 0.398$, $S_{\text{max}} = 1.253$, sigmoid slope $k = 2.202$, $\Delta_{\text{hyst}} = 0.141$ (tuned; see Gain selection) (against last committed budget), 4 complexity levels.
 *   **Primary Experiments:** 1,000 synthetic learner trajectories ($T = 40$ steps each), each replayed through all 4 experimental arms, evaluating $\Delta M$, Jitter ($J$), and recovery steps.
