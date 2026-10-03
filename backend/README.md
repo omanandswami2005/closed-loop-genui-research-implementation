@@ -41,8 +41,9 @@ python -m closedloop.sim.run --out ../results/benchmark      # ~1 min on 4 cores
 - **Surrogate plant.** Gemini is replaced by the deterministic compiler plus
   injected faults: `p_drift = 0.15` (valid but off-budget output) and
   `p_malformed = 0.03` (truncated JSON, unknown component, out-of-range
-  field, depth overflow, injected `onClick`). These rates are assumptions,
-  not measurements; swap in logged Gemini outputs to measure them.
+  field, depth overflow, injected `onClick`). These were assumptions; the
+  real plant measures 3.4% content-malformed and 2.8% drift (see "Real
+  Gemini plant" below), so 15% drift is a stress setting.
 - **Unconstrained arm.** The same plant asked for a complexity of
   `P(L_n) + N(0, 0.15)` with no governor, hysteresis or budget check.
 - **Rule-based arm.** Level up after 3 consecutive correct, down after 2
@@ -95,6 +96,48 @@ plus jitter. The chosen values are the `GovernorConfig` defaults, and every
 reported number uses the test cohort (seed 20261003). `tune sensitivity`
 moves each value by +/-50% and re-runs the main arms under alternative M_I
 weightings (spec 0.40/0.35/0.25, each term dropped, each term heavy).
+
+## Live service
+
+```
+pip install -e ".[service]"
+uvicorn closedloop.service:app --port 8000
+```
+
+`loop.py` runs one learner's loop in the benchmark's order, with the CUSUM
+lapse detector on. `service.py` exposes it: `POST /api/sessions`
+(`{"plant": "surrogate" | "gemini", "seed"?}`), `POST
+/api/sessions/{id}/responses` (`{"answer", "steps"?}`), `POST
+/api/sessions/{id}/check` (one workspace line) and `GET /api/health`. Each
+response carries the next CLT-UI document and the full telemetry.
+`checker.py` checks answers and steps with exact rational arithmetic and
+accepts only expressions linear in x. The System-1 policy is the rule-based
+`SurrogatePolicy`; Laya was measured (above) and is not used.
+
+## Real Gemini plant
+
+`gemini.py` calls `gemini-3.7-flash` on the Vertex AI global endpoint
+(project and model from `GOOGLE_CLOUD_PROJECT`, `GENUI_GEMINI_MODEL`; on
+Cloud Run the token comes from the metadata server). Its output goes through
+the same `admit` gate as the surrogate's.
+
+```
+python -m closedloop.sim.gemini_eval --out ../results/gemini --n 300
+```
+
+300 calls at budgets drawn uniformly from [0.02, 0.98], thinking level LOW
+(`results/gemini/summary.json`):
+
+| Measure | Value |
+|---|---|
+| Schema compliance | 0.937 (19 rejections: 9 transport errors or timeouts, 10 trees with no interactive element) |
+| Drift, valid but off budget by > 0.05 | 2.8% of valid outputs |
+| Within budget overall | 0.91 (fallback 0.09) |
+| abs(M_I - M_I*), valid outputs | median 0.012, mean 0.014 |
+| Latency | p50 5.6 s, p95 7.8 s |
+
+Level 1 is the weakest (schema 0.85, budget 0.82): near the budget floor
+the model sometimes emits a screen with nothing to interact with.
 
 ## Recovery metrics
 

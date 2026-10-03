@@ -150,6 +150,13 @@ _HINTS = (
 )
 
 
+# Static framing text added by each extra nesting level (0 interactive elements).
+_PROMPTS = (
+    "\\text{Solve for } x: \\quad {eq}",
+    "\\text{Then check: substitute your } x \\text{ into both sides.}",
+)
+
+
 def build(bp: Blueprint, eq: Equation) -> UIDocument:
     primary = _primary_node(bp, eq)
     if bp.depth == 1:
@@ -161,8 +168,8 @@ def build(bp: Blueprint, eq: Equation) -> UIDocument:
         if bp.worked_steps:
             children.append(_worked_steps(eq, bp.worked_steps))
         root = Stack(type="Stack", direction="vertical", children=children)
-        for _ in range(bp.depth - 2):
-            prompt = MathText(type="MathText", latex=eq.latex())
+        for i in range(bp.depth - 2):
+            prompt = MathText(type="MathText", latex=_PROMPTS[bp.depth - 3 - i].replace("{eq}", eq.latex()))
             root = Stack(type="Stack", direction="vertical", children=[prompt, root])
     return UIDocument(schema_version=SCHEMA_VERSION, equation=eq, root=root)
 

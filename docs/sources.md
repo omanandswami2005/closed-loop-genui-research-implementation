@@ -57,7 +57,7 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 |---|---|---|
 | Model emits JSON constrained by a schema | Adapted | Token-level constrained decoding: [20], [27]; reliability of schema-constrained output: [28]. Our engine checks output after generation and falls back, which is a different mechanism |
 | Schema check plus deterministic fallback template | Assumption | Our design |
-| Surrogate plant fault rates (15% off-budget, 3% malformed) | Placeholder | Development only. The paper's numbers will use rates measured on real Gemini output |
+| Surrogate plant fault rates (15% off-budget, 3% malformed) | Assumption, then measured | Measured on 300 real gemini-3.7-flash calls through the same gate (`results/gemini/summary.json`): 3.4% content-malformed (6.3% with transport failures), 2.8% drift. The benchmark's 15% drift is therefore a stress setting |
 
 ## References
 
