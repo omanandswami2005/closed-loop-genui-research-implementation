@@ -2,7 +2,7 @@
 % Series volume numbers are left out where Crossref did not confirm them.
 % Every entry below was checked on 2026-10-03 against Crossref, the arXiv API
 % or the publisher / proceedings page: title, authors, venue and year match.
-% "note" fields mark anything that was NOT fully confirmed. See
+% "checknote" fields (not printed) mark anything that was NOT fully confirmed. See
 % docs/source-check.md for which claim each entry supports.
 
 % ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@
   pages   = {253--278},
   year    = {1995},
   doi     = {10.1007/BF01099821},
-  note    = {Issue cover-dated 1994; Crossref lists 1995, which is the year most papers cite}
+  checknote    = {Issue cover-dated 1994; Crossref lists 1995, which is the year most papers cite}
 }
 
 @inproceedings{baker2008contextual,
@@ -50,7 +50,7 @@
   number  = {2},
   pages   = {1--10},
   year    = {2013},
-  note    = {Pages taken from the JEDM PDF; fixed-point analysis of the BKT update (Sec. 4)}
+  checknote    = {Pages taken from the JEDM PDF; fixed-point analysis of the BKT update (Sec. 4)}
 }
 
 @inproceedings{doroudi2017misidentified,
@@ -58,7 +58,7 @@
   title     = {The Misidentified Identifiability Problem of {B}ayesian Knowledge Tracing},
   booktitle = {Proceedings of the 10th International Conference on Educational Data Mining (EDM 2017)},
   year      = {2017},
-  note      = {Existence and venue confirmed via search; page numbers not confirmed}
+  checknote      = {Existence and venue confirmed via search; page numbers not confirmed}
 }
 
 @inproceedings{pardos2010individualization,
@@ -129,7 +129,7 @@
   pages   = {9--38},
   year    = {2012},
   doi     = {10.1007/s11257-011-9106-8},
-  note    = {Online first 2011; journal issue 2012}
+  checknote    = {Online first 2011; journal issue 2012}
 }
 
 @inproceedings{pavlik2009pfa,
@@ -157,10 +157,11 @@
 @misc{galyardt2015recent,
   author        = {Galyardt, April and Goldin, Ilya},
   title         = {Predicting Performance During Tutoring with Models of Recent Performance},
+  howpublished  = {arXiv:1501.02732},
   year          = {2015},
   eprint        = {1501.02732},
   archivePrefix = {arXiv},
-  note          = {Also presented at EDM 2015 as "Move Your Lamp Post: Recent Data Reflects Learner Knowledge Better than Older Data" (venue confirmed via search; pages not confirmed)}
+  checknote          = {Also presented at EDM 2015 as "Move Your Lamp Post: Recent Data Reflects Learner Knowledge Better than Older Data" (venue confirmed via search; pages not confirmed)}
 }
 
 @inproceedings{beck2013wheel,
@@ -185,10 +186,11 @@
 @misc{piech2015dkt,
   author        = {Piech, Chris and Spencer, Jonathan and Huang, Jonathan and Ganguli, Surya and Sahami, Mehran and Guibas, Leonidas and Sohl-Dickstein, Jascha},
   title         = {Deep Knowledge Tracing},
+  howpublished  = {arXiv:1506.05908},
   year          = {2015},
   eprint        = {1506.05908},
   archivePrefix = {arXiv},
-  note          = {Published at NeurIPS 2015 (not re-checked; cite the arXiv record if unsure)}
+  checknote          = {Published at NeurIPS 2015 (not re-checked; cite the arXiv record if unsure)}
 }
 
 @article{kaser2017dbn,
@@ -246,7 +248,7 @@
   number  = {2},
   pages   = {135--175},
   year    = {1994},
-  note    = {Title, authors, journal, volume and year confirmed; issue and pages from common citations, not re-checked}
+  checknote    = {Title, authors, journal, volume and year confirmed; issue and pages from common citations, not re-checked}
 }
 
 @article{kaser2024simulated,
@@ -265,7 +267,7 @@
   title     = {Optimal and Worst-Case Performance of Mastery Learning Assessment with {B}ayesian Knowledge Tracing},
   booktitle = {Proceedings of the 6th International Conference on Educational Data Mining (EDM 2013)},
   year      = {2013},
-  note      = {Existence and venue confirmed via dblp/search; page numbers not confirmed}
+  checknote      = {Existence and venue confirmed via dblp/search; page numbers not confirmed}
 }
 
 @article{slater2018degree,
@@ -349,6 +351,7 @@
 @misc{adams2007bocpd,
   author        = {Adams, Ryan Prescott and MacKay, David J. C.},
   title         = {{B}ayesian Online Changepoint Detection},
+  howpublished  = {arXiv:0710.3742},
   year          = {2007},
   eprint        = {0710.3742},
   archivePrefix = {arXiv}
@@ -382,7 +385,7 @@
   volume  = {10},
   pages   = {4646},
   year    = {2019},
-  note    = {Article number 4646; journal record confirmed via PMC (PMC6831579)}
+  checknote    = {Article number 4646; journal record confirmed via PMC (PMC6831579)}
 }
 
 % ---------------------------------------------------------------------------
@@ -496,7 +499,7 @@
   pages   = {289--307},
   year    = {2010},
   doi     = {10.1007/s11251-009-9107-8},
-  note    = {Online first 2009; journal issue 2010}
+  checknote    = {Online first 2009; journal issue 2010}
 }
 
 @article{paas2003measurement,
@@ -577,7 +580,7 @@
   pages   = {30},
   year    = {2019},
   doi     = {10.1186/s40594-019-0183-2},
-  note    = {Article number 30}
+  checknote    = {Article number 30}
 }
 
 @article{kieran1981equality,
@@ -684,7 +687,7 @@
   title     = {Exploring the Design Space for Adaptive Graphical User Interfaces},
   booktitle = {Proceedings of the Working Conference on Advanced Visual Interfaces (AVI)},
   pages     = {201--},
-  note      = {Crossref gives only the start page},
+  checknote      = {Crossref gives only the start page},
   publisher = {ACM},
   year      = {2006},
   doi       = {10.1145/1133265.1133306}
@@ -725,19 +728,21 @@
 @misc{leviathan2026genui,
   author        = {Leviathan, Yaniv and Valevski, Dani and Kalman, Matan and Lumen, Danny and Segalis, Eyal and Molad, Eyal and Pasternak, Shlomi and Natchu, Vishnu and Nygaard, Valerie and Srinivasan, Venkatachary and Manyika, James and Matias, Yossi},
   title         = {Generative {UI}: {LLMs} are Effective {UI} Generators},
+  howpublished  = {arXiv:2604.09577},
   year          = {2026},
   eprint        = {2604.09577},
   archivePrefix = {arXiv},
-  note          = {Google Research; announced on the Google Research blog 2025-11-18. Author "Srinivasan Venkatachary" is split oddly in the arXiv record; check spelling before camera-ready}
+  checknote          = {Google Research; announced on the Google Research blog 2025-11-18. Author "Srinivasan Venkatachary" is split oddly in the arXiv record; check spelling before camera-ready}
 }
 
 @misc{tu2026maicui,
   author        = {Tu, Shangqing and Li, Yanjia and Chen, Keyu and Zhang, Sichen and Yu, Jifan and Zhang-Li, Daniel and Hou, Lei and Li, Juanzi and Zhang, Yu and Liu, Huiqin and others},
   title         = {{MAIC-UI}: Making Interactive Courseware with Generative {UI}},
+  howpublished  = {arXiv:2604.25806},
   year          = {2026},
   eprint        = {2604.25806},
   archivePrefix = {arXiv},
-  note          = {Preprint, not peer reviewed}
+  checknote          = {Preprint, not peer reviewed}
 }
 
 % ---------------------------------------------------------------------------
@@ -746,6 +751,7 @@
 @misc{willard2023guided,
   author        = {Willard, Brandon T. and Louf, R{\'e}mi},
   title         = {Efficient Guided Generation for Large Language Models},
+  howpublished  = {arXiv:2307.09702},
   year          = {2023},
   eprint        = {2307.09702},
   archivePrefix = {arXiv}
@@ -754,10 +760,11 @@
 @misc{poesia2022synchromesh,
   author        = {Poesia, Gabriel and Polozov, Oleksandr and Le, Vu and Tiwari, Ashish and Soares, Gustavo and Meek, Christopher and Gulwani, Sumit},
   title         = {Synchromesh: Reliable Code Generation from Pre-trained Language Models},
+  howpublished  = {arXiv:2201.11227},
   year          = {2022},
   eprint        = {2201.11227},
   archivePrefix = {arXiv},
-  note          = {Published at ICLR 2022 (venue not re-checked)}
+  checknote          = {Published at ICLR 2022 (venue not re-checked)}
 }
 
 @inproceedings{scholak2021picard,
@@ -781,6 +788,7 @@
 @misc{geng2025jsonschemabench,
   author        = {Geng, Saibo and Cooper, Hudson and Moskal, Micha{\l} and Jenkins, Samuel and Berman, Julian and Ranchin, Nathan and West, Robert and Horvitz, Eric and Nori, Harsha},
   title         = {{JSONSchemaBench}: A Rigorous Benchmark of Structured Outputs for Language Models},
+  howpublished  = {arXiv:2501.10868},
   year          = {2025},
   eprint        = {2501.10868},
   archivePrefix = {arXiv}
@@ -820,7 +828,7 @@
   title        = {Laya: Open-Weight Decision Model},
   year         = {2026},
   howpublished = {Model card, \url{https://huggingface.co/convaiinnovations/laya}},
-  note         = {Software, not a paper. No peer-reviewed or arXiv description was found on 2026-10-03; latency figures come from the vendor}
+  checknote         = {Software, not a paper. No peer-reviewed or arXiv description was found on 2026-10-03; latency figures come from the vendor}
 }
 
 % ---------------------------------------------------------------------------
@@ -831,7 +839,7 @@
   title     = {How Much Mastery is Enough Mastery? The Relationship between Mastery in a Lesson and the Performance on the Subsequent Lesson},
   booktitle = {Proceedings of the 18th International Conference on Educational Data Mining (EDM 2025)},
   year      = {2025},
-  note      = {Short paper. Read in full: calls 0.95 "the widely adopted threshold" (citing Corbett and Anderson 1995) and finds 0.98 gives further benefit. Proceedings number and pages not confirmed}
+  checknote      = {Short paper. Read in full: calls 0.95 "the widely adopted threshold" (citing Corbett and Anderson 1995) and finds 0.98 gives further benefit. Proceedings number and pages not confirmed}
 }
 
 @article{ziegler1942optimum,
@@ -843,7 +851,7 @@
   pages   = {759--765},
   year    = {1942},
   doi     = {10.1115/1.4019264},
-  note    = {Crossref files it under Journal of Fluids Engineering}
+  checknote    = {Crossref files it under Journal of Fluids Engineering}
 }
 
 @article{cohen1953retarded,
@@ -855,7 +863,7 @@
   pages   = {827--834},
   year    = {1953},
   doi     = {10.1115/1.4015451},
-  note    = {Crossref files it under Journal of Fluids Engineering}
+  checknote    = {Crossref files it under Journal of Fluids Engineering}
 }
 
 @article{astrom2004revisiting,
@@ -886,7 +894,7 @@
   journal = {Transactions of the American Institute of Electrical Engineers, Part II: Applications and Industry},
   year    = {1953},
   doi     = {10.1109/TAI.1953.6371346},
-  note    = {Volume and pages not confirmed; add from the DOI page before camera-ready}
+  checknote    = {Volume and pages not confirmed; add from the DOI page before camera-ready}
 }
 
 @article{tullis1983formatting,
@@ -928,7 +936,7 @@
   publisher = {ACM},
   year      = {2018},
   doi       = {10.1145/3266037.3266087},
-  note      = {Subtitle not shown in Crossref; check before camera-ready}
+  checknote      = {Subtitle not shown in Crossref; check before camera-ready}
 }
 
 @article{hick1952rate,
@@ -994,7 +1002,7 @@
   pages   = {393--405},
   year    = {2017},
   doi     = {10.1007/s10648-016-9359-1},
-  note    = {Online first 2016; journal issue 2017}
+  checknote    = {Online first 2016; journal issue 2017}
 }
 
 @article{dawes1979robust,
