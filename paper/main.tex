@@ -114,7 +114,7 @@ fixed points and parameter constraints have been analyzed
 calibrated probability that can serve directly as a control variable.
 
 \subsection{Adaptive and generative interfaces}
-Model-based interface generation \cite{gajos2010supple} adapt presentation to users, but
+Model-based interface generation \cite{gajos2010supple} adapts presentation to users, but
 adaptation has costs: unpredictable changes reduce usability
 \cite{gajos2008predictability,findlater2004menus}. Recent GenUI
 systems let a large language model produce the interface itself
@@ -247,12 +247,11 @@ trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[height=4.7cm]{figures/screen_l1.png}\hfill
-\includegraphics[height=4.7cm]{figures/screen_l4.png}
-\caption{Two screens rendered by the client. Left: a level-1 tree emitted by
-Gemini 3.7 Flash for $P(L)=0.15$, a worked example with the balance-scale
-manipulative. Right: a level-4 tree from the surrogate plant for
-$P(L)=0.999$, a symbolic workspace with graph verification.}
+\includegraphics[height=4.8cm]{figures/screen_l1.png}\hspace{4mm}%
+\includegraphics[height=4.8cm]{figures/screen_l4.png}
+\caption{Client screens that passed the gate. Left: level 1, written by
+Gemini 3.7 Flash in guided mode ($M_I^*=0.091$, $M_I=0.111$). Right:
+level 4, from the surrogate plant ($M_I^*=0.895$, $M_I=0.905$).}
 \label{fig:screens}
 \end{figure*}
 
@@ -369,15 +368,14 @@ of steps rendered from the fallback catalog. Because the simulator knows the
 learner's latent state, we also report \emph{overload} (level 3 or 4 shown
 while the skill is not known), \emph{underload} (level 1 or 2 shown while it
 is known) and an ITAE-weighted mismatch $\sum_n (n{+}1)m_n/\sum_n(n{+}1)$
-\cite{graham1953itae}, where $m_n$ marks either case. These three measures
-are available only in simulation.
+\cite{graham1953itae}, where $m_n$ marks either case.
 
 % ---------------------------------------------------------------------------
 \section{Results}
 \label{sec:results}
 
 All numbers come from one benchmark run on the test cohort (seed 20261003;
-tuning seed 20261004), released with the code. Intervals are
+tuning seed 20261004). Intervals are
 normal-approximation 95\% confidence intervals over the 1,000 learners.
 
 \begin{table*}[t]
@@ -450,8 +448,7 @@ under equal weights, the initial $0.40/0.35/0.25$ split and three
 single-feature-heavy splits ($0.6/0.2/0.2$). Dropping abstraction or depth
 roughly doubles it (0.023 and 0.022) while keeping more than 99\% of steps
 within $\varepsilon$. Dropping element density breaks the loop: fallbacks rise to 84\% and only
-18\% of screens are within $\varepsilon$. ITAE mismatch is about 0.072 under
-every weighting.
+18\% of screens are within $\varepsilon$.
 
 \subsection{BKT saturation and lapse handling}
 Under correct responses the BKT estimate converges to a stable fixed point at
