@@ -1,4 +1,4 @@
-import { Activity, RotateCcw } from "lucide-react";
+import { Activity, Info, RotateCcw } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import { ItemContext, type ItemContextValue } from "./clt/context";
@@ -109,6 +109,12 @@ export function App() {
             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-500">item {view ? view.item + 1 : "—"} · solve for x</span>
             {view && <Tex math={view.equation_latex} display className="text-xl" />}
           </div>
+
+          {view?.notice && (
+            <div role="status" className="flex items-center gap-2 border border-amber-700 bg-amber-950/40 px-4 py-2 font-mono text-xs text-amber-300">
+              <Info size={12} aria-hidden /> {view.notice}
+            </div>
+          )}
 
           {outcome && (
             <div

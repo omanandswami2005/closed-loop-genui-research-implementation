@@ -128,7 +128,8 @@ class GeminiPlant:
             text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
             fault = None
         except (httpx.HTTPError, KeyError, IndexError, ValueError) as exc:
-            text, fault = "", f"plant_error: {type(exc).__name__}"
+            status = exc.response.status_code if isinstance(exc, httpx.HTTPStatusError) else None
+            text, fault = "", f"plant_error: {type(exc).__name__}" + (f" {status}" if status else "")
         self.last_latency_ms = (time.perf_counter() - t0) * 1000
         return Emission(text, fault)
 

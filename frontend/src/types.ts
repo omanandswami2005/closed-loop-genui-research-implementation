@@ -145,6 +145,7 @@ export interface SessionView {
   history: Telemetry[];
   responses: boolean[];
   setpoint: number;
+  notice: string | null; // set when the surrogate plant stood in for live Gemini
   outcome?: Outcome;
 }
 
