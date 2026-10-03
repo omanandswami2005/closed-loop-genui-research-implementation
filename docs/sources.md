@@ -10,10 +10,10 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 | Choice | Status | Source |
 |---|---|---|
 | Two-state BKT update (posterior + learning transition) | Cited | Corbett & Anderson 1995 [1] |
-| Priors P(L0)=0.15, P(T)=0.12, P(G)=0.20, P(S)=0.08 | Assumption, within published bounds | Guess < 0.3 and slip < 0.1 are the usual non-degenerate bounds [1][2]; P(G)+P(S) < 1 makes BKT identifiable [3]. Values are not fitted to data. pyBKT [4] can fit them to ASSISTments logs later |
-| Per-learner parameter variation | Cited | Individualized BKT priors and learning rates [5] |
+| Priors P(L0)=0.15, P(T)=0.12, P(G)=0.20, P(S)=0.08 | Assumption, within published bounds | Corbett & Anderson bound guess < 0.3 and slip < 0.1 [1]; Baker et al. use the looser guess, slip < 0.5 [2]; both are compared in [23]. P(G)+P(S) < 1 and P(T) < 1 − P(S)/(1 − P(G)) keep the model non-degenerate [21, Eqs. 15–16]; see also [3]. Values are not fitted to data. pyBKT [4] can fit them to ASSISTments logs later |
+| Per-learner parameter variation | Cited | Individualized priors [5]; individualized learning rates [22] |
 | Forgetting transition P(F) | Cited | BKT+Forgets: Qiu et al. 2011 [6]; Khajah et al. 2016 [7] |
-| Saturation after success runs (the "5 wrong answers" problem) | Cited | Overconfidence of BKT predictions is what [6] and [7] correct with forgetting |
+| Saturation after success runs (the "5 wrong answers" problem) | Cited (cause); Adapted (fix) | Under correct answers the BKT estimate converges to a stable fixed point at 1 [21, Sec. 4]. Forgetting was introduced for recency effects [7] and time between sessions [6]; using it against saturation is our application |
 | CUSUM lapse detector on the tracker (our extension) | Adapted | CUSUM change detection: Page 1954 [8], Basseville & Nikiforov 1993 [9]. Applying it to reset a BKT estimate inside a UI control loop is our contribution |
 | Lapse detector threshold h = 6.5 | Assumption | Chosen from the sensitivity sweep in `results/benchmark/lapse_sensitivity.csv` |
 
@@ -21,8 +21,8 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 
 | Choice | Status | Source |
 |---|---|---|
-| Synthetic learners sampled from a BKT model (Monte Carlo) | Cited | Simulated data from BKT is standard for evaluating mastery policies: Fancsali, Nixon & Ritter 2013 [10]; Pelánek 2017 [11] |
-| Three archetypes (novice, inconsistent, fast) and their ranges | Assumption | Values from `start-here.md`, centered on the spec's numbers; not fitted |
+| Synthetic learners sampled from a BKT model (Monte Carlo) | Cited | Simulated students for testing designs [24]; review of simulated learners [25]; BKT-generated data for evaluating mastery assessment [10], [23] |
+| Three archetypes (novice, inconsistent, fast) and their ranges | Assumption | Values from `start-here.md`, centered on the spec's numbers; not fitted. All ranges satisfy [21] and the 0.5 bound of [2], but the novice slip (0.20–0.30) and guesser guess/slip (up to 0.40/0.30) deliberately exceed the 0.3/0.1 bound of [1] |
 | Lapse cohort with true forgetting 0.02 to 0.06 per item | Assumption | Motivated by forgetting effects found in [6] and [7]; the range is ours |
 | Paired design (same responses through every arm) | Assumption | Standard variance reduction (common random numbers); no learning-gain claims |
 
@@ -32,8 +32,8 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 |---|---|---|
 | Discrete PID, anti-windup clamp, filtered derivative | Cited | Åström & Hägglund 2006 [12]; Åström & Murray 2008 [13] |
 | Gains Kp=1.25, Ki=0.10, Kd=0.35, γ=0.10, S_max=3 | Assumption | From `start-here.md`; hand-tuned, not derived |
-| Hysteresis deadband against the last committed value | Cited | Standard relay-with-hysteresis practice [13] |
-| Setpoint P* = 0.85 | Assumption | The classic mastery threshold is 0.95 [1]; 0.85 is a spec choice and should be stated as such |
+| Hysteresis deadband against the last committed value | Adapted | A standard deadband against chattering (general practice; no specific page in [12], [13] is claimed). The 0.06 value is ours |
+| Setpoint P* = 0.95 (changed from 0.85 on 2026-10-03) | Cited | The standard BKT mastery threshold [1]; called "the widely adopted threshold" in [26] |
 | Level slew limit (one level per step) | Adapted | Rate limiting is standard in control [12]; using it against level skips is ours |
 
 ## Interface and pedagogy
@@ -51,7 +51,7 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 
 | Choice | Status | Source |
 |---|---|---|
-| Model emits JSON constrained by a schema | Cited | Constrained/guided generation: Willard & Louf 2023 [20] |
+| Model emits JSON constrained by a schema | Adapted | Token-level constrained decoding: [20], [27]; reliability of schema-constrained output: [28]. Our engine checks output after generation and falls back, which is a different mechanism |
 | Schema check plus deterministic fallback template | Assumption | Our design |
 | Surrogate plant fault rates (15% off-budget, 3% malformed) | Assumption | Placeholders until measured on real Gemini output |
 
@@ -77,3 +77,13 @@ value ourselves; the paper must state it as a design parameter, not as a fact.
 18. J. Vlassis, "The balance model: Hindrance or support for the solving of linear equations with one unknown," *Educational Studies in Mathematics*, vol. 49, pp. 341–359, 2002.
 19. A. Miniukovich and A. De Angeli, "Quantification of interface visual complexity," in *Proc. AVI*, 2014, pp. 153–160.
 20. B. T. Willard and R. Louf, "Efficient guided generation for large language models," arXiv:2307.09702, 2023.
+21. B. van de Sande, "Properties of the Bayesian knowledge tracing model," *Journal of Educational Data Mining*, vol. 5, no. 2, pp. 1–10, 2013.
+22. M. V. Yudelson, K. R. Koedinger, and G. J. Gordon, "Individualized Bayesian knowledge tracing models," in *Proc. AIED*, 2013, pp. 171–180.
+23. S. Slater and R. S. Baker, "Degree of error in Bayesian knowledge tracing estimates from differences in sample sizes," *Behaviormetrika*, vol. 45, no. 2, pp. 475–493, 2018.
+24. K. VanLehn, S. Ohlsson, and R. Nason, "Applications of simulated students: An exploration," *Journal of Artificial Intelligence in Education*, vol. 5, 1994.
+25. T. Käser and G. Alexandron, "Simulated learners in educational technology: A systematic literature review and a Turing-like test," *International Journal of Artificial Intelligence in Education*, vol. 34, no. 2, pp. 545–585, 2024.
+26. J. Zhang, K. Vanacore, R. S. Baker, N. Ch, C. Mills, and O. Henkel, "How much mastery is enough mastery? The relationship between mastery in a lesson and the performance on the subsequent lesson," in *Proc. EDM*, 2025.
+27. S. Geng, M. Josifoski, M. Peyrard, and R. West, "Grammar-constrained decoding for structured NLP tasks without finetuning," in *Proc. EMNLP*, 2023, pp. 10932–10952.
+28. S. Geng et al., "JSONSchemaBench: A rigorous benchmark of structured outputs for language models," arXiv:2501.10868, 2025.
+
+All entries, with DOIs, are also in `docs/references.bib`; the check behind each correction is in `docs/source-check.md`.
