@@ -49,7 +49,9 @@ three times as often. We further show that
 standard BKT saturates after long success runs, so that a subsequent streak
 of errors leaves the interface unchanged, and evaluate forgetting and a
 CUSUM lapse detector as remedies; the detector cuts overload in a
-forgetting cohort by 25\%. Plant fault rates are assumed, not measured. All claims concern algorithmic behavior;
+forgetting cohort by 25\%. In 300 calls to the real model, 3.4\% of outputs
+were malformed and 2.8\% of valid outputs missed the budget, against
+simulated rates of 3\% and 15\%. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
 
@@ -216,7 +218,7 @@ percentile 1.46\,s) and gave the same decision, a worked example, for all
 200 test states, so it is not part of the evaluated system.
 
 \subsection{Generative plant and validation gate}
-The plant, intended to be Gemini 3.7 Flash served through Vertex AI,
+The plant, Gemini 3.7 Flash served through Vertex AI,
 receives the budget, the
 policy decision and the equation and emits a JSON component tree. Nodes are
 drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
@@ -294,8 +296,21 @@ The benchmark replaces the foundation model with a surrogate that compiles
 the closest admissible tree and injects faults: with probability 0.15 it
 drifts off budget, and with probability 0.03 it emits malformed output
 (truncated JSON, unknown component, out-of-range field, depth overflow,
-injected field). These rates are assumptions, not measurements of Gemini.
+injected field). These rates were set before the real model was measured.
 The unconstrained arm uses the same surrogate without the budget check.
+
+To check them, we sent 300 requests to the real model (thinking level low,
+temperature 0.4) with budgets drawn uniformly from $[0.02,0.98]$ and passed
+every output through the same gate. Nine calls failed in transport (six HTTP
+errors, three 30\,s timeouts). Of the remaining 291, ten were valid JSON
+that broke a structural rule (a tree with no interactive element), a
+content-malformed rate of 3.4\%. Of the 281 valid trees, eight (2.8\%) missed
+the budget by more than $\varepsilon$; the median error was 0.012. Counting
+all failures, 91\% of calls met the budget and 9\% would fall back. Compliance
+was lowest at level 1 (82\% within budget) and 93--95\% at levels 2--4.
+Median latency was 5.6\,s (95th percentile 7.8\,s). The surrogate's 3\%
+malformed rate is therefore close to the measured one, and its 15\% drift
+rate is a stress setting about five times the measured rate.
 
 \subsection{Metrics}
 Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
@@ -327,7 +342,8 @@ normal-approximation 95\% confidence intervals over the 1,000 learners.
 \caption{Main results and ablations on the test cohort (1,000 learners, 40 items each).
 $\Delta M$ is measured against the closed-loop reference budget. Overload,
 underload and ITAE use the latent learner state and exist only in simulation.
-Fallback rates follow from the assumed surrogate fault rates.}
+Fallback rates follow from the surrogate's fault rates; its drift rate is
+about five times that measured on the real model.}
 \label{tab:main}
 \begin{tabular}{lcccccccc}
 \toprule
@@ -349,7 +365,7 @@ Closed loop & 0.0122 (0.0119--0.0124) & 1.000 & 0.035 & 0.67 & 0.002 & 0.121 & 0
 Table~\ref{tab:main} shows that the closed loop keeps the rendered interface
 within 0.012 of its budget on average. Every rendered tree is within
 $\varepsilon$, but this holds by construction, since the gate substitutes a
-fallback whenever a tree misses the budget; with the assumed 15\% drift rate,
+fallback whenever a tree misses the budget; with the surrogate's 15\% drift rate,
 15.4\% of steps are fallbacks. Unconstrained GenUI and the rule-based arm
 track the same reference budget less closely (0.131 and 0.123).
 
@@ -429,9 +445,10 @@ been validated against measured load, for which instruments exist
 parameters are design values rather than fits to tutor data. Long error
 streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
-The plant is a surrogate with assumed fault rates. Schema compliance
-(97\%) and the fallback rate (15\%) follow from those assumptions and say
-nothing about Gemini; measuring them with the real model is future work.
+The benchmark plant is a surrogate. Its malformed rate matches and its drift rate
+exceeds those measured on the real model, but the real-model measurement covers single
+calls, not full learner trajectories, and its 5.6\,s median latency is too
+slow for per-item regeneration without caching or prefetching.
 Finally, a learned fast policy would need fine-tuning on real learner
 interaction data; training it on simulator data would only imitate the rule
 policy it is meant to replace.
@@ -445,9 +462,10 @@ unconstrained generator while rarely showing abstract screens to learners
 who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
-little cost, while forgetting overcorrects. The next steps are measuring
-the real model's fault rates, a learned fast policy trained on real
-interaction data, and a study with learners.
+little cost, while forgetting overcorrects. In 300 real calls the
+generative model met the budget 91\% of the time. The next steps are
+running full trajectories with the real model, a learned fast policy
+trained on real interaction data, and a study with learners.
 
 \section*{Code and Data Availability}
 The engine, simulation harness, benchmark results and the sources of
