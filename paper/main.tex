@@ -58,7 +58,7 @@ cognitive load, adaptive learning, simulation
 
 Intelligent tutoring systems (ITS) have long modeled learners precisely.
 Knowledge tracing maintains a probability that a learner has mastered each
-knowledge component \cite{corbett1995knowledge,koedinger2012kli}, and
+knowledge component \cite{corbett1995knowledge}, and
 tutors built on it have been deployed at scale in mathematics
 \cite{ritter2007cognitive,vanlehn2011relative}. The interface of such
 systems, however, is authored in advance: the learner model selects the next
@@ -73,7 +73,7 @@ becomes.
 
 Cognitive load theory explains why this matters. The same material can help
 a novice and hinder an expert (the expertise reversal effect)
-\cite{kalyuga2003expertise,chen2017element}, and guidance should fade as
+\cite{kalyuga2003expertise}, and guidance should fade as
 competence grows \cite{renkl2003structuring,salden2010expertise}. An
 interface that adapts to the learner therefore needs both a learner model and
 a mechanism that holds the interface to a complexity appropriate to that
@@ -99,49 +99,41 @@ and two remedies.
 \subsection{Learner modeling}
 Bayesian Knowledge Tracing (BKT) models each knowledge component as a
 two-state hidden Markov model with prior, learning, guess and slip parameters
-\cite{corbett1995knowledge}. Extensions individualize the prior
-\cite{pardos2010individualization} and the learning rate
-\cite{yudelson2013individualized}, add forgetting
-\cite{qiu2011time,khajah2016deep}, or contextualize guess and slip
-\cite{baker2008contextual}. Its identifiability and degeneracy have been
-analyzed in detail \cite{beck2007identifiability,vandesande2013properties,doroudi2017misidentified}.
-Logistic models such as PFA \cite{pavlik2009pfa,gong2011construct} and deep
-models \cite{piech2015dkt} are alternatives; BKT remains competitive when
-extended \cite{khajah2016deep} and is reviewed in
-\cite{pelanek2017bkt,desmarais2012review}. We use BKT because its state is a
+\cite{corbett1995knowledge}. Extensions individualize parameters per learner
+\cite{pardos2010individualization}, add forgetting \cite{khajah2016deep},
+or contextualize guess and slip \cite{baker2008contextual}, and its
+fixed points and parameter constraints have been analyzed
+\cite{vandesande2013properties}. Logistic and deep alternatives exist
+\cite{pelanek2017bkt}; BKT remains competitive when extended
+\cite{khajah2016deep}. We use BKT because its state is a
 calibrated probability that can serve directly as a control variable.
 
 \subsection{Adaptive and generative interfaces}
-Adaptive hypermedia \cite{brusilovsky2001adaptive} and model-based interface
-generation \cite{gajos2010supple} adapt presentation to users, but
+Model-based interface generation \cite{gajos2010supple} adapt presentation to users, but
 adaptation has costs: unpredictable changes reduce usability
-\cite{gajos2008predictability,gajos2006design,lavie2010adaptive}. Recent GenUI
+\cite{gajos2008predictability,findlater2004menus}. Recent GenUI
 systems let a large language model produce the interface itself
 \cite{leviathan2026genui,tu2026maicui}. To our knowledge, none of these
 systems bounds the generated interface by a learner model.
 
 \subsection{Cognitive load and scaffolding}
-Cognitive load theory \cite{sweller1988cognitive,sweller1998cognitive,sweller2019cognitive}
+Cognitive load theory \cite{sweller1988cognitive}
 attributes intrinsic load to element interactivity \cite{sweller2010element}.
 Worked examples reduce load for algebra novices \cite{sweller1985worked} and
 should fade into problem solving \cite{renkl2003structuring,salden2010expertise};
 concrete representations should fade into symbolic ones
 \cite{fyfe2014concreteness}. For linear equations, the balance model supports
 early understanding but breaks down with negative quantities
-\cite{vlassis2002balance,otten2019balance}, and learners hold persistent
+\cite{vlassis2002balance}, and learners hold persistent
 misconceptions about equality and operating on the unknown
-\cite{kieran1981equality,herscovics1994gap,alibali2007equal,booth2014persistent}.
+\cite{kieran1981equality,booth2014persistent}.
 
 \subsection{Control and constrained generation}
 PID control with anti-windup and derivative filtering is standard practice
-\cite{astrom2006advanced,astrom2008feedback,astrom1989windup}, and feedback
-control has been applied to computing systems \cite{hellerstein2004feedback}
-and to difficulty adjustment in games \cite{hunicke2005dda}. Constrained
+\cite{astrom2006advanced,astrom1989windup}. Constrained
 decoding guarantees well-formed model output
-\cite{willard2023guided,scholak2021picard,geng2023grammar,poesia2022synchromesh},
-though schema-constrained output is not perfectly reliable in practice
-\cite{geng2025jsonschemabench} and format restrictions can affect output
-quality \cite{tam2024speak}.
+\cite{willard2023guided}, though schema-constrained output is not perfectly
+reliable in practice \cite{geng2025jsonschemabench}.
 
 % ---------------------------------------------------------------------------
 \section{Architecture}
@@ -190,7 +182,7 @@ hysteresis deadband $\Delta_h$ commits a new budget only when it differs from
 the last committed budget by at least $\Delta_h$.
 
 \paragraph*{Gain selection}
-Classical tuning rules \cite{ziegler1942optimum,cohen1953retarded,astrom2004revisiting,skogestad2003simple}
+Classical tuning rules \cite{ziegler1942optimum,skogestad2003simple}
 assume an identified plant response. In our benchmark the interface does not
 alter the simulated learner's responses (Section~\ref{sec:method}), so there is
 no plant response to identify. Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
@@ -208,9 +200,7 @@ symbolic), whether to show the balance-scale manipulative, whether hints are
 enabled, and an instructional density limit. The intended implementation is
 an open-weight decision model \cite{laya2026}; the benchmark uses a
 deterministic rule-based stand-in with the same interface, so no latency
-claims about that model are made. The split between a fast decider and a
-slow generator follows the System~1 / System~2 analogy
-\cite{kahneman2011thinking}.
+claims about that model are made.
 
 \subsection{Generative plant and validation gate}
 The plant (\tbd{Gemini model and configuration}) receives the budget, the
@@ -220,7 +210,7 @@ drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
 \textsc{SymbolicEquationWorkspace}, \textsc{SteppedHintAccordion} and
 \textsc{CartesianVerificationPlane}. The client renders these components
 directly and never executes generated code. Each emission is parsed against
-the schema \cite{pezoa2016jsonschema}; if parsing fails, or if
+the schema; if parsing fails, or if
 $|M_I-M_I^*|>\varepsilon$ with $\varepsilon=0.05$, a precompiled fallback
 tree nearest to the budget is rendered instead.
 
@@ -231,12 +221,11 @@ nesting depth $\delta$,
 M_I = w_1\frac{\rho-1}{7} + w_2\frac{\alpha-1}{3} + w_3\frac{\delta-1}{3},
 \quad \rho\in[1,8],\ \alpha,\delta\in[1,4].
 \end{equation}
-Each feature has a basis in prior work: element interactivity and choice
-count raise load \cite{sweller2010element,hick1952rate,cowan2001magical}
+Each feature has a basis in prior work: element interactivity raises load \cite{sweller2010element}
 and display density is a classic complexity measure \cite{tullis1983formatting};
 the abstraction ladder from balance scale to operation pad to symbolic
 workspace follows concreteness fading \cite{fyfe2014concreteness}; and
-deeper structures cost users more \cite{kiger1984depth,larson1998web}.
+deeper structures cost users more \cite{kiger1984depth}.
 Placing the Cartesian plane at the top of the ladder is our design choice.
 With no data to fit weights, we use equal weights $w_i=1/3$, which are robust
 in that setting \cite{dawes1979robust}, and test sensitivity to the weights
@@ -251,7 +240,7 @@ validated against measured cognitive load.
 Simulated learners are an established way to test instructional designs
 before human studies \cite{vanlehn1994simulated,kaser2024simulated}, and
 BKT-generated data have been used to evaluate mastery assessment
-\cite{fancsali2013optimal,slater2018degree}. Each learner is a two-state
+\cite{fancsali2013optimal}. Each learner is a two-state
 HMM whose parameters are drawn uniformly from archetype ranges
 (Table~\ref{tab:archetypes}). The ranges for the novice and guesser
 archetypes exceed the tighter bounds of \cite{corbett1995knowledge} by design
@@ -282,7 +271,7 @@ Fast master & .15--.30 & .30--.40 & .15--.25 & .01--.03\\
 the plant chooses complexity from a noisy reading of mastery with no budget
 check. (3) \emph{Rule-based}: step up after three consecutive correct
 responses and down after two consecutive errors, an up-down rule in the
-spirit of \cite{levitt1971updown,kelly2015mastery}. (4) \emph{Closed loop}:
+spirit of \cite{levitt1971updown}. (4) \emph{Closed loop}:
 the full architecture. Ablations remove the derivative filter, remove
 anti-windup, and add a one-level slew limit.
 
@@ -338,8 +327,8 @@ exceeds $1-10^{-6}$ after ten correct responses and five subsequent errors
 lower it only to about $0.98$; after roughly forty correct responses it
 equals $1.0$ in double precision and no further evidence can lower it. The
 interface therefore stays at its highest level through a streak of errors.
-We compare two remedies: forgetting, $P(F)>0$ \cite{qiu2011time,khajah2016deep},
-and a CUSUM detector \cite{page1954cusum,basseville1993detection} on the
+We compare two remedies: forgetting, $P(F)>0$ \cite{khajah2016deep},
+and a CUSUM detector \cite{page1954cusum} on the
 log-likelihood ratio between ``not known'' and the tracker's prediction,
 which resets the estimate when an alarm fires. \tbd{results on the
 forgetting cohort}. Weighting recent responses more heavily
@@ -353,11 +342,10 @@ does not test whether learners benefit. Because simulated responses do not
 depend on the interface, the loop is closed only through the mastery
 estimate, not through the learner. $M_I$ is a structural proxy that has not
 been validated against measured load, for which instruments exist
-\cite{leppink2013instrument,paas1992training,ayres2006subjective}. BKT
-parameters are design values rather than fits to data such as ASSISTments
-\cite{badrinath2021pybkt}. Long error streaks may reflect misconceptions
-rather than slips \cite{booth2014persistent}, or a learner who will not reach
-mastery \cite{beck2013wheel}; the controller does not distinguish these.
+\cite{leppink2013instrument}. BKT
+parameters are design values rather than fits to tutor data. Long error
+streaks may reflect misconceptions rather than slips
+\cite{booth2014persistent}; the controller does not distinguish these.
 \tbd{plant: surrogate vs.\ measured Gemini rates}.
 
 \section{Conclusion}
