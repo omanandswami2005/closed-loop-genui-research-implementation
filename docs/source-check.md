@@ -32,6 +32,8 @@ were matched. BibTeX for all of them is in [`references.bib`](references.bib).
 
 ## 2. Corrections to `docs/sources.md`
 
+All fixes below were applied to `docs/sources.md` on the engine branch on 2026-10-03.
+
 | Row in sources.md | Problem | Fix |
 |---|---|---|
 | "Guess < 0.3 and slip < 0.1 are the usual non-degenerate bounds [1][2]" | The 0.3 / 0.1 bound is Corbett & Anderson's. Baker, Corbett & Aleven 2008 used a looser bound of 0.5 for each. Source for both statements: Slater & Baker 2018, Sec. 2 (read in full). | Credit 0.3 / 0.1 to `corbett1995knowledge` and 0.5 to `baker2008contextual`; add `slater2018degree` as the place that compares them. |
@@ -42,7 +44,7 @@ were matched. BibTeX for all of them is in [`references.bib`](references.bib).
 | "Synthetic learners from BKT ... Fancsali 2013 [10]; Pelánek 2017 [11]" | Fancsali et al. 2013 is right: they simulate students from random BKT parameters (confirmed via a later paper's description). I could not confirm Pelánek 2017 discusses simulated learners. | Keep [10]. Replace [11] for this claim with `kaser2024simulated` (systematic review of simulated learners) and `vanlehn1994simulated` (the classic paper on why simulated students are used to test designs). Add `slater2018degree`, which also generates BKT data from chosen parameters. Keep Pelánek 2017 for the BKT-vs-alternatives overview. |
 | "Hysteresis deadband ... Cited ... [13]" | Hysteresis against chattering is standard control practice, but I did not find the page in Åström & Murray that says it. | Mark **Unconfirmed** or **Adapted**; say "a standard hysteresis deadband" without a page claim. |
 | "Model emits JSON constrained by a schema ... Cited [20]" | Willard & Louf 2023 is about token-level constrained decoding (Outlines). Our engine instead checks the output **after** generation and falls back. That is a different mechanism. | Status **Adapted**. Add `geng2023grammar`, `geng2025jsonschemabench` (how reliable schema-constrained output is in practice), `tam2024speak` (format limits can hurt model quality: a fair caveat), and `pezoa2016jsonschema` for JSON Schema itself. |
-| Setpoint 0.85 row | Correct as written. One warning: do not cite the "85% rule" (`wilson2019eighty`) as support. That paper is about the best **accuracy rate during training** (about 85% correct), not a **mastery probability** threshold. Mention it only as a loose analogy, if at all. | No change. |
+| Setpoint row | **Decision (omiii, 2026-10-03): the target moves from 0.85 to 0.95**, the usual mastery threshold. | Status becomes **Supported**: `corbett1995knowledge` set mastery at 0.95; `zhang2025mastery` (read in full) calls 0.95 "the widely adopted threshold" and reports that 0.98 helps a bit more. Do not cite the "85% rule" (`wilson2019eighty`) for any setpoint: it is about the best accuracy rate during training, not a mastery probability. |
 | BKT docstring analogy "forgetting factor in recursive estimation" | Reasonable, but uncited. | Cite a recursive-estimation text if it stays in the paper, or drop it. |
 
 Everything else in `sources.md` checked out: Corbett & Anderson (year 1995;
@@ -86,9 +88,10 @@ De Angeli 2014 (correctly framed as related work only).
 
 Say "we set" or "design parameter" for each of these in the paper:
 
-- PID gains Kp = 1.25, Ki = 0.10, Kd = 0.35; filter γ = 0.10; integral clamp 3.0; slope k = 2.0; hysteresis 0.06; setpoint P* = 0.85.
+- PID gains Kp = 1.25, Ki = 0.10, Kd = 0.35; filter γ = 0.10; integral clamp 3.0; slope k = 2.0; hysteresis 0.06. Section 6 explains how to turn these from "hand-picked" into "found by a documented tuning procedure".
+- The setpoint is no longer ours: it is now 0.95, the published mastery threshold (section 2).
 - BKT defaults P(L0) = 0.15, P(T) = 0.12, P(G) = 0.20, P(S) = 0.08. The spec calls these "standard calibrated priors". They are not from any published fit; change that wording.
-- M_I weights 0.40 / 0.35 / 0.25, the bounds ρ ∈ [1, 8] and δ ∈ [1, 4], and the α ordering 1 to 4.
+- M_I weights 0.40 / 0.35 / 0.25, the bounds ρ ∈ [1, 8] and δ ∈ [1, 4], and the α ordering 1 to 4. Section 7 lists what each part of the formula can lean on, and what to do about the weights.
 - Tolerance ε = 0.05, fallback grid of 40, recent-error window of 5, hint rule.
 - Archetype ranges, cohort sizes 300 / 400 / 300, 40 steps per learner.
 - Surrogate plant fault rates (15% off-budget, 3% broken JSON) and the open-loop noise 0.15. These are placeholders until measured on real Gemini output.
@@ -142,3 +145,103 @@ for good. This is worth one sentence in Limitations.
 Also cite `beck2013wheel` (wheel-spinning) when explaining why long error
 runs matter, and `booth2014persistent` / `kieran1981equality` for the
 misconceptions that can cause them.
+
+## 6. Controller settings: what a paper can and cannot back
+
+**The PID structure is fully supported.** Proportional, integral and
+derivative terms, an integral clamp against windup, and a low-pass filter on
+the derivative are textbook practice: `astrom2006advanced`,
+`astrom2008feedback`, `astrom1989windup`. Using feedback control to steer
+software is supported by `hellerstein2004feedback`.
+
+**The gain numbers cannot come from a published table.** The classic tuning
+rules (`ziegler1942optimum`, `cohen1953retarded`, the AMIGO rules in
+`astrom2004revisiting`, the SIMC rules in `skogestad2003simple`) all start
+from a measured model of the plant: how strongly and how fast the process
+responds when the controller output changes. They then give the gains as
+formulas of that response. Our case breaks that starting point in two ways:
+
+1. The "plant" is a learner, and no one has measured how a learner's mastery
+   responds to a change in screen complexity.
+2. In our simulation the screen does **not** change the simulated learner's
+   answers (see `backend/closedloop/sim/learners.py`: answers are drawn once
+   and replayed through every arm). So the controller is shaping a signal,
+   not steering a process that answers back. A Ziegler-Nichols style rule has
+   nothing to measure.
+
+So quoting Ziegler-Nichols or similar for Kp = 1.25 etc. would be an
+over-claim. A reviewer in control would catch it.
+
+**What we can honestly do instead (recommended): tune with a documented
+procedure.** This turns "hand-picked" into "reproducible", which is what
+reviewers ask for:
+
+1. Write down one cost to minimize, for example tracking error plus a penalty
+   on screen jumps (jitter). Weighting error by time is the classic ITAE
+   criterion from `graham1953itae`.
+2. Search the gains (Kp, Ki, Kd, γ, the clamp) on a **tuning** cohort with its
+   own random seed.
+3. Report every result on a separate **test** cohort, so the tuning does not
+   leak into the numbers.
+4. Show a small sensitivity table: how the results change when each gain moves
+   up or down by, say, 50%. If the results barely move, the exact numbers
+   matter little, which is a strong point in the paper.
+
+Then the paper says: "gains were selected by minimizing an ITAE-type cost on
+a held-out tuning cohort [graham1953itae]; the controller structure follows
+[astrom2006advanced]". That is honest and defensible.
+
+| Setting | Can a paper back it? | What to write |
+|---|---|---|
+| PID form, integral clamp, filtered derivative | Yes | Cite `astrom2006advanced`, `astrom1989windup` |
+| Kp, Ki, Kd | No published value fits | "Selected by the tuning procedure above" |
+| Derivative filter γ = 0.10 | The **idea** of filtering is standard; the number is not | Tune with the gains. Note: γ = 0.10 averages the change in error over roughly the last 10 steps |
+| Integral clamp 3.0 | The idea yes, the number no | Tune with the gains, or derive it from the range of the error signal and state the reasoning |
+| Sigmoid slope k = 2.0 | No paper; it follows from our own maths (spec section 6.3) | Keep the derivation in the paper; it is ours. It must be redone for the 0.95 target |
+| Hysteresis 0.06 | The idea yes (standard deadband), the number no | Tune, or tie it to the size of one complexity level (0.25) and say so |
+
+**Effect of the 0.95 target on the controller (for the engine thread).** The
+error formula divides by (1 − target) above the target. At 0.85 that is 0.15;
+at 0.95 it is 0.05, so tiny changes in mastery above 0.95 now swing the error
+three times harder. The slope k and the reachable-range check in spec section
+6.3 were derived for 0.85 and need to be redone; the gains should be re-tuned
+after the change anyway.
+
+## 7. Screen-complexity formula (M_I): what a paper can and cannot back
+
+M_I adds up three parts: how many things you can click or drag (ρ), how
+abstract the tool is (α), and how deeply the layout is nested (δ).
+
+**Each part has support:**
+
+| Part | Why it should raise complexity | Sources |
+|---|---|---|
+| ρ: number of interactive elements | More things that must be handled together means more load ("element interactivity"); more choices means slower decisions; working memory holds only about four items at once; screen density is a classic complexity measure | `sweller2010element`, `chen2017element`, `hick1952rate`, `hyman1953stimulus`, `cowan2001magical`, `tullis1983formatting` |
+| α: abstraction (balance scale → steps → symbols → graph) | Concrete first, then fade to abstract | `fyfe2014concreteness`, `vlassis2002balance`, `otten2019balance`. Putting the graph above symbols is still **ours** |
+| δ: nesting depth | Deeper menus and page structures cost users more | `kiger1984depth`, `larson1998web` |
+| Computing complexity automatically from the layout | Prior work scores interfaces from layout features, then checks the scores against human ratings | `tullis1983formatting`, `ngo2003modelling`, `miniukovich2014quantification`, `miniukovich2015computation`, `oulasvirta2018aim` |
+
+**The weights 0.40 / 0.35 / 0.25 have no source.** The papers that combine
+layout features (for example `miniukovich2015computation`) get their weights
+by fitting to human ratings. We have no human ratings, so we cannot do that.
+Options, best first:
+
+1. **Use equal weights (1/3 each) and say why.** `dawes1979robust` shows that
+   simple equal-weight sums hold up well when there is no data to fit
+   weights; tuned-looking weights without data add false precision. This
+   gives a citation for the choice itself.
+2. **Keep 0.40 / 0.35 / 0.25, but add a sensitivity check:** rerun the
+   benchmark with other weight sets (equal weights, and each part dropped in
+   turn) and show the conclusions do not change.
+3. **Future work:** fit the weights to ratings, or validate M_I against a
+   cognitive-load questionnaire such as `leppink2013instrument`,
+   `paas1992training` or `ayres2006subjective`. These need human participants,
+   so they belong in Future work, not in this paper.
+
+My advice: do 1 and 2 together. Equal weights with a citation, plus a short
+table showing the results are the same with other weights.
+
+**Honest wording for the paper:** "M_I is a proxy built from three features
+that the literature links to load and visual complexity
+[sweller2010element; tullis1983formatting; kiger1984depth]. It has not been
+validated against measured cognitive load; that requires a user study."
