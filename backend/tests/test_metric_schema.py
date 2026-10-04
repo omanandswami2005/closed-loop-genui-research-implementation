@@ -64,6 +64,19 @@ def test_fallback_is_valid_and_within_epsilon():
             assert abs(measure(doc).m_i - b) <= EPSILON
 
 
+
+def test_fallback_lands_within_epsilon_for_every_budget_the_loop_can_ask():
+    """Dense check behind the paper's claim that the fallback never misses the budget."""
+    worst = 0.0
+    for i in range(1001):
+        b = i / 1000
+        level = complexity_level(b)
+        for mastery in (0.1, 0.5, 0.9):
+            for errors in range(6):
+                d = POLICY.decide(mastery, b, level, errors)
+                worst = max(worst, abs(measure(fallback_document(b, d, EQ)).m_i - b))
+    assert worst <= EPSILON, worst
+
 @pytest.mark.parametrize("kind", FAULT_KINDS)
 def test_every_injected_fault_is_rejected_and_falls_back(kind):
     d = POLICY.decide(0.5, 0.4, 2, 0)
