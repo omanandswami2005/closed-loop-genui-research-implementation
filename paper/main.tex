@@ -3,7 +3,7 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
-\usepackage{booktabs}
+\usepackage{booktabs,makecell}
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{xurl}
@@ -46,8 +46,8 @@ rule-based baseline, with 3.5 times less jitter than unconstrained GenUI,
 which matches latent mastery slightly better but skips levels three times as
 often. Standard BKT saturates after long success runs, so a later streak of
 errors leaves the interface unchanged; a CUSUM lapse detector cuts overload
-in a forgetting cohort by 25\%. In 300 calls to the real model with the
-planner, 98.7\% of screens were within budget, against 92\% when the model
+in a forgetting cohort by 25\%. In 300 single calls to the real model with the
+planner (not full learner sessions), 98.7\% of screens were within budget, against 92\% when the model
 also chose the layout. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
@@ -119,7 +119,26 @@ adaptation has costs: unpredictable changes reduce usability
 \cite{gajos2008predictability,findlater2004menus}. Recent GenUI
 systems let a large language model produce the interface itself
 \cite{leviathan2026genui,tu2026maicui}. To our knowledge, none of these
-systems bounds the generated interface by a learner model.
+systems bounds the generated interface by a learner model
+(Table~\ref{tab:related}).
+
+\begin{table}[t]
+\caption{Prior approaches against the three properties combined here. Learner model means a model of the learner's knowledge.}
+\label{tab:related}
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Approach & \makecell{Learner\\model} & \makecell{Generated\\interface} & \makecell{Bounded by\\learner state}\\
+\midrule
+Tracing tutors \cite{corbett1995knowledge,ritter2007cognitive} & yes & no & no\\
+Adaptive fading \cite{salden2010expertise} & yes & no & fixed rule\\
+Model-based UI \cite{gajos2010supple} & no & yes & no\\
+LLM-based GenUI \cite{leviathan2026genui,tu2026maicui} & no & yes & no\\
+This work & yes & yes & yes\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Cognitive load and scaffolding}
 Cognitive load theory \cite{sweller1988cognitive}
@@ -415,8 +434,10 @@ dark.}
 The closed loop keeps the rendered interface within 0.012 of its budget
 on average (Table~\ref{tab:main}, Fig.~\ref{fig:results}), against 0.131
 and 0.123 for unconstrained GenUI and the rule-based arm. Every rendered tree
-is within $\varepsilon$ by construction, since the gate substitutes a
-fallback (15.4\% of steps at the surrogate's drift rate). The closed loop's jitter (0.035) is 3.5 times lower than that of
+is within $\varepsilon$, partly by construction: the generator's own output met
+the budget on 84.6\% of steps, and the gate replaced the other 15.4\% from the
+fallback catalog. The compliance is thus that of governor, planner and gate
+together, not of the governor alone. The closed loop's jitter (0.035) is 3.5 times lower than that of
 unconstrained GenUI (0.123), which also skips levels 2.06 times per run
 against 0.67. The rule-based arm is smoother still (0.025, no skips), because
 it moves one level at a time. Against the latent learner state, the picture
