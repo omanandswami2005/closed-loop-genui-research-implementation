@@ -33,12 +33,10 @@ Intelligent tutoring systems estimate what a learner knows but present a
 fixed interface, while generative user interfaces (GenUI) synthesize
 interfaces at runtime without any model of the learner. We propose a
 closed-loop architecture that couples the two. Bayesian Knowledge Tracing
-estimates mastery; a PID governor with anti-windup and a filtered derivative
-converts the mastery deficit into a structural complexity budget; a fast
-policy selects scaffolding affordances; a deterministic planner fixes the
-layout whose complexity is closest to the budget; and a foundation model
-writes the content of that layout as a JSON component tree, with a fallback
-when schema or budget checks fail. We evaluate the architecture in silico on
+estimates mastery; a PID governor turns the mastery deficit into a structural
+complexity budget; a rule-based policy selects scaffolding; a planner fixes the
+layout closest to the budget; and a foundation model writes its content as a
+JSON component tree, with a fallback when schema or budget checks fail. We evaluate the architecture in silico on
 1,000 synthetic learners from three archetypes, replayed through four arms.
 The closed loop keeps the rendered interface within 0.012 of the governor's
 budget on average, against 0.131 for unconstrained GenUI and 0.123 for a
@@ -79,12 +77,13 @@ Cognitive load theory explains why this matters. The same material can help
 a novice and hinder an expert (the expertise reversal effect)
 \cite{kalyuga2003expertise}, and guidance should fade as
 competence grows \cite{renkl2003structuring,salden2010expertise}. An
-interface that adapts to the learner therefore needs both a learner model and
-a mechanism that holds the interface to a complexity appropriate to that
-model, without the abrupt layout changes that make adaptive interfaces hard
-to use \cite{gajos2008predictability,findlater2004menus}.
+adaptive interface therefore needs a learner model and a mechanism that holds
+its complexity to that model without the abrupt changes that make adaptive
+interfaces hard to use \cite{gajos2008predictability,findlater2004menus}.
 
-This paper makes three contributions:
+BKT, PID control, layout search and constrained generation are each
+established; our contribution is their integration, in which a learner model
+sets a structural budget that a generated interface must meet at runtime:
 \begin{enumerate}
 \item A closed loop in which BKT mastery drives a PID governor whose
 complexity budget is met by a layout planner and a generative model, with
@@ -99,19 +98,17 @@ and two remedies, with sensitivity to controller, metric and BKT parameters.
 % ---------------------------------------------------------------------------
 \section{Related Work}
 
-\subsection{Learner modeling}
+\paragraph*{Learner modeling}
 Bayesian Knowledge Tracing (BKT) models each knowledge component as a
 two-state hidden Markov model with prior, learning, guess and slip parameters
-\cite{corbett1995knowledge}. Extensions individualize parameters per learner
-\cite{pardos2010individualization}, add forgetting \cite{khajah2016deep},
-or contextualize guess and slip \cite{baker2008contextual}, and its
-fixed points and parameter constraints have been analyzed
-\cite{vandesande2013properties}. Logistic and deep alternatives exist
-\cite{pelanek2017bkt}; BKT remains competitive when extended
-\cite{khajah2016deep}. We use BKT because its state is a
-calibrated probability that can serve directly as a control variable.
+\cite{corbett1995knowledge}. Extensions individualize parameters
+\cite{pardos2010individualization}, add forgetting \cite{khajah2016deep} or
+contextualize guess and slip \cite{baker2008contextual}; its fixed points are
+analyzed in \cite{vandesande2013properties}. Extended BKT stays competitive
+with logistic and deep models \cite{pelanek2017bkt,khajah2016deep}; its state
+is a probability that can serve directly as a control variable.
 
-\subsection{Adaptive and generative interfaces}
+\paragraph*{Adaptive and generative interfaces}
 Model-based interface generation \cite{gajos2010supple} adapts presentation to users, but
 adaptation has costs: unpredictable changes reduce usability
 \cite{gajos2008predictability,findlater2004menus}. Recent GenUI
@@ -138,7 +135,7 @@ This work & yes & yes & yes\\
 \end{tabular}
 \end{table}
 
-\subsection{Cognitive load and scaffolding}
+\paragraph*{Cognitive load and scaffolding}
 Cognitive load theory \cite{sweller1988cognitive}
 attributes intrinsic load to element interactivity \cite{sweller2010element}.
 Worked examples help algebra novices \cite{sweller1985worked} and should fade
@@ -161,7 +158,7 @@ reliable in practice \cite{geng2025jsonschemabench}.
 
 \begin{figure}[t]
 \centering
-\scalebox{0.94}{\input{figures/architecture.tex}}
+\scalebox{0.9}{\input{figures/architecture.tex}}
 \caption{The closed loop as deployed. The gate rechecks the budget
 (dashed); failing trees are replaced from the fallback catalog. The learner
 (shaded) is simulated here.}
@@ -212,16 +209,19 @@ M_I^* = \bigl(1+e^{k u_n}\bigr)^{-1},
 \end{equation}
 which is quantized into four levels $\ell_n=\min(4,1+\lfloor 4M_I^*\rfloor)$. A
 hysteresis deadband $\Delta_h$ commits a new budget only when it differs from
-the last committed budget by at least $\Delta_h$.
+the last committed budget by at least $\Delta_h$. The governor steps once per
+response (unit sample time) from $S_0=D_0=0$ with $e_{-1}=e_0$, so the first
+step has no derivative kick, and its first budget is always committed.
 
 \paragraph*{Gain selection}
 Classical tuning rules \cite{ziegler1942optimum,skogestad2003simple}
 assume an identified plant, but here the interface does not alter simulated
 responses (Section~\ref{sec:method}). Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
-$S_{\max}$ and $\Delta_h$ were selected by minimizing an ITAE-type tracking
-cost \cite{graham1953itae} plus a jitter penalty on a separate tuning cohort;
-all reported results use a disjoint test cohort. A random search of 200
-samples selected
+$S_{\max}$ and $\Delta_h$ were selected by minimizing the cost $\mathrm{ITAE}+J$
+(Section~\ref{sec:method}) \cite{graham1953itae} on a separate 1,000-learner
+tuning cohort; all reported results use a disjoint test cohort. A random search
+of 200 uniform samples over $K_p\in[0.25,2.5]$, $K_i\in[0,0.4]$, $K_d,\gamma\in
+[0,1]$ ($\gamma\ge 0.05$), $S_{\max}\in[1,6]$, $\Delta_h\in[0.02,0.15]$ selected
 $K_p=0.865$, $K_i=0.377$, $K_d=0.672$, $\gamma=0.398$, $S_{\max}=1.253$ and
 $\Delta_h=0.141$. The cost surface is flat: the selected point scores 0.104
 on the tuning cohort against 0.110 for hand-set initial values, which rank
@@ -258,8 +258,8 @@ trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[height=3.9cm]{figures/screen_l1.png}\hspace{4mm}%
-\includegraphics[height=3.9cm]{figures/screen_l4.png}
+\includegraphics[height=3.7cm]{figures/screen_l1.png}\hspace{4mm}%
+\includegraphics[height=3.7cm]{figures/screen_l4.png}
 \caption{Screens written by Gemini 3.7 Flash in guided mode; both passed the
 gate. Left: level 1, balance scale with a worked step ($M_I^*=0.091$,
 $M_I=0.111$). Right: level 4, graph verification ($M_I^*=0.903$, $M_I=0.905$).}
@@ -317,16 +317,17 @@ Fast master & .15--.30 & .30--.40 & .15--.25 & .01--.03\\
 \end{tabular}
 \end{table}
 
-\subsection{Arms}
-(1) \emph{Static}: a fixed level-2 interface. (2) \emph{Unconstrained GenUI}:
-the plant chooses complexity from a noisy reading of mastery with no budget
-check. (3) \emph{Rule-based}: step up after three consecutive correct
+\paragraph*{Arms}
+All arms see the same responses and BKT estimate. (1) \emph{Static}: a fixed
+level-2 interface. (2) \emph{Unconstrained GenUI}: the plant sets its own
+complexity to the estimate plus Gaussian noise ($\sigma=0.15$); only the schema
+is checked. (3) \emph{Rule-based}: step up after three consecutive correct
 responses and down after two consecutive errors, an up-down rule in the
-spirit of \cite{levitt1971updown}. (4) \emph{Closed loop}:
+spirit of \cite{levitt1971updown}. Arms 1 and 3 render catalog trees. (4) \emph{Closed loop}:
 the full architecture. Ablations remove the derivative filter, remove
 anti-windup, and add a one-level slew limit.
 
-\subsection{Plant model in the benchmark}
+\paragraph*{Plant model in the benchmark}
 The benchmark replaces the foundation model with a surrogate that compiles
 the planner's layout and injects faults: with probability 0.15 it
 drifts off budget, and with probability 0.03 it emits malformed output
@@ -351,18 +352,16 @@ Content-malformed, of completed calls & 3.4\% & 0\%\\
 Off budget, of valid trees & 2.8\% & 0\%\\
 Within budget, of all calls & 92.0\% & 98.7\%\\
 Median $|M_I-M_I^*|$ of valid trees & 0.012 & 0.007\\
-Median thinking tokens & 696 & 0\\
 Latency of completed calls, median / p95 & 7.7 / 18.6\,s & 2.7 / 5.1\,s\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-In free mode, ten of 294 completed calls lacked an interactive element
-and eight of 284 valid trees missed the budget, most often at level 1; in
-guided mode all failures were in transport. The surrogate's 3\% malformed
+Free-mode failures lacked an interactive element (10/294) or missed the
+budget (8/284, mostly level 1); guided-mode failures were all in transport. The surrogate's 3\% malformed
 rate thus matches free mode, and its 15\% drift rate is a stress setting.
 
-\subsection{Metrics}
+\paragraph*{Metrics}
 Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
 budget the closed-loop governor commits for the same responses, so that all
 arms share one reference; ``within $\varepsilon$'' is the share of steps with
@@ -376,14 +375,16 @@ of steps rendered from the fallback catalog. Because the simulator knows the
 learner's latent state, we also report \emph{overload} (level 3 or 4 shown
 while the skill is not known), \emph{underload} (level 1 or 2 shown while it
 is known) and an ITAE-weighted mismatch $\sum_n (n{+}1)m_n/\sum_n(n{+}1)$
-\cite{graham1953itae}, where $m_n$ marks either case.
+\cite{graham1953itae}, where $m_n$ marks either case. These are level
+mismatches, not measured load.
 
 % ---------------------------------------------------------------------------
 \section{Results}
 \label{sec:results}
 
 All numbers come from one run on the test cohort (seed 20261003; tuning
-seed 20261004), with normal-approximation 95\% CIs over 1,000 learners.
+seed 20261004), with normal-approximation 95\% CIs over 1,000 learners. The CIs reflect
+variation across learners in this run, not across independent runs.
 
 \begin{table*}[t]
 \centering
@@ -430,19 +431,17 @@ it moves one level at a time. Against the latent learner state, the picture
 is mixed. Unconstrained GenUI has the lowest ITAE mismatch (0.043 against
 0.073) and the least underload (5.4\% of steps against 12.1\%), but shows an
 abstract interface to a learner who does not know the skill twelve times as
-often (2.4\% against 0.2\%). After a streak of five or more errors that lowered the level, the
-closed loop returned to its pre-streak level within the horizon in 34 of
-51 cases, after a median of 5 items; the rule-based arm did so in 9 of
-19 cases, after a median of 12.
+often (2.4\% against 0.2\%). After streaks of five or more errors that lowered the level, the closed
+loop regained its pre-streak level in 34 of 51 cases (median 5 items), the
+rule-based arm in 9 of 19 (median 12).
 
 \subsection{Ablations}
 Removing the derivative filter raises jitter from 0.035 to 0.044 and nearly
 doubles level skips (1.19 per run). Removing anti-windup lets the integral
 grow without bound: underload rises from 12.1\% to 21.7\%, only 84\% of
 learners reach level 4 against 95\%, and median recovery after an error
-streak grows from 5 to 14 items. In a scripted probe of prolonged struggle,
-the unclamped integral reached 22.9 (clamp 1.25) and the interface never
-reached level 4. A one-level slew limit removes nearly all skips (0.02 per
+streak grows from 5 to 14 items. In a scripted probe the unclamped integral
+reached 22.9 (clamp 1.25). A one-level slew limit removes nearly all skips (0.02 per
 run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
@@ -503,8 +502,9 @@ The benchmark tests whether the controller does what it is designed to do; it
 does not test whether learners benefit. Because simulated responses do not
 depend on the interface, the loop is closed only through the mastery
 estimate, not through the learner. $M_I$ is a structural proxy that has not
-been validated against measured load, for which instruments exist
-\cite{leppink2013instrument}. BKT
+been validated against measured or perceived load, for which instruments
+exist \cite{leppink2013instrument}; the results show structural complexity
+regulation, not reduced cognitive load. BKT
 parameters are design values rather than fits to tutor data; $\pm 50\%$
 changes leave tracking intact but shift when the interface escalates. Long error
 streaks may reflect misconceptions rather than slips
@@ -523,10 +523,12 @@ unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
-a modest cost in jitter, while forgetting overcorrects. In 300 single real calls, 98.7\% of
+a modest cost in jitter, while forgetting trades overload for underload. In 300 single real calls, 98.7\% of
 screens met the budget with the planner and 92\% without it. The next steps are
 running full trajectories with the real model, a learned fast policy
-trained on real interaction data, and a study with learners.
+trained on real interaction data, and a study with learners. We claim
+structural budget regulation in simulation, not learning gains or reduced
+cognitive load.
 
 \section*{Code and Data Availability}
 The engine, simulation harness, benchmark results and the sources of
