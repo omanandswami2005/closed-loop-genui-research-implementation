@@ -80,7 +80,7 @@ De Angeli 2014 (correctly framed as related work only).
 | Linear-equation misconceptions (why error runs happen) | Supported | `kieran1981equality` (equal sign read as "write the answer"), `herscovics1994gap` (difficulty operating on the unknown), `alibali2007equal`, `booth2014persistent` (errors that persist through instruction) |
 | Students who never reach mastery | Supported | `beck2013wheel` (wheel-spinning) |
 | Fast "System 1" decider + slow "System 2" generator | Adapted | `kahneman2011thinking` for the terms only. It is a psychology analogy, not evidence for the architecture |
-| Laya as the fast decider | **No paper exists** | Only a model card and vendor blog posts (`laya2026`). The engine uses a deterministic stand-in, so the paper should say Laya is "a drop-in option" and must not cite the vendor's latency numbers as results |
+| Laya as the fast decider | **No paper exists** | Only a model card and vendor blog posts (`laya2026`). Laya was evaluated zero-shot (`results/laya/`) and is not used; the system uses a rule-based policy. The paper reports only that evaluation and must not cite the vendor's latency numbers as results |
 | Measuring cognitive load | Supported, but not done | `paas2003measurement`. We do not measure load, so cite only in Limitations / Future work |
 | Simulated learners as a valid test method | Supported | `vanlehn1994simulated`, `kaser2024simulated`, `fancsali2013optimal`, `rafferty2016pomdp` |
 

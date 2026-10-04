@@ -18,7 +18,7 @@ are no human-subject results.
 | `paper/` | IEEE conference manuscript (LaTeX) |
 | `docs/` | Sources, references and the claim-to-source check |
 | `infra/gcp/` | One-time Google Cloud setup and its non-secret settings |
-| `start-here.md` | The original research and engineering blueprint |
+| `start-here.md` | The original research and engineering blueprint (it planned Laya as the fast policy; Laya was evaluated and not used, the built policy is rule-based) |
 
 ## Requirements
 
@@ -81,7 +81,7 @@ Related runs, all from `backend/`:
 |---|---|
 | `python -m closedloop.sim.tune search --out ../results/tuning` | controller tuning (`tuning.json`, `search.csv`) |
 | `python -m closedloop.sim.tune sensitivity --out ../results/tuning` | parameter and M_I weight sensitivity |
-| `pip install -e ".[laya]" && python -m closedloop.sim.laya_eval --out ../results/laya` | real Laya policy vs the surrogate |
+| `pip install -e ".[laya]" && python -m closedloop.sim.laya_eval --out ../results/laya` | zero-shot Laya evaluation (Laya is not used in the system) |
 
 ## Run the real Gemini measurement
 

@@ -1,5 +1,7 @@
 # Theoretical Foundations and Engineering Blueprint: Closed-Loop Mastery-Constrained Generative Educational Interfaces
 
+> **Status note.** This is the original plan, written before the system was built. It names Laya as the fast System-1 policy. In the built and evaluated system the fast policy is a deterministic rule-based policy (`backend/closedloop/policy.py`). Laya was evaluated zero-shot: it gave the same decision for every learner state and took about 1.3 s per decision, so it is not used (`results/laya/`). The paper (`paper/closed-loop-genui.tex`) describes what was built.
+
 ---
 
 ## Technical Clarification: The Role and Mechanics of PID Control in Educational Interface Adaptation
@@ -37,7 +39,7 @@ In this research architecture, **the learner's mind and the user interface const
                        │                                                             │
                        ▼                                                             │
             ┌─────────────────────┐                                                  │
-            │ Laya Policy Layer   │ ──> Categorical Widget Selection                 │
+            │ Rule-Based Policy   │ ──> Categorical Widget Selection                 │
             └──────────┬──────────┘                                                  │
                        │                                                             │
                        ▼                                                             │
@@ -91,7 +93,7 @@ The implementation complexity is **negligible**. While control theory sounds mat
                                            ▼
                        ┌────────────────────────────────────────┐
                        │     FAST DISCRETE DECISION LAYER       │
-                       │  Laya Local Engine (<35 ms, p95)       │
+                       │  Rule-Based Policy (Laya not used)     │
                        │  Categorical Scaffolding & Hint Policy │
                        └───────────────────┬────────────────────┘
                                            │
@@ -128,13 +130,13 @@ The implementation complexity is **negligible**. While control theory sounds mat
 *   **Proposed Solution:** A multi-tier, closed-loop educational interface architecture wherein:
     1.  An explicit Bayesian Knowledge Tracing (BKT) engine tracks real-time latent skill acquisition ($P(L_n)$).
     2.  A discrete-time PID controller converts cognitive error into a continuous structural complexity budget ($M_I^*$).
-    3.  A fast local decision model (**Laya**) evaluates micro-affordance states (scaffolding category, hint availability) within a $<50\text{ ms}$ System-1 budget (Laya's own allocation: $<35\text{ ms}$ p95).
+    3.  A fast local decision model (**Laya**) evaluates micro-affordance states (scaffolding category, hint availability) within a $<50\text{ ms}$ System-1 budget (Laya's own allocation: $<35\text{ ms}$ p95). *Built instead: a rule-based policy. (Laya was evaluated zero-shot and not used; see `results/laya/`.)*
     4.  A schema-constrained foundation model compiles interactive, declarative STEM manipulables strictly within the generated complexity bounds.
 *   **Main Research Question (RQ):** *Can a closed-loop control framework dynamically regulate the structural complexity and instructional scaffolding of schema-constrained Generative UIs to maintain alignment with a learner's continuous mastery state while preventing interface thrashing?*
 *   **Sub-Research Questions:**
     *   **SRQ1 (Algorithmic Fidelity):** How effectively does the closed-loop controller enforce structural complexity bounds ($M_I$) across simulated learner trajectories compared to open-loop generation?
     *   **SRQ2 (Control Stability):** To what extent do anti-windup clamping and low-pass derivative filtering prevent interface chattering and visual oscillation during non-linear learning phases?
-    *   **SRQ3 (Architectural Decoupling):** How effectively does delegating micro-affordance policies to a fast local decision model (Laya) reduce foundation model generation overhead and eliminate prompt drift?
+    *   **SRQ3 (Architectural Decoupling):** How effectively does delegating micro-affordance policies to a fast local decision model (Laya) reduce foundation model generation overhead and eliminate prompt drift? *(Not tested with Laya: the built system uses a rule-based policy.)*
 *   **Evaluation Strategy (Zero-Human, In-Silico Experimental Benchmark):** A rigorous 4-arm technical simulation benchmark comparing (1) Static Pre-Authored Manipulables, (2) Unconstrained Open-Loop GenUI, (3) Rule-Based Adaptive UI, and (4) Proposed Closed-Loop BKT-PID-GenUI across 1,000 synthetic learner trajectories (each replayed through all four arms with identical seeds), measuring constraint compliance, structural stability, and failure recovery [INFERENCE].
 *   **Publication Strategy:** Target an **IEEE Conference** (e.g., IEEE ICALT, IEEE FIE, IEEE TALE) or an **IEEE/ACM Conference Track** (e.g., AIED, ACM IUI) indexed in **Scopus** and **IEEE Xplore**, structured as an architectural and systems-control paper requiring zero human-subject trial approvals.
 
@@ -169,7 +171,7 @@ Human Evaluation            24-subject lab study (NASA-TLX).    Pivot to 1,000-t
                                                                 synthetic learner simulations.
 Educational Domain          Python Recursion (Coding/CS).       Middle/High School Mathematics: Multi-Step
                                                                 Linear Equations and System Balancing.
-Decision Model Integration  Ambiguous hosted vs. local tools.   Laya as the fast, local System-1 micro-policy
+Decision Model Integration  Ambiguous hosted vs. local tools.   Planned: Laya as System-1 policy; built: rule-based policy (Laya not used)
                                                                 decider for typed scaffolding choices.
 ========================================================================================================
 
@@ -186,7 +188,7 @@ E. Cognitive Load              Intrinsic vs. Extraneous Load    Sweller; Paas (2
 F. Scaffolding & Fading        Dynamic Guidance Reduction       Wood, Bruner, Ross (1976)UI element transition
 G. Knowledge Tracing           BKT / DKT / SAKT / IRT           Yudelson (2013); Piech   State estimation options
 H. Fast Decision Models        Low-latency classification       AlphaXiv/arXiv 2026      Candidate System 1
-I. Laya                        Open-weights local decider       GitHub / HF (2026)       Local decision engine
+I. Laya                        Open-weights local decider       GitHub / HF (2026)       Local decision engine (evaluated, not used)
 K. LLM UI Generation           Prompt-to-Executable code        MAIC-UI (2026)           Synthesis mechanism
 L. Structured Generation       Grammar logit masking            Willard & Louf (Outlines)Syntax guarantee
 M. UI Constraint Systems       Multidimensional bounds vector   Author survey paper      Control interface
@@ -318,10 +320,10 @@ To avoid the casual aesthetic of "vibecoded" prototypes, the front-end interface
 
 ---
 
-## SECTION 5 — SYSTEM ARCHITECTURE & LAYA INTEGRATION
+## SECTION 5 — SYSTEM ARCHITECTURE & FAST POLICY (LAYA PLANNED, NOT USED)
 
 ### The Four-Tier Neuro-Symbolic Pipeline
-To maximize research rigor, the architecture partitions the system into four decoupled layers, giving **Laya** its mathematically optimal role as a **System-1 Fast Policy Decider**:
+To maximize research rigor, the architecture partitions the system into four decoupled layers, with a **System-1 Fast Policy Decider** in Layer 2. The plan gave this role to **Laya**; the built system uses a rule-based policy (Laya was evaluated zero-shot and not used; see `results/laya/`.):
 
 ```
 [Layer 0: Psychometric State Tracking]
@@ -332,22 +334,25 @@ Student Action ──► pyBKT Engine ──► Posterior Mastery P(L_n)
 Error e_n = (0.95 - P(L_n)) / span ──► Discrete PID Governor ──► Scalar Complexity Budget M_I*
                                                                │
                                                                ▼
-[Layer 2: Fast Micro-Affordance Policy (Laya System 1)]
-Mastery + Error + Budget ──► Laya Local Decision Engine ──► Typed Scaffolding Decisions
+[Layer 2: Fast Micro-Affordance Policy (rule-based, System 1)]
+Mastery + Error + Budget ──► Rule-Based Policy ──► Typed Scaffolding Decisions
                              • choice: Allowed Manipulative Type
                              • noul:   Enable Hint Button?
                              • score:  Guidance Level (0 to 100)
                                                                │
                                                                ▼
 [Layer 3: Generative Interface Plant (System 2)]
-Complexity Budget + Laya Policy ──► Gemini 3.7 Flash ──► Strict JSON Schema AST
+Complexity Budget + Policy Decisions ──► Gemini 3.7 Flash ──► Strict JSON Schema AST
                                                                │
                                                                ▼
 [Layer 4: Deterministic Validation & Client Execution]
 AST Metric Check (|M_I - M_I*| <= ε) ──► Validated AST ──► React CLT-UI Renderer
 ```
 
-### Precise Operational Role of Laya
+### Planned Role of Laya (not used)
+
+*The rule-based policy answers these same three decisions. Laya was evaluated zero-shot on 200 learner states: it chose a worked example every time and took a median of 1.32 s per decision on CPU, far over the 35 ms budget below, so it is not part of the system.*
+
 Laya operates locally via its Python package. It does **not** generate the UI, nor does it replace BKT. Instead, it solves the **discrete policy mapping problem**:
 *   *Input to Laya:* The continuous learner state ($P(L_n)$), the PID complexity budget ($M_I^*$), recent error count, and response latency.
 *   *Laya Decisions (System 1):*
@@ -355,7 +360,7 @@ Laya operates locally via its Python package. It does **not** generate the UI, n
     2.  `noul("display_balance_scale_manipulative")`
     3.  `score("instructional_density_limit", min=1, max=5)`
 *   *Advantage:* Laya evaluates these policy questions within a $<35\text{ ms}$ (p95) allocation with calibrated probabilities, preventing the large generative model from having to reason about high-level pedagogical rules.
-*   *Latency budget (single source of truth):* the full System-1 path (BKT update + PID governor + Laya policy, Layers 0–2) must complete in $<50\text{ ms}$ at p95. Within it, Laya is allocated $<35\text{ ms}$ p95, BKT + PID $<1\text{ ms}$ (the PID arithmetic alone is $<0.05\text{ ms}$), and the remainder is serialization headroom. The System-2 Gemini call is outside this budget.
+*   *Latency budget (single source of truth):* the full System-1 path (BKT update + PID governor + fast policy, Layers 0–2) must complete in $<50\text{ ms}$ at p95. Within it, Laya is allocated $<35\text{ ms}$ p95, BKT + PID $<1\text{ ms}$ (the PID arithmetic alone is $<0.05\text{ ms}$), and the remainder is serialization headroom. The System-2 Gemini call is outside this budget.
 
 ---
 
@@ -434,7 +439,7 @@ Because no human testing is conducted, the empirical core of the paper consists 
 │ Arm 1 (Baseline A): Static Interface (Standard non-adaptive math UI)        │
 │ Arm 2 (Baseline B): Unconstrained GenUI (Prompted LLM without control loop) │
 │ Arm 3 (Baseline C): Rule-Based Adaptive UI (Fixed step-threshold switching) │
-│ Arm 4 (Proposed)  : Closed-Loop BKT-PID-Laya GenUI                          │
+│ Arm 4 (Proposed)  : Closed-Loop BKT-PID-GenUI                               │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -474,7 +479,7 @@ PLANNED ABLATION CONDITIONS
 ========================================================================================================
 Condition                Description                                  Hypothesized Failure Mode
 --------------------------------------------------------------------------------------------------------
-1. Full System           BKT + PID + Derivative Filter + Laya + GenUI Optimal adherence and stability.
+1. Full System           BKT + PID + Derivative Filter + Policy + GenUI Optimal adherence and stability.
 2. No Derivative Filter  PID derivative filter set to γ = 1.0         Interface Jitter (J) spikes by >80%
                          (raw error difference used).                 due to BKT slip noise amplification.
 3. No Anti-Windup        Integral accumulator unclamped               Recovery latency (τ_rec) degrades by
@@ -498,7 +503,7 @@ Abstract & Title           0.5 pages            Closed-loop control framing, qua
 I. Introduction            1.0 pages            Rigid ITS vs. blind GenUI; research gap; 3 contributions.
 II. Related Work           1.0 pages            BKT, Cognitive Load Theory, GenUI, Fast Decision Models.
 III. Theoretical Framework 1.0 pages            Math models: BKT updates, PID control law, M_I metric.
-IV. System Implementation  1.0 pages            CLT-UI component library, Laya policy, Schema pipeline.
+IV. System Implementation  1.0 pages            CLT-UI component library, rule-based policy, Schema pipeline.
 V. In-Silico Methodology   0.75 pages           Synthetic learner design, 4-arm setup, metric definitions.
 VI. Results & Discussion   1.25 pages           Adherence tables, stability plots, ablation comparisons.
 VII. Limitations & Future  0.25 pages           In-silico simulation constraints; roadmap to classroom trials.
@@ -514,7 +519,7 @@ References                 1.0 pages            25–30 verified archival citati
 *   **Repository Name:** `ClosedLoop-GenUI-Math`
 *   **Domain:** Middle-School Algebraic Linear Equations ($ax + b = c$).
 *   **Frontend:** React 19 + TypeScript, Tailwind CSS, Lucide Icons, Scientific Research Apparatus Theme.
-*   **Backend:** Python 3.11, FastAPI, `pyBKT`, `laya`, Pydantic v2.
+*   **Backend:** Python 3.11, FastAPI, `pyBKT`, Pydantic v2 (`laya` only as an optional extra for its evaluation).
 *   **Plant Model:** Gemini 3.7 Flash (`google-genai` SDK, `response_mime_type="application/json"`, strict Pydantic output schema).
 *   **State Parameters:** $P^* = 0.95$ (asymmetric error normalization, $e_n \in [-1, 1]$), $K_p = 0.865$, $K_i = 0.377$, $K_d = 0.672$, $\gamma = 0.398$, $S_{\text{max}} = 1.253$, sigmoid slope $k = 2.202$, $\Delta_{\text{hyst}} = 0.141$ (tuned; see Gain selection) (against last committed budget), 4 complexity levels.
 *   **Primary Experiments:** 1,000 synthetic learner trajectories ($T = 40$ steps each), each replayed through all 4 experimental arms, evaluating $\Delta M$, Jitter ($J$), and recovery steps.
