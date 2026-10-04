@@ -10,7 +10,7 @@ plt.rcParams.update({'font.family':'serif','font.serif':['STIXGeneral','DejaVu S
  'pdf.fonttype':42})
 rows={r['variant']:r for r in csv.DictReader(open(R+'results/benchmark/summary.csv')) if r['archetype']=='all'}
 arms=[('static','Static'),('unconstrained_genui','Unconstr.'),('rule_based','Rule-based'),('closed_loop','Closed loop')]
-fig,axs=plt.subplots(1,3,figsize=(3.5,1.25),sharey=True)
+fig,axs=plt.subplots(1,3,figsize=(3.5,1.15),sharey=True)
 y=list(range(len(arms)))[::-1]
 panels=[('mean_delta_m_ref','Constraint error $\\Delta M$',True),('jitter','Jitter $J$',True),('level_skips_per_run','Level skips per run',False)]
 for ax,(k,t,ci) in zip(axs,panels):
@@ -36,7 +36,7 @@ fig.savefig(O+'results.pdf')
 P={}
 for r in csv.DictReader(open(R+'results/benchmark/probe_steps.csv')):
     if r['probe']=='saturated_lapse': P.setdefault(r['variant'],[]).append(r)
-fig,ax=plt.subplots(figsize=(3.5,1.2))
+fig,ax=plt.subplots(figsize=(3.5,1.05))
 err=[int(r['step']) for r in P['closed_loop'] if r['correct']=='0']
 ax.axvspan(min(err)-0.5,max(err)+0.5,color='#e6e6e6',lw=0)
 ax.text((min(err)+max(err))/2,1.02,'5 errors',ha='center',va='bottom',fontsize=6.5)

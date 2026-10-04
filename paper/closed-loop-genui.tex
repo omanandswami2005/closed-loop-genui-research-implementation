@@ -93,7 +93,7 @@ schema validation and a fallback.
 linear-equation tasks, built from features linked to cognitive load.
 \item An in-silico benchmark of 1,000 synthetic learners across four arms
 and ablations, including an analysis of BKT saturation after success runs
-and two remedies, with sensitivity to controller, metric and BKT parameters.
+and two remedies, with sensitivity analyses.
 \end{enumerate}
 
 % ---------------------------------------------------------------------------
@@ -107,7 +107,8 @@ two-state hidden Markov model with prior, learning, guess and slip parameters
 contextualize guess and slip \cite{baker2008contextual}; its fixed points are
 analyzed in \cite{vandesande2013properties}. Extended BKT stays competitive
 with logistic and deep models \cite{pelanek2017bkt,khajah2016deep}; its state
-is a probability that can serve directly as a control variable.
+is a probability that can serve directly as a control variable with interpretable
+parameters.
 
 \paragraph*{Adaptive and generative interfaces}
 Model-based interface generation \cite{gajos2010supple} adapts presentation to users, but
@@ -284,8 +285,8 @@ deeper structures cost users more \cite{kiger1984depth}.
 Placing the Cartesian plane at the top of the ladder is our design choice.
 With no data to fit weights, we use equal weights $w_i=1/3$, which are robust
 in that setting \cite{dawes1979robust}, and test sensitivity to the weights
-(Section~\ref{sec:results}). $M_I$ is a structural proxy; it has not been
-validated against measured cognitive load.
+(Section~\ref{sec:results}). Entropy measures such as XAOS \cite{stickel2010xaos} score
+rendered screens; $M_I$ scores the tree before rendering, as the gate requires.
 
 % ---------------------------------------------------------------------------
 \section{Method}
@@ -430,7 +431,7 @@ on average (Table~\ref{tab:main}, Fig.~\ref{fig:results}), against 0.131
 and 0.123 for unconstrained GenUI and the rule-based arm. Every rendered tree
 is within $\varepsilon$, partly by construction: the generator's own output met
 the budget on 84.6\% of steps, and the gate replaced the other 15.4\% from the
-fallback catalog. Compliance thus belongs to governor, planner and gate together. The closed loop's jitter (0.035) is 3.5 times lower than that of
+fallback catalog. The closed loop's jitter (0.035) is 3.5 times lower than that of
 unconstrained GenUI (0.123), which also skips levels 2.06 times per run
 against 0.67. The rule-based arm is smoother still (0.025, no skips), because
 it moves one level at a time. Against the latent learner state, the picture
@@ -446,8 +447,7 @@ Removing the derivative filter raises jitter from 0.035 to 0.044 and nearly
 doubles level skips (1.19 per run). Removing anti-windup lets the integral
 grow without bound: underload rises from 12.1\% to 21.7\%, only 84\% of
 learners reach level 4 against 95\%, and median recovery after an error
-streak grows from 5 to 14 items. In a scripted probe the unclamped integral
-reached 22.9 (clamp 1.25). A one-level slew limit removes nearly all skips (0.02 per
+streak grows from 5 to 14 items. A one-level slew limit removes nearly all skips (0.02 per
 run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
@@ -478,7 +478,7 @@ and a CUSUM detector \cite{page1954cusum} on the
 log-likelihood ratio between ``not known'' and the tracker's prediction,
 which resets the estimate to 0.5 when the sum exceeds $h=6.5$. It
 accumulates only when a confident estimate is contradicted, so isolated
-slips are absorbed. Forgetting uses $P(F)=0.02$.
+slips are absorbed; unlike neural forgetting models, it needs no training data. Forgetting uses $P(F)=0.02$.
 
 \begin{figure}[t]
 \centering
@@ -511,13 +511,11 @@ estimate, not through the learner. $M_I$ is a structural proxy that has not
 been validated against measured or perceived load, for which instruments
 exist \cite{leppink2013instrument}; the results show structural complexity
 regulation, not reduced cognitive load. BKT
-parameters are design values rather than fits to tutor data; $\pm 50\%$
-changes leave tracking intact but shift when the interface escalates. Long error
+parameters are design values rather than fits to tutor data. Long error
 streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
-The surrogate plant's fault rates match or exceed the real model's, but
-the real model was measured on single calls, not full trajectories. Its latency (median 7.7\,s free,
-2.7\,s guided) calls for prefetching or caching.
+The real model was measured on single calls, not full trajectories. Its latency (median 7.7\,s free,
+2.7\,s guided) calls for prefetching or caching. We tested one domain, linear equations.
 
 \section{Conclusion}
 We coupled a learner model to a generative interface through a PID
@@ -528,9 +526,8 @@ unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. A CUSUM lapse detector restores
 BKT's reaction after long success runs at a modest cost in jitter. In 300 single real calls, 98.7\% of
-raw outputs met the budget with the planner and 92\% without it. The next steps are
-running full trajectories with the real model, a learned fast policy
-trained on real interaction data, and a study with learners. We claim
+raw outputs met the budget with the planner and 92\% without it. Next steps are full
+real-model trajectories, a learned fast policy and a study with learners. We claim
 structural budget regulation in simulation, not learning gains or reduced
 cognitive load.
 
