@@ -2,6 +2,7 @@
 
     python -m closedloop.sim.tune search       --out ../results/tuning   # ~5 min
     python -m closedloop.sim.tune sensitivity  --out ../results/tuning   # ~3 min
+    python -m closedloop.sim.tune bkt          --out ../results/tuning   # ~1 min
 
 No published rule gives PID gains for this loop: the classic rules need a
 plant model, and here the interface never changes the simulated learner's
@@ -17,6 +18,8 @@ answers. So the controller parameters are *tuned*, not sourced:
 3. Every paper number comes from the TEST cohort (the benchmark seed).
 4. ``sensitivity`` moves each tuned parameter by +/-50% on the test cohort and
    re-runs the main arms under alternative M_I weightings.
+5. ``bkt`` moves each of the closed loop's tracker parameters (P(L0), P(T),
+   P(G), P(S)) by x0.5 and x1.5, one at a time, on the test cohort.
 """
 
 from __future__ import annotations
@@ -26,9 +29,10 @@ import csv
 import json
 import math
 import random
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
+from ..bkt import BKTParams
 from ..governor import GovernorConfig
 from ..metric import DEFAULT_WEIGHTS, set_weights
 from .arms import ARMS, Variant
@@ -167,15 +171,70 @@ def sensitivity(out: Path, workers: int, scale: float) -> None:
     (out / "governor_defaults.json").write_text(json.dumps(asdict(base), indent=2) + "\n")
 
 
+BKT_KEEP = (
+    "mean_delta_m",
+    "mean_delta_m_ref",
+    "fidelity",
+    "fidelity_ref",
+    "jitter",
+    "level_skips_per_run",
+    "overload_rate",
+    "underload_rate",
+    "itae_mismatch",
+    "fallback_rate",
+    "reached_level4",
+)
+
+
+def bkt_sensitivity(out: Path, workers: int, scale: float) -> None:
+    """One-at-a-time x0.5 / x1.5 sweep of the closed loop's tracker parameters.
+
+    Only the tracker changes; the learners, the reference targets and the tuned
+    governor stay fixed.
+    """
+    base = BKTParams()
+    variants = [Variant("defaults", "closed_loop")]
+    meta = {"defaults": ("", 1.0, base)}
+    for k in ("p_l0", "p_t", "p_g", "p_s"):
+        for f in (0.5, 1.5):
+            value = min(0.99, max(0.001, getattr(base, k) * f))
+            params = replace(base, **{k: value})
+            if params.p_g + params.p_s >= 1.0:
+                continue
+            name = f"{k}_x{f}"
+            variants.append(Variant(name, "closed_loop", bkt=params))
+            meta[name] = (k, f, params)
+    runs, streaks, _, _ = run_cohort(cohort(DEFAULT_SEED, _sizes(scale)), variants, DEFAULT_SEED, workers)
+    rows = []
+    for row in summary_table(runs, streaks, variants, []):
+        k, f, params = meta[row["variant"]]
+        rows.append(
+            {
+                "variant": row["variant"],
+                "parameter": k,
+                "factor": f,
+                **{n: round(getattr(params, n), 4) for n in ("p_l0", "p_t", "p_g", "p_s")},
+                **{c: row[c] for c in BKT_KEEP},
+            }
+        )
+    ref = rows[0]
+    for r in rows:
+        r["delta_m_change_pct"] = round(100 * (r["mean_delta_m"] / ref["mean_delta_m"] - 1), 1)
+        r["jitter_change_pct"] = round(100 * (r["jitter"] / ref["jitter"] - 1), 1)
+    _write(out / "bkt_sensitivity.csv", rows)
+    for r in rows:
+        print(f"{r['variant']:12s} dM={r['mean_delta_m']:.4f} ({r['delta_m_change_pct']:+.1f}%) J={r['jitter']:.4f} ({r['jitter_change_pct']:+.1f}%) fidref={r['fidelity_ref']:.3f} skips={r['level_skips_per_run']:.3f} over={r['overload_rate']:.4f} under={r['underload_rate']:.4f} itae={r['itae_mismatch']:.4f} fb={r['fallback_rate']:.4f}")
+
+
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("mode", choices=("search", "sensitivity"))
+    ap.add_argument("mode", choices=("search", "sensitivity", "bkt"))
     ap.add_argument("--out", type=Path, default=Path("../results/tuning"))
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--scale", type=float, default=1.0)
     args = ap.parse_args(argv)
     args.out.mkdir(parents=True, exist_ok=True)
-    (search if args.mode == "search" else sensitivity)(args.out, args.workers, args.scale)
+    {"search": search, "sensitivity": sensitivity, "bkt": bkt_sensitivity}[args.mode](args.out, args.workers, args.scale)
 
 
 if __name__ == "__main__":
