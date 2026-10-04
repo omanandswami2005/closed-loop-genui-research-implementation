@@ -24,6 +24,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
         run: |
-          gh release create "$VERSION" paper/main.pdf#paper.pdf \
+          gh release create "$VERSION" paper/closed-loop-genui.pdf#closed-loop-genui.pdf \
             --target "$GITHUB_SHA" --title "$VERSION" \
             --notes-file ".github/release-notes/$VERSION.md"

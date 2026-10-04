@@ -110,7 +110,7 @@ in `calls.csv`).
 
 ```
 cd paper
-pdflatex main && bibtex main && pdflatex main && pdflatex main
+pdflatex closed-loop-genui && bibtex closed-loop-genui && pdflatex closed-loop-genui && pdflatex closed-loop-genui
 ```
 
 ## Deployment

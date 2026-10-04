@@ -3,7 +3,7 @@
 IEEE conference draft (IEEEtran). Build from this folder:
 
 ```
-pdflatex main && bibtex main && pdflatex main && pdflatex main
+pdflatex closed-loop-genui && bibtex closed-loop-genui && pdflatex closed-loop-genui && pdflatex closed-loop-genui
 ```
 
 References come from `../docs/references.bib`; see `../docs/source-check.md` for which claim each source supports.

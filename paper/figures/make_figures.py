@@ -9,8 +9,8 @@ plt.rcParams.update({'font.family':'serif','font.serif':['STIXGeneral','DejaVu S
  'font.size':8,'axes.linewidth':0.6,'xtick.major.width':0.6,'ytick.major.width':0.6,'axes.spines.top':False,'axes.spines.right':False,
  'pdf.fonttype':42})
 rows={r['variant']:r for r in csv.DictReader(open(R+'results/benchmark/summary.csv')) if r['archetype']=='all'}
-arms=[('static','Static'),('unconstrained_genui','Unconstr.\nGenUI'),('rule_based','Rule-\nbased'),('closed_loop','Closed\nloop')]
-fig,axs=plt.subplots(1,3,figsize=(3.5,1.4),sharey=True)
+arms=[('static','Static'),('unconstrained_genui','Unconstr.'),('rule_based','Rule-based'),('closed_loop','Closed loop')]
+fig,axs=plt.subplots(1,3,figsize=(3.5,1.25),sharey=True)
 y=list(range(len(arms)))[::-1]
 panels=[('mean_delta_m_ref','Constraint error $\\Delta M$',True),('jitter','Jitter $J$',True),('level_skips_per_run','Level skips per run',False)]
 for ax,(k,t,ci) in zip(axs,panels):
@@ -36,14 +36,14 @@ fig.savefig(O+'results.pdf')
 P={}
 for r in csv.DictReader(open(R+'results/benchmark/probe_steps.csv')):
     if r['probe']=='saturated_lapse': P.setdefault(r['variant'],[]).append(r)
-fig,ax=plt.subplots(figsize=(3.5,1.35))
+fig,ax=plt.subplots(figsize=(3.5,1.2))
 err=[int(r['step']) for r in P['closed_loop'] if r['correct']=='0']
 ax.axvspan(min(err)-0.5,max(err)+0.5,color='#e6e6e6',lw=0)
 ax.text((min(err)+max(err))/2,1.02,'5 errors',ha='center',va='bottom',fontsize=6.5)
 for v,lab,ls,mk,c,lw in [('closed_loop','Plain BKT','-',None,'#a0a0a0',2.4),('closed_loop_lapse_cusum','CUSUM lapse detector','--','o','#111111',1.0),('closed_loop_forgetting','Forgetting $P(F)=0.02$',':','s','#111111',1.0)]:
     s=[int(r['step']) for r in P[v]]; b=[float(r['budget']) for r in P[v]]
     ax.step(s,b,where='post',ls=ls,color=c,lw=lw,label=lab,marker=mk,markersize=2.5,markevery=(2,4))
-ax.set_xlabel('Item',fontsize=7.5); ax.set_ylabel('Committed budget $M_I^*$',fontsize=7.5)
+ax.set_xlabel('Item',fontsize=7.5); ax.set_ylabel('Budget $M_I^*$',fontsize=7.5)
 ax.set_xlim(0,39); ax.set_ylim(0,1.1); ax.set_yticks([0,0.25,0.5,0.75,1.0])
 ax.tick_params(labelsize=6.5); ax.yaxis.grid(True,lw=0.3,color='#dddddd'); ax.set_axisbelow(True)
 ax.legend(fontsize=6.3,frameon=False,loc='lower center',bbox_to_anchor=(0.5,1.06),ncol=3,handlelength=2.2,columnspacing=1.0)

@@ -64,9 +64,9 @@ Intelligent tutoring systems (ITS) have long modeled learners precisely.
 Knowledge tracing maintains a probability that a learner has mastered each
 knowledge component \cite{corbett1995knowledge}, and
 tutors built on it have been deployed at scale in mathematics
-\cite{ritter2007cognitive,vanlehn2011relative}. The interface of such
-systems, however, is authored in advance: the learner model selects the next
-problem, not the form in which the problem is presented.
+\cite{ritter2007cognitive,vanlehn2011relative}. Their interface,
+however, is authored in advance: the learner model selects the next problem,
+not its presentation.
 
 Generative user interfaces take the opposite position. A foundation model
 produces a task-specific interface for each request
@@ -86,13 +86,11 @@ to use \cite{gajos2008predictability,findlater2004menus}.
 
 This paper makes three contributions:
 \begin{enumerate}
-\item A closed-loop architecture in which a BKT mastery estimate drives a PID
-governor whose output is a structural complexity budget, met by a
-deterministic layout planner and a generative model that writes the content,
-with schema validation and a deterministic fallback.
-\item A computable structural complexity metric over a declarative component
-tree for linear-equation tasks, built from features linked in prior work to
-cognitive load and visual complexity.
+\item A closed loop in which BKT mastery drives a PID governor whose
+complexity budget is met by a layout planner and a generative model, with
+schema validation and a fallback.
+\item A computable structural complexity metric over a component tree for
+linear-equation tasks, built from features linked to cognitive load.
 \item An in-silico benchmark of 1,000 synthetic learners across four arms
 and ablations, including an analysis of BKT saturation after success runs
 and two remedies, with sensitivity to controller, metric and BKT parameters.
@@ -123,13 +121,13 @@ systems bounds the generated interface by a learner model
 (Table~\ref{tab:related}).
 
 \begin{table}[t]
-\caption{Prior approaches against the three properties combined here. Learner model means a model of the learner's knowledge.}
+\caption{Prior approaches against the three properties combined here}
 \label{tab:related}
 \centering\footnotesize
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-Approach & \makecell{Learner\\model} & \makecell{Generated\\interface} & \makecell{Bounded by\\learner state}\\
+Approach & \makecell{Knowledge\\model} & \makecell{Generated\\interface} & \makecell{Bounded by\\learner state}\\
 \midrule
 Tracing tutors \cite{corbett1995knowledge,ritter2007cognitive} & yes & no & no\\
 Adaptive fading \cite{salden2010expertise} & yes & no & fixed rule\\
@@ -143,16 +141,15 @@ This work & yes & yes & yes\\
 \subsection{Cognitive load and scaffolding}
 Cognitive load theory \cite{sweller1988cognitive}
 attributes intrinsic load to element interactivity \cite{sweller2010element}.
-Worked examples reduce load for algebra novices \cite{sweller1985worked} and
-should fade into problem solving \cite{renkl2003structuring,salden2010expertise};
+Worked examples help algebra novices \cite{sweller1985worked} and should fade
+into problem solving \cite{renkl2003structuring,salden2010expertise}, as
 concrete representations should fade into symbolic ones
-\cite{fyfe2014concreteness}. For linear equations, the balance model supports
-early understanding but breaks down with negative quantities
-\cite{vlassis2002balance}, and learners hold persistent
-misconceptions about equality and operating on the unknown
+\cite{fyfe2014concreteness}. The balance model aids early understanding of
+linear equations but fails with negative quantities \cite{vlassis2002balance},
+and misconceptions about equality persist
 \cite{kieran1981equality,booth2014persistent}.
 
-\subsection{Control and constrained generation}
+\paragraph*{Control and constrained generation}
 PID control with anti-windup and derivative filtering is standard practice
 \cite{astrom2006advanced,astrom1989windup}. Constrained
 decoding guarantees well-formed model output
@@ -164,7 +161,7 @@ reliable in practice \cite{geng2025jsonschemabench}.
 
 \begin{figure}[t]
 \centering
-\input{figures/architecture.tex}
+\scalebox{0.94}{\input{figures/architecture.tex}}
 \caption{The closed loop as deployed. The gate rechecks the budget
 (dashed); failing trees are replaced from the fallback catalog. The learner
 (shaded) is simulated here.}
@@ -219,14 +216,12 @@ the last committed budget by at least $\Delta_h$.
 
 \paragraph*{Gain selection}
 Classical tuning rules \cite{ziegler1942optimum,skogestad2003simple}
-assume an identified plant response. In our benchmark the interface does not
-alter the simulated learner's responses (Section~\ref{sec:method}), so there is
-no plant response to identify. Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
+assume an identified plant, but here the interface does not alter simulated
+responses (Section~\ref{sec:method}). Instead, $K_p$, $K_i$, $K_d$, $\gamma$,
 $S_{\max}$ and $\Delta_h$ were selected by minimizing an ITAE-type tracking
 cost \cite{graham1953itae} plus a jitter penalty on a separate tuning cohort;
 all reported results use a disjoint test cohort. A random search of 200
-samples over $K_p\in[0.25,2.5]$, $K_i\in[0,0.4]$, $K_d\in[0,1]$,
-$\gamma\in[0.05,1]$, $S_{\max}\in[1,6]$ and $\Delta_h\in[0.02,0.15]$ selected
+samples selected
 $K_p=0.865$, $K_i=0.377$, $K_d=0.672$, $\gamma=0.398$, $S_{\max}=1.253$ and
 $\Delta_h=0.141$. The cost surface is flat: the selected point scores 0.104
 on the tuning cohort against 0.110 for hand-set initial values, which rank
@@ -239,9 +234,8 @@ affordances: scaffolding mode (worked example, guided scaffold, open
 symbolic), whether to show the balance-scale manipulative, whether hints are
 enabled, and an instructional density limit. The policy is deterministic
 and rule-based in every reported result. An open-weight decision model
-\cite{laya2026}, evaluated zero-shot, took a median of 1.32\,s per decision
-on a CPU and chose a worked example in all 200 test states, so it is not
-part of the evaluated system.
+\cite{laya2026}, evaluated zero-shot, took 1.32\,s per decision (median, CPU)
+and chose a worked example in all 200 test states, so it is not used.
 
 \subsection{Layout planner, generative plant and validation gate}
 The planner turns the budget into a layout. The policy fixes the abstraction
@@ -254,10 +248,8 @@ through Vertex AI, receives this layout with the policy decision and the
 equation and writes the content as a JSON component tree. In the original
 design (\emph{free} mode) the plant also chose the layout; we measure both
 (Table~\ref{tab:gemini}). Nodes are
-drawn from a closed set of six components: \textsc{ConcreteBalanceScale},
-\textsc{WorkedSolutionStep}, \textsc{ScaffoldedOperationPad},
-\textsc{SymbolicEquationWorkspace}, \textsc{SteppedHintAccordion} and
-\textsc{CartesianVerificationPlane}. The client renders these components
+drawn from a closed set of six components (balance scale, worked step,
+operation pad, symbolic workspace, hint accordion, verification plane). The client renders these components
 directly and never executes generated code. Each emission is parsed against
 the schema; if parsing fails, or if
 $|M_I-M_I^*|>\varepsilon$ with $\varepsilon=0.05$, a precompiled fallback
@@ -266,8 +258,8 @@ trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[height=4.8cm]{figures/screen_l1.png}\hspace{4mm}%
-\includegraphics[height=4.8cm]{figures/screen_l4.png}
+\includegraphics[height=3.9cm]{figures/screen_l1.png}\hspace{4mm}%
+\includegraphics[height=3.9cm]{figures/screen_l4.png}
 \caption{Screens written by Gemini 3.7 Flash in guided mode; both passed the
 gate. Left: level 1, balance scale with a worked step ($M_I^*=0.091$,
 $M_I=0.111$). Right: level 4, graph verification ($M_I^*=0.903$, $M_I=0.905$).}
@@ -302,10 +294,9 @@ before human studies \cite{vanlehn1994simulated,kaser2024simulated}, and
 BKT-generated data have been used to evaluate mastery assessment
 \cite{fancsali2013optimal}. Each learner is a two-state
 HMM whose parameters are drawn uniformly from archetype ranges
-(Table~\ref{tab:archetypes}). The ranges for the novice and guesser
-archetypes exceed the tighter bounds of \cite{corbett1995knowledge} by design
-to represent noisy learners, while respecting the non-degeneracy conditions
-of \cite{vandesande2013properties}. The cohort has 1,000 learners
+(Table~\ref{tab:archetypes}). Novice and guesser ranges exceed the bounds
+of \cite{corbett1995knowledge} by design but respect
+\cite{vandesande2013properties}. The cohort has 1,000 learners
 (300/400/300) with 40 items each. Responses are sampled once per learner and
 replayed unchanged through every arm (paired design). The interface therefore
 does not influence the simulated responses: the benchmark measures controller
@@ -339,8 +330,7 @@ anti-windup, and add a one-level slew limit.
 The benchmark replaces the foundation model with a surrogate that compiles
 the planner's layout and injects faults: with probability 0.15 it
 drifts off budget, and with probability 0.03 it emits malformed output
-(truncated JSON, unknown component, out-of-range field, depth overflow,
-injected field). These rates were set before the real model was measured.
+(e.g., truncated JSON, unknown component). These rates were set before the real model was measured.
 The unconstrained arm uses the same surrogate without the budget check.
 
 We measured the real model in free mode, which tests the model alone, and
@@ -371,7 +361,6 @@ In free mode, ten of 294 completed calls lacked an interactive element
 and eight of 284 valid trees missed the budget, most often at level 1; in
 guided mode all failures were in transport. The surrogate's 3\% malformed
 rate thus matches free mode, and its 15\% drift rate is a stress setting.
-Free mode's latency comes largely from hidden reasoning (our reading).
 
 \subsection{Metrics}
 Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
@@ -393,18 +382,16 @@ is known) and an ITAE-weighted mismatch $\sum_n (n{+}1)m_n/\sum_n(n{+}1)$
 \section{Results}
 \label{sec:results}
 
-All numbers come from one benchmark run on the test cohort (seed 20261003;
-tuning seed 20261004). Intervals are
-normal-approximation 95\% confidence intervals over the 1,000 learners.
+All numbers come from one run on the test cohort (seed 20261003; tuning
+seed 20261004), with normal-approximation 95\% CIs over 1,000 learners.
 
 \begin{table*}[t]
 \centering
-\caption{Main results and ablations on the test cohort (1,000 learners, 40 items each).
+\caption{Main results and ablations on the test cohort.
 $\Delta M$ and ``within $\varepsilon$'' are measured against the closed-loop
 reference budget; every closed-loop variant meets its own budget at every step. Overload,
 underload and ITAE use the latent learner state and exist only in simulation.
-Fallback rates follow from the surrogate's fault rates; its drift rate is
-about five times that measured on the real model.}
+Fallback rates follow from the surrogate's fault rates.}
 \label{tab:main}
 \begin{tabular}{lcccccccc}
 \toprule
@@ -436,16 +423,14 @@ on average (Table~\ref{tab:main}, Fig.~\ref{fig:results}), against 0.131
 and 0.123 for unconstrained GenUI and the rule-based arm. Every rendered tree
 is within $\varepsilon$, partly by construction: the generator's own output met
 the budget on 84.6\% of steps, and the gate replaced the other 15.4\% from the
-fallback catalog. The compliance is thus that of governor, planner and gate
-together, not of the governor alone. The closed loop's jitter (0.035) is 3.5 times lower than that of
+fallback catalog. Compliance thus belongs to governor, planner and gate together. The closed loop's jitter (0.035) is 3.5 times lower than that of
 unconstrained GenUI (0.123), which also skips levels 2.06 times per run
 against 0.67. The rule-based arm is smoother still (0.025, no skips), because
 it moves one level at a time. Against the latent learner state, the picture
 is mixed. Unconstrained GenUI has the lowest ITAE mismatch (0.043 against
 0.073) and the least underload (5.4\% of steps against 12.1\%), but shows an
 abstract interface to a learner who does not know the skill twelve times as
-often (2.4\% against 0.2\%). The rule-based arm underloads on 24.5\% of steps
-and the static arm on 80\%. After a streak of five or more errors that lowered the level, the
+often (2.4\% against 0.2\%). After a streak of five or more errors that lowered the level, the
 closed loop returned to its pre-streak level within the horizon in 34 of
 51 cases, after a median of 5 items; the rule-based arm did so in 9 of
 19 cases, after a median of 12.
@@ -455,14 +440,14 @@ Removing the derivative filter raises jitter from 0.035 to 0.044 and nearly
 doubles level skips (1.19 per run). Removing anti-windup lets the integral
 grow without bound: underload rises from 12.1\% to 21.7\%, only 84\% of
 learners reach level 4 against 95\%, and median recovery after an error
-streak grows from 5 to 14 items (only 4 recoveries within the horizon). In a scripted probe of prolonged struggle,
+streak grows from 5 to 14 items. In a scripted probe of prolonged struggle,
 the unclamped integral reached 22.9 (clamp 1.25) and the interface never
 reached level 4. A one-level slew limit removes nearly all skips (0.02 per
 run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
 \label{sec:sensitivity}
-Changing each controller parameter by $\pm 50\%$ raised the test cost
+Changing each controller parameter by $\pm 50\%$ raised the cost
 ($\mathrm{ITAE}+J$) from 0.108 to at most 0.118, except $1.5\Delta_h$,
 which lowered it to 0.104 but more than doubled level skips. For the
 metric weights, the closed loop's $\Delta M$ stays between 0.007 and 0.017
@@ -481,14 +466,14 @@ Under correct responses the BKT estimate converges to a stable fixed point at
 one \cite{vandesande2013properties}. With the default parameters the estimate
 exceeds $1-10^{-6}$ after ten correct responses and five subsequent errors
 lower it only to about $0.98$; after 24 correct responses it
-equals $1.0$ in double precision and no further evidence can lower it. The
-interface therefore stays at its highest level through a streak of errors.
+equals $1.0$ in double precision and no further evidence can lower it.  The interface
+then stays at its highest level through a streak of errors.
 We compare two remedies: forgetting, $P(F)>0$ \cite{khajah2016deep},
 and a CUSUM detector \cite{page1954cusum} on the
 log-likelihood ratio between ``not known'' and the tracker's prediction,
-which resets the estimate to 0.5 when the sum exceeds $h=6.5$. Because
-it accumulates only when a confident estimate is contradicted, isolated
-slips are absorbed. The tracker with forgetting uses $P(F)=0.02$.
+which resets the estimate to 0.5 when the sum exceeds $h=6.5$. It
+accumulates only when a confident estimate is contradicted, so isolated
+slips are absorbed. Forgetting uses $P(F)=0.02$.
 
 \begin{figure}[t]
 \centering
@@ -508,8 +493,8 @@ steps. The CUSUM detector lowers this to 5.6\% ($-25\%$) at the cost of
 higher jitter (0.052 against 0.042) and an almost unchanged ITAE mismatch
 (0.189 against 0.184). Forgetting lowers overload further, to 3.0\%, but
 underloads on 25.3\% of steps against 12.8\%, raises ITAE to 0.273 and
-lets only 80\% of learners reach level 4. Neither remedy dominates. Weighting recent responses more heavily
-\cite{galyardt2015recent} is a third option we leave for future work.
+lets only 80\% of learners reach level 4. Neither remedy dominates; weighting recent responses
+\cite{galyardt2015recent} is left for future work.
 
 % ---------------------------------------------------------------------------
 \section{Discussion and Limitations}
@@ -524,18 +509,15 @@ parameters are design values rather than fits to tutor data; $\pm 50\%$
 changes leave tracking intact but shift when the interface escalates. Long error
 streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
-The benchmark plant is a surrogate. Its malformed rate matches and its drift rate
-exceeds those measured on the real model, but the real-model measurement covers single
-calls, not full learner trajectories. Its latency (median 7.7\,s free,
+The surrogate plant's fault rates match or exceed the real model's, but
+the real model was measured on single calls, not full trajectories. Its latency (median 7.7\,s free,
 2.7\,s guided) calls for prefetching or caching.
-A learned fast policy would need real interaction data; simulator data
-would only imitate the rule policy.
+A learned fast policy would need real interaction data.
 
 \section{Conclusion}
 We coupled a learner model to a generative interface through a PID
-governor, a fast policy, a layout planner and a validation gate, with the
-generative model writing content into a fixed layout, and tested the loop
-in simulation. The governor's budget is met at every step, with the gate
+governor, a layout planner and a validation gate, and tested the loop in
+simulation. The governor's budget is met at every step, with the gate
 replacing the 15.4\% of generated trees that miss it, and the interface changes 3.5 times less than an
 unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
@@ -550,7 +532,6 @@ trained on real interaction data, and a study with learners.
 The engine, simulation harness, benchmark results and the sources of
 this manuscript are openly available at \url{https://github.com/omanandswami2005/closed-loop-genui-research-implementation}.
 
-\IEEEtriggeratref{39}
 \bibliographystyle{IEEEtran}
 \bibliography{../docs/references}
 
