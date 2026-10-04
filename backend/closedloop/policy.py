@@ -1,10 +1,10 @@
 """System-1 micro-affordance policy (spec Section 5, Layer 2).
 
-``SurrogatePolicy`` is a deterministic stand-in with the same inputs and the
-same three typed decisions the Laya decider makes (choice / noul / score), so
-the 1,000-learner harness does not depend on the Laya runtime. ``LayaPolicy``
-answers the same decisions with the real Laya model (``closedloop.sim.laya_eval``
-compares the two).
+``SurrogatePolicy`` is the system's policy: a deterministic rule set that maps
+the learner state to three typed decisions (choice / noul / score). It is used
+in the benchmark and in the live app. ``LayaPolicy`` asks the same decisions of
+the Laya decision model zero-shot; it was evaluated (``closedloop.sim.laya_eval``)
+and is not used, because untrained it gave the same answer for every state.
 """
 
 from __future__ import annotations
@@ -94,8 +94,9 @@ def describe_state(mastery: float, budget: float, level: int, recent_errors: int
 
 
 class LayaPolicy:
-    """The same three decisions answered by the Laya System-1 decision model.
+    """Evaluation only: the same three decisions asked of the Laya model zero-shot.
 
+    Not part of the system; kept so ``closedloop.sim.laya_eval`` can be re-run.
     Requires the optional ``laya`` package (``pip install -e ".[laya]"``); the
     model checkpoint downloads on first use. ``graph_verification`` stays a
     deterministic function of the level, as in the surrogate.

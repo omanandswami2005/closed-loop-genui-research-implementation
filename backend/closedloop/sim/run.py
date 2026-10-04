@@ -271,7 +271,7 @@ def main(argv: list[str] | None = None) -> None:
             "p50": percentile(lat_us, 0.50),
             "p95": percentile(lat_us, 0.95),
             "p99": percentile(lat_us, 0.99),
-            "note": "BKT update + PID governor + surrogate policy; excludes the Laya runtime and the plant",
+            "note": "BKT update + PID governor + rule-based policy; excludes the plant",
         },
         "injected_faults": faults,
     }

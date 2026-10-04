@@ -18,7 +18,7 @@ python -m closedloop.sim.run --out ../results/benchmark      # ~1 min on 4 cores
 | `governor.py` | 6.2, 6.3 | Normalized error, PID with anti-windup clamp and filtered derivative, inverted logistic budget, 4 levels, hysteresis against the last committed budget, optional level slew limit |
 | `metric.py` | 6.4 | Structural complexity M_I |
 | `ast_schema.py` | 4 | CLT-UI JSON AST (Pydantic, `extra="forbid"`, depth <= 4, rho <= 8); `UIDocument.model_json_schema()` is the model's response schema |
-| `policy.py` | 5 | System-1 decisions (scaffolding mode, balance scale, hints, density). `LayaPolicy` asks the real Laya model; `SurrogatePolicy` is a deterministic stand-in used for the 160,000-step benchmark |
+| `policy.py` | 5 | System-1 decisions (scaffolding mode, balance scale, hints, density). `SurrogatePolicy` is the system's deterministic rule-based policy, used in the benchmark and the live app; `LayaPolicy` is kept only for the Laya evaluation (not used) |
 | `plant.py` | 5, Layers 3-4 | Deterministic compiler budget -> AST, surrogate plant with fault injection, the validation gate (`admit`) and the fallback template cache |
 | `sim/` | 7, 8 | Learner archetypes, the 4 arms and 3 ablations, metrics, CLI |
 
@@ -78,11 +78,11 @@ rendered level with the learner's true (simulated) knowledge state.
 Every parameter's source, or its status as an assumption, is listed in
 `../docs/sources.md`.
 
-## Laya, gains and weights
+## Laya evaluation, gains and weights
 
 ```
 pip install -e ".[laya]"
-python -m closedloop.sim.laya_eval --out ../results/laya   # real Laya vs the surrogate
+python -m closedloop.sim.laya_eval --out ../results/laya   # Laya zero-shot vs the rule-based policy (evaluation only)
 python -m closedloop.sim.tune search --out ../results/tuning       # tune controller
 python -m closedloop.sim.tune sensitivity --out ../results/tuning  # +/-50% and weight sweeps
 ```

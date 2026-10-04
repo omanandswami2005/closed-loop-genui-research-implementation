@@ -1,4 +1,4 @@
-"""Compare the real Laya decision model with the surrogate policy.
+"""Evaluate the Laya decision model (zero-shot) against the rule-based policy.
 
     pip install -e ".[laya]"
     python -m closedloop.sim.laya_eval --out ../results/laya
@@ -6,8 +6,9 @@
 Part A asks both policies the same decisions on learner states sampled from
 the benchmark (stratified by complexity level) and records agreement and
 Laya's per-call latency. Part B runs the closed loop end to end with each
-policy on a small paired cohort. Laya is too slow on CPU for all 160,000
-steps, which is why the main benchmark uses the surrogate.
+policy on a small paired cohort. Laya is not part of the system: untrained it
+gave the same answer for every state and is slow on CPU, so the rule-based
+``SurrogatePolicy`` is the system's policy.
 """
 
 from __future__ import annotations

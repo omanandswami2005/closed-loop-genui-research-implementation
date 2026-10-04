@@ -310,7 +310,7 @@
     "p50": 6.496,
     "p95": 10.281,
     "p99": 21.76234000000007,
-    "note": "BKT update + PID governor + surrogate policy; excludes the Laya runtime and the plant"
+    "note": "BKT update + PID governor + rule-based policy; excludes the plant"
   },
   "injected_faults": {
     "unconstrained_genui": {
