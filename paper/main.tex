@@ -95,7 +95,7 @@ tree for linear-equation tasks, built from features linked in prior work to
 cognitive load and visual complexity.
 \item An in-silico benchmark of 1,000 synthetic learners across four arms
 and ablations, including an analysis of BKT saturation after success runs
-and two remedies.
+and two remedies, with sensitivity to controller, metric and BKT parameters.
 \end{enumerate}
 
 % ---------------------------------------------------------------------------
@@ -187,7 +187,7 @@ P(L_{n+1}) &= \hat p\,(1-P(F)) + (1-\hat p)\,P(T),
 \end{align}
 where $P(F)=0$ gives standard BKT and $P(F)>0$ adds forgetting
 \cite{khajah2016deep}. Default parameters are $P(L_0)=0.15$, $P(T)=0.12$,
-$P(G)=0.20$, $P(S)=0.08$. They are design values, not fitted; they satisfy
+$P(G)=0.20$, $P(S)=0.08$. They are design values, not fitted (sensitivity in Section~\ref{sec:sensitivity}); they satisfy
 the bounds $P(G)<0.3$, $P(S)<0.1$ \cite{corbett1995knowledge} and the
 non-degeneracy conditions $P(G)+P(S)<1$, $P(T)<1-P(S)/(1-P(G))$
 \cite{vandesande2013properties}.
@@ -461,6 +461,7 @@ reached level 4. A one-level slew limit removes nearly all skips (0.02 per
 run) and leaves the ground-truth measures unchanged.
 
 \subsection{Sensitivity}
+\label{sec:sensitivity}
 Changing each controller parameter by $\pm 50\%$ raised the test cost
 ($\mathrm{ITAE}+J$) from 0.108 to at most 0.118, except $1.5\Delta_h$,
 which lowered it to 0.104 but more than doubled level skips. For the
@@ -519,7 +520,8 @@ depend on the interface, the loop is closed only through the mastery
 estimate, not through the learner. $M_I$ is a structural proxy that has not
 been validated against measured load, for which instruments exist
 \cite{leppink2013instrument}. BKT
-parameters are design values rather than fits to tutor data. Long error
+parameters are design values rather than fits to tutor data; $\pm 50\%$
+changes leave tracking intact but shift when the interface escalates. Long error
 streaks may reflect misconceptions rather than slips
 \cite{booth2014persistent}; the controller does not distinguish these.
 The benchmark plant is a surrogate. Its malformed rate matches and its drift rate
@@ -534,12 +536,12 @@ We coupled a learner model to a generative interface through a PID
 governor, a fast policy, a layout planner and a validation gate, with the
 generative model writing content into a fixed layout, and tested the loop
 in simulation. The governor's budget is met at every step, with the gate
-absorbing plant faults, and the interface changes 3.5 times less than an
+replacing the 15.4\% of generated trees that miss it, and the interface changes 3.5 times less than an
 unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
 matter, and a slew limit removes level skips. Standard BKT stops reacting
 after long success runs; a CUSUM lapse detector restores the reaction at
-a modest cost in jitter, while forgetting overcorrects. In 300 real calls, 98.7\% of
+a modest cost in jitter, while forgetting overcorrects. In 300 single real calls, 98.7\% of
 screens met the budget with the planner and 92\% without it. The next steps are
 running full trajectories with the real model, a learned fast policy
 trained on real interaction data, and a study with learners.
@@ -548,7 +550,7 @@ trained on real interaction data, and a study with learners.
 The engine, simulation harness, benchmark results and the sources of
 this manuscript are openly available at \url{https://github.com/omanandswami2005/closed-loop-genui-research-implementation}.
 
-\IEEEtriggeratref{40}
+\IEEEtriggeratref{39}
 \bibliographystyle{IEEEtran}
 \bibliography{../docs/references}
 
