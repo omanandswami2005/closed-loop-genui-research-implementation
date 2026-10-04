@@ -45,7 +45,7 @@ which matches latent mastery slightly better but skips levels three times as
 often. Standard BKT saturates after long success runs, so a later streak of
 errors leaves the interface unchanged; a CUSUM lapse detector cuts overload
 in a forgetting cohort by 25\%. In 300 single calls to the real model with the
-planner (not full learner sessions), 98.7\% of screens were within budget, against 92\% when the model
+planner (not full learner sessions), 98.7\% of raw outputs were within budget before any fallback, against 92\% when the model
 also chose the layout. All claims concern algorithmic behavior;
 no learning gains are claimed.
 \end{abstract}
@@ -82,8 +82,9 @@ its complexity to that model without the abrupt changes that make adaptive
 interfaces hard to use \cite{gajos2008predictability,findlater2004menus}.
 
 BKT, PID control, layout search and constrained generation are each
-established; our contribution is their integration, in which a learner model
-sets a structural budget that a generated interface must meet at runtime:
+established; our contribution is their integration: to our knowledge, the first
+system in which a BKT mastery estimate, through feedback control, sets a
+structural budget that a runtime-generated interface must meet:
 \begin{enumerate}
 \item A closed loop in which BKT mastery drives a PID governor whose
 complexity budget is met by a layout planner and a generative model, with
@@ -114,8 +115,9 @@ adaptation has costs: unpredictable changes reduce usability
 \cite{gajos2008predictability,findlater2004menus}. Recent GenUI
 systems let a large language model produce the interface itself
 \cite{leviathan2026genui,tu2026maicui}. To our knowledge, none of these
-systems bounds the generated interface by a learner model
-(Table~\ref{tab:related}).
+systems bounds the generated interface by a learner model: SUPPLE models devices and
+motor abilities, not knowledge; fading and staircase rules
+\cite{salden2010expertise,levitt1971updown} adjust task difficulty, not interface structure (Table~\ref{tab:related}).
 
 \begin{table}[t]
 \caption{Prior approaches against the three properties combined here}
@@ -241,7 +243,7 @@ and chose a worked example in all 200 test states, so it is not used.
 The planner turns the budget into a layout. The policy fixes the abstraction
 level $\alpha$; the planner then enumerates every admissible layout with
 1--8 interactive elements, 0--3 hint tiers and nesting depth 1--4 (at most
-168 candidates) and picks the one whose $M_I$ is closest to $M_I^*$. It keeps a requested worked
+102 valid layouts) and picks the one whose $M_I$ is closest to $M_I^*$. It keeps a requested worked
 example when that stays within $\varepsilon$; ties go to fewer elements,
 then shallower nesting. The plant, Gemini 3.7 Flash served
 through Vertex AI, receives this layout with the policy decision and the
@@ -253,13 +255,14 @@ operation pad, symbolic workspace, hint accordion, verification plane). The clie
 directly and never executes generated code. Each emission is parsed against
 the schema; if parsing fails, or if
 $|M_I-M_I^*|>\varepsilon$ with $\varepsilon=0.05$, a precompiled fallback
-tree nearest to the budget is rendered instead. A web client renders the
+tree is rendered instead: the planner's layout for the nearest of 41 budgets
+1/40 apart, within $\varepsilon$ for every budget and policy decision (worst 0.049). A web client renders the
 trees for inspection (Fig.~\ref{fig:screens}); the benchmark does not use it.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[height=3.7cm]{figures/screen_l1.png}\hspace{4mm}%
-\includegraphics[height=3.7cm]{figures/screen_l4.png}
+\includegraphics[height=3.5cm]{figures/screen_l1.png}\hspace{4mm}%
+\includegraphics[height=3.5cm]{figures/screen_l4.png}
 \caption{Screens written by Gemini 3.7 Flash in guided mode; both passed the
 gate. Left: level 1, balance scale with a worked step ($M_I^*=0.091$,
 $M_I=0.111$). Right: level 4, graph verification ($M_I^*=0.903$, $M_I=0.905$).}
@@ -350,7 +353,7 @@ uniform on $[0.02,0.98]$, scored by the same gate (Table~\ref{tab:gemini}).
 Transport failures (HTTP error, timeout) & 6 & 4\\
 Content-malformed, of completed calls & 3.4\% & 0\%\\
 Off budget, of valid trees & 2.8\% & 0\%\\
-Within budget, of all calls & 92.0\% & 98.7\%\\
+Raw output within budget, of all calls & 92.0\% & 98.7\%\\
 Median $|M_I-M_I^*|$ of valid trees & 0.012 & 0.007\\
 Latency of completed calls, median / p95 & 7.7 / 18.6\,s & 2.7 / 5.1\,s\\
 \bottomrule
@@ -360,6 +363,8 @@ Latency of completed calls, median / p95 & 7.7 / 18.6\,s & 2.7 / 5.1\,s\\
 Free-mode failures lacked an interactive element (10/294) or missed the
 budget (8/284, mostly level 1); guided-mode failures were all in transport. The surrogate's 3\% malformed
 rate thus matches free mode, and its 15\% drift rate is a stress setting.
+Compliance counts raw outputs over all calls; after the gate, every
+rendered tree met the budget.
 
 \paragraph*{Metrics}
 Constraint error $\Delta M=|M_I-M^*_{\mathrm{ref}}|$ is measured against the
@@ -384,7 +389,8 @@ mismatches, not measured load.
 
 All numbers come from one run on the test cohort (seed 20261003; tuning
 seed 20261004), with normal-approximation 95\% CIs over 1,000 learners. The CIs reflect
-variation across learners in this run, not across independent runs.
+variation across learners in this run. Over ten independent test seeds the
+ranking of arms never changed and the closed loop's $\Delta M$ stayed within 0.0118--0.0122.
 
 \begin{table*}[t]
 \centering
@@ -512,7 +518,6 @@ streaks may reflect misconceptions rather than slips
 The surrogate plant's fault rates match or exceed the real model's, but
 the real model was measured on single calls, not full trajectories. Its latency (median 7.7\,s free,
 2.7\,s guided) calls for prefetching or caching.
-A learned fast policy would need real interaction data.
 
 \section{Conclusion}
 We coupled a learner model to a generative interface through a PID
@@ -521,10 +526,9 @@ simulation. The governor's budget is met at every step, with the gate
 replacing the 15.4\% of generated trees that miss it, and the interface changes 3.5 times less than an
 unconstrained generator while rarely showing abstract screens to simulated
 learners who have not mastered the skill. Anti-windup and the derivative filter each
-matter, and a slew limit removes level skips. Standard BKT stops reacting
-after long success runs; a CUSUM lapse detector restores the reaction at
-a modest cost in jitter, while forgetting trades overload for underload. In 300 single real calls, 98.7\% of
-screens met the budget with the planner and 92\% without it. The next steps are
+matter, and a slew limit removes level skips. A CUSUM lapse detector restores
+BKT's reaction after long success runs at a modest cost in jitter. In 300 single real calls, 98.7\% of
+raw outputs met the budget with the planner and 92\% without it. The next steps are
 running full trajectories with the real model, a learned fast policy
 trained on real interaction data, and a study with learners. We claim
 structural budget regulation in simulation, not learning gains or reduced

@@ -81,6 +81,7 @@ Related runs, all from `backend/`:
 |---|---|
 | `python -m closedloop.sim.tune search --out ../results/tuning` | controller tuning (`tuning.json`, `search.csv`) |
 | `python -m closedloop.sim.tune sensitivity --out ../results/tuning` | parameter and M_I weight sensitivity |
+| `python -m closedloop.sim.run --seed SEED --out ../results/seeds/SEED`, then `python results/seeds/aggregate.py` from the repo root | the same benchmark on 10 independent test seeds (`results/seeds/across_seeds.csv`) |
 | `pip install -e ".[laya]" && python -m closedloop.sim.laya_eval --out ../results/laya` | zero-shot Laya evaluation (Laya is not used in the system) |
 
 ## Run the real Gemini measurement
