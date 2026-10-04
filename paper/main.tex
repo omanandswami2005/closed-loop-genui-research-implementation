@@ -469,7 +469,11 @@ under equal weights, the initial $0.40/0.35/0.25$ split and three
 single-feature-heavy splits ($0.6/0.2/0.2$). Dropping abstraction or depth
 roughly doubles it (0.023 and 0.022) while keeping more than 99\% of steps
 within $\varepsilon$. Dropping element density breaks the loop: fallbacks rise to 84\% and only
-18\% of screens are within $\varepsilon$.
+18\% of screens are within $\varepsilon$. Changing each BKT parameter by
+$\pm 50\%$ kept every step within $\varepsilon$, $\Delta M$ between 0.010 and
+0.017, jitter between 0.034 and 0.041 and fallbacks at 15--16\%. The
+parameters mainly shift when the interface escalates: $P(T)$ and $P(G)$ move
+ITAE between 0.048 and 0.115, and skips rise to at most 1.20 per run.
 
 \subsection{BKT saturation and lapse handling}
 Under correct responses the BKT estimate converges to a stable fixed point at
@@ -544,6 +548,7 @@ trained on real interaction data, and a study with learners.
 The engine, simulation harness, benchmark results and the sources of
 this manuscript are openly available at \url{https://github.com/omanandswami2005/closed-loop-genui-research-implementation}.
 
+\IEEEtriggeratref{40}
 \bibliographystyle{IEEEtran}
 \bibliography{../docs/references}
 
