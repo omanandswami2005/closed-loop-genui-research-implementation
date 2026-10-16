@@ -1,0 +1,11 @@
+{
+  "cohort": "lapse (forget 0.02-0.06 per item)",
+  "learners": 1000,
+  "resamples": 2000,
+  "seed": 20261003,
+  "overload_plain": 0.0755,
+  "overload_cusum": 0.056325,
+  "relative_change": -0.2539735099337748,
+  "bootstrap_ci_lo": -0.2805536799459824,
+  "bootstrap_ci_hi": -0.2280014250089064
+}

@@ -1,0 +1,24 @@
+{
+  "combinations": 738,
+  "grid_budgets": 41,
+  "error_counts": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "mastery_values": [
+    0.1,
+    0.5,
+    0.99
+  ],
+  "worked_example_requested": 180,
+  "worked_example_kept": 126,
+  "worked_example_kept_share": 0.7,
+  "hints_requested": 196,
+  "hints_kept": 196,
+  "fallback_worst_budget_error": 0.04761904761904767,
+  "epsilon": 0.05
+}
