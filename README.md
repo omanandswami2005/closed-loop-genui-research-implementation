@@ -107,6 +107,11 @@ GENUI_GEMINI_TOKEN=$(gcloud auth print-access-token) python -m closedloop.sim.ge
 The committed run is in `results/gemini/` (`summary.json` and one row per call
 in `calls.csv`).
 
+## Reproduce the paper's numbers
+
+The commands, model settings and prompt locations for every table are in
+[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
+
 ## Build the paper
 
 ```
