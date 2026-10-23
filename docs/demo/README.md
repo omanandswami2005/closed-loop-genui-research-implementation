@@ -182,3 +182,18 @@ The sample documents in `docs/demo/samples/` were written for this demo
   with `gemini-3-flash-preview` took 16-21 s in 8 of 8 runs (3.7-flash: 57-123 s, 1 of 3
   failed); screens with `gemini-3.5-flash-lite` and the layout schema passed the gate in
   32 of 32 tries at about 2 s. The research results in `results/` are unaffected.
+
+## Walkthrough video
+
+`e2e/video/` makes the narrated walkthrough from the real app:
+
+```
+python e2e/video/tts.py OUT/audio                     # narration.json -> WAV clips (Google Cloud TTS)
+BASE=http://127.0.0.1:8000 GENUI_DEMO_CACHE=<server pack cache> node e2e/video/record.ts OUT/work OUT/audio file.pdf
+python e2e/video/assemble.py OUT/work OUT/audio walkthrough.mp4
+```
+
+`record.ts` drives Chromium through the whole flow (landing, onboarding, a live upload,
+learning, report, research mode) and captures frames; `assemble.py` places each narration
+clip at its scene and plays any longer stretch faster with a visible fast-forward badge.
+Use an empty pack cache so the upload is generated live.

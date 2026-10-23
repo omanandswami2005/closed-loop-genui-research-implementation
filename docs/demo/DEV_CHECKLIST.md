@@ -52,7 +52,7 @@ Legend: `[x]` done and verified, `[ ]` open. "Check" says how it was verified.
 
 ## 7. Deploy and deliver
 - [x] `Dockerfile.demo` builds; separate Cloud Run service `genui-demo` (the existing `genui` service untouched). Check: live URL health, Playwright suite against https://genui-demo-151739080904.us-central1.run.app.
-- [ ] Narrated walkthrough video (Playwright capture + Google TTS voice + animated title/caption overlays, ffmpeg). Check: watched end to end.
+- [x] Narrated walkthrough video (Playwright capture + Google TTS voice + animated title/caption overlays, ffmpeg; `e2e/video/`: `tts.py` -> `record.ts` -> `assemble.py`). Check: 4 min cut reviewed frame by frame; live upload and live Gemini in the recording.
 - [ ] Branch pushed, PR opened (not merged).
 
 ## 8. Production redesign and reliability (request 2026-10-23)

@@ -1,0 +1,19 @@
+{
+  "voice": "en-US-Chirp3-HD-Charon",
+  "scenes": {
+    "intro": "This is a demo of a closed-loop generative interface for learning. You bring your own study material, and the system turns it into topics, then adapts every screen to how well you are doing.",
+    "landing": "The app opens on a landing page with the idea in one line: turn any document into lessons that adapt to you. Further down are the loop, the features, and a plain statement of what is and is not claimed.",
+    "architecture": "Here is the loop. Gemini reads the material once and writes a question bank, which is checked before use. Then, for every screen, a Bayesian Knowledge Tracing model estimates mastery. A PID controller turns the gap to the mastery target into a complexity budget. A rule-based policy picks the kind of scaffolding. Gemini writes the screen's text inside that budget, and a validation gate checks it before the browser renders it from a fixed set of components.",
+    "onboarding": "Onboarding takes three short steps: name and level, interests, and a starting point. The starting point sets the model's first mastery estimate. Level and interests are passed to Gemini, so wording and examples fit this learner.",
+    "material": "Next, the material. Ready-made sample packs are available, but here we upload a new PDF about the human heart, which the system has never seen before.",
+    "generating": "The text is extracted, Gemini outlines the topics, and then writes twelve questions per topic, in parallel, at four levels: recognise, understand, recall, and apply. Every question is validated before use. The answer must be one of the options, and a fill-in-the-gap question must have exactly one gap. This takes about twenty seconds.",
+    "topics": "Here is the result: topics with summaries and key points, all drawn from the document. Let's learn the first topic.",
+    "first": "This learner is new to the material, so mastery starts low and the controller sets a small budget: a guided question with few options, and a short nudge that Gemini wrote for this learner. On the right, the gauge shows the mastery estimate, a panel explains in plain words why this screen was chosen, and under the hood you can see every value in the loop.",
+    "answering": "As the learner answers, the mastery estimate is updated and the next screen is generated. Correct answers raise the budget, so the screens become more open.",
+    "wrong": "A wrong answer pulls the estimate down, and the controller steps back to a simpler, more supported screen. Answers are always marked against the question bank, never by the language model.",
+    "higher": "With more correct answers, the screens move up to recall, a fill-in-the-gap question, and then to apply, a new situation with key ideas to tick. Each screen's measured complexity stays within the gate's tolerance of the budget.",
+    "report": "The progress report summarises each topic for the learner or a teacher: the mastery estimate from start to now, the highest level reached, hints used, and the questions to review, with explanations. It can also be printed.",
+    "research": "The original research testbed for linear equations is still here, unchanged. That is the part evaluated in the paper.",
+    "outro": "To be clear about scope: the controller, the gate, and the marking are real and running live, and Gemini is called for real. But this general-content mode has not been evaluated. The paper's results cover linear equations with simulated learners only, and mastery here is the model's estimate, not a measured learning gain."
+  }
+}

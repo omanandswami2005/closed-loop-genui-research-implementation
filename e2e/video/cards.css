@@ -1,0 +1,18 @@
+@font-face { font-family:Inter; font-weight:400; src:url(../../frontend/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family:Inter; font-weight:500; src:url(../../frontend/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family:Inter; font-weight:600; src:url(../../frontend/node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family:Inter; font-weight:700; src:url(../../frontend/node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family:"JetBrains Mono"; font-weight:400; src:url(../../frontend/node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family:"JetBrains Mono"; font-weight:500; src:url(../../frontend/node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+:root { --bg:#060a13; --panel:#0c1220; --line:#162033; --ink:#f1f5f9; --mute:#94a3b8; --cobalt:#3b82f6; --cob2:#22d3ee; --ok:#34d399; --amber:#f59e0b; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; height:100%; background:radial-gradient(ellipse 80% 60% at 70% 0%,rgba(59,130,246,.18),transparent 60%),radial-gradient(ellipse 60% 50% at 0% 100%,rgba(124,58,237,.14),transparent 60%),var(--bg); color:var(--ink); font-family:Inter, system-ui, sans-serif; overflow:hidden; }
+.mono { font-family:"JetBrains Mono","DejaVu Sans Mono",monospace; }
+.grid { position:absolute; inset:0; background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:48px 48px; opacity:0; animation:fade 1.2s ease forwards; mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%); }
+@keyframes fade { to { opacity:.55 } }
+@keyframes up { from { transform:translateY(28px); opacity:0 } to { transform:none; opacity:1 } }
+@keyframes draw { to { stroke-dashoffset:0 } }
+@keyframes pop { from { transform:scale(.85); opacity:0 } to { transform:none; opacity:1 } }
+@keyframes wipe { from { clip-path:inset(0 100% 0 0) } to { clip-path:inset(0 0 0 0) } }
+.reveal { opacity:0; animation:up .8s cubic-bezier(.2,.7,.2,1) forwards; }
+.grad { background:linear-gradient(90deg,#60a5fa,#22d3ee 50%,#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent; }
