@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { demoApi } from "./api";
+import { Gallery } from "./genui/Gallery";
 import { Landing } from "./Landing";
 import { Learn } from "./Learn";
 import { Library } from "./Library";
@@ -60,6 +61,7 @@ export function DemoApp() {
         <Spinner />
       </div>
     );
+  else if (route.name === "gallery") body = <Gallery type={route.type} />;
   else if (!learner || route.name === "start") body = <Onboarding initial={learner?.profile ?? null} onSave={(p) => void save(p)} busy={busy} />;
   else if (route.name === "library") body = <Library />;
   else if (route.name === "pack") body = <PackView id={route.id} learnerId={learner.learnerId} cached={route.cached} />;

@@ -1,8 +1,10 @@
 import confetti from "canvas-confetti";
-import { ArrowLeft, Check, ChevronDown, Info, LineChart, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, FlaskConical, Info, LineChart, Sparkles, Trophy, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { demoApi } from "./api";
+import { LabStage } from "./genui/LabStage";
+import { prettyType } from "./genui/registry";
 import { LearnContext, type LearnContextValue, LearnRenderer } from "./LearnRenderer";
 import { cn } from "./lib/utils";
 import { TraceChart } from "./TraceChart";
@@ -131,6 +133,76 @@ function UnderTheHood({ v }: { v: DemoView }) {
   );
 }
 
+function TopicDone({ v }: { v: DemoView }) {
+  const t = v.telemetry;
+  const correct = v.responses.filter(Boolean).length;
+  const lab = Object.values(v.lab_results);
+  const mastered = t.mastery >= v.setpoint;
+  useEffect(() => {
+    if (mastered) celebrate();
+  }, [mastered]);
+  return (
+    <main className="mx-auto max-w-3xl px-4 py-10">
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
+        <Card className="p-7" data-testid="topic-done">
+          <div className="flex flex-wrap items-center gap-5">
+            <AnimatedCircularProgressBar className="size-28 text-xl" value={Math.round(t.mastery * 100)} gaugePrimaryColor={mastered ? "#34d399" : "#22d3ee"} gaugeSecondaryColor="rgba(255,255,255,0.08)" />
+            <div className="min-w-0 flex-1">
+              <Eyebrow>Topic finished</Eyebrow>
+              <h1 className="mt-1 text-2xl font-semibold tracking-tight">{v.topic.title}</h1>
+              <p className="mt-1 text-sm text-slate-300" data-testid="end-reason">
+                <Trophy className="mr-1.5 inline size-4 text-amber-300" />
+                The check ended: {v.end_reason}.
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              ["questions", `${v.answered}/${v.max_items}`],
+              ["correct", `${correct}`],
+              ["mastery estimate", t.mastery.toFixed(2)],
+              ["lab levels solved", `${lab.filter((r) => r.solved).length}/${lab.length}`],
+            ].map(([k, val]) => (
+              <div key={k} className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2.5">
+                <div className="text-[11px] uppercase tracking-wider text-slate-500">{k}</div>
+                <div className="font-mono text-xl tabular-nums text-white">{val}</div>
+              </div>
+            ))}
+          </div>
+          {lab.length > 0 && (
+            <div className="mt-5">
+              <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                <FlaskConical className="size-4 text-violet-300" /> What you did in the lab
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {lab.map((r, i) => (
+                  <Pill key={i} tone={r.solved ? "green" : "default"}>
+                    {prettyType(r.type)} · {r.solved ? `solved${r.attempts > 1 ? ` in ${r.attempts}` : ""}` : r.revealed ? "solution shown" : "skipped"}
+                  </Pill>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="mt-6">
+            <TraceChart history={v.history} responses={v.responses} setpoint={v.setpoint} />
+          </div>
+          <p className="mt-4 text-xs text-slate-500">
+            The mastery estimate comes from a Bayesian Knowledge Tracing model updated after every answer. It is an estimate for this demo, not a grade.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <Button onClick={() => go(`/pack/${v.pack_id}`)} data-testid="next-topic">
+              Choose the next topic
+            </Button>
+            <Button variant="secondary" onClick={() => go("/report")} data-testid="to-report">
+              <LineChart className="size-4" /> Open progress report
+            </Button>
+          </div>
+        </Card>
+      </motion.div>
+    </main>
+  );
+}
+
 function celebrate() {
   const opts = { particleCount: 70, spread: 70, startVelocity: 38, ticks: 160, colors: ["#3b82f6", "#22d3ee", "#a78bfa", "#ffffff"] };
   void confetti({ ...opts, origin: { x: 0.35, y: 0.7 } });
@@ -198,6 +270,8 @@ export function Learn({ sid }: { sid: string }) {
         <Spinner />
       </div>
     );
+  if (view.stage === "explore") return <LabStage view={view} onFinish={setView} />;
+  if (view.done) return <TopicDone v={view} />;
   const t = view.telemetry;
   const correct = view.responses.filter(Boolean).length;
 
@@ -213,7 +287,7 @@ export function Learn({ sid }: { sid: string }) {
               {view.topic.title}
             </h1>
             <div data-testid="item-label" className="mt-1 font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              Item {view.item + 1} · level {view.question.level} {view.level_name} · {correct}/{view.responses.length} correct
+              Step 2 of 2 · question {view.answered + 1} of {view.max_items} · level {view.question.level} {view.level_name} · {correct}/{view.responses.length} correct
             </div>
           </div>
           <LevelSteps level={view.question.level} />

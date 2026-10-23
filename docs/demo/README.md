@@ -4,7 +4,13 @@ A learner uploads a document (PDF, PPTX, TXT, MD) or pastes text. Gemini turns i
 into topics with a question bank, and the learner studies a topic through the same
 closed loop as the research testbed: BKT mastery estimate, PID complexity budget,
 rule-based policy, a generated screen, and the validation gate with a deterministic
-fallback. A progress report summarises each topic for the learner or a teacher.
+fallback. Each topic starts with an **interactive lab**: Gemini composes 3-4 levels from a
+catalog of 30 hands-on components and simulations (sort, match, balance a scale, label a
+diagram, run a projectile, fit a trend line, ...), the server validates each level and
+re-computes that it can be solved, and the browser renders it with fixed React components.
+Then comes a **check of at most 10 questions** driven by the closed loop, and a topic
+summary. A progress report summarises each topic for the learner or a teacher.
+See [GENUI_LABS.md](GENUI_LABS.md) for the lab system and its 30 components.
 
 > **Scope.** This is a demo extension, not part of the evaluated system. The paper's
 > results cover linear equations with simulated learners only. Nothing here measures
@@ -41,20 +47,23 @@ For development with hot reload: run the uvicorn command above without
 | 4. Question bank | `bank.py`, one Gemini call per topic, in parallel | Real. 12 questions per topic, 3 at each level: recognise (multiple choice), understand (multiple choice), recall (fill the gap), apply (multiple choice in a new situation). Each has 3 hints and an explanation. A call that stalls for 45 s is sent again (up to 3 copies; the first reply wins). Typical total: 16-21 s. |
 | 5. Validation of the bank | `bank.clean_question`, `bank.build_topic` | Deterministic. Answer must be one of the options, a blank has exactly one gap and a 1-3 word answer, no hint equals the answer, no duplicate prompts; a topic needs every level. Invalid questions are dropped and counted. |
 | 6. Cache | `PackStore` | Pack id = SHA-256 of the extracted text. Same file again = instant. Sample packs ship in `closedloop_demo/packs/`. |
-| 7. Each screen | `loop.DemoSession` | BKT tracker, PID governor and `SurrogatePolicy` are imported from `closedloop` unchanged. The policy's abstraction level picks a question of that level; `plant.plan` finds the closest layout to the budget. |
+| 7a. Interactive lab | `labs.LabStore`, `widgets.py`, `POST /api/demo/sessions/{id}/lab` | Real Gemini call (`gemini-3-flash-preview`, 8-35 s, then cached per topic and learner level/interests). Gemini writes `lab-ui/1` JSON: 3-4 levels from the 30-component catalog, each with intro, goal, 2-3 hints, worked solution and explanation, plus a toolbox of key facts. Every level is validated and its solution re-computed (`widgets.parse_station`); rejected levels go back to Gemini once with the reasons; the lab is topped up from a deterministic template built from the bank if needed. Results per level are posted back and appear in the summary and report. Details: [GENUI_LABS.md](GENUI_LABS.md). |
+| 7b. The check: each screen | `loop.DemoSession` | BKT tracker, PID governor and `SurrogatePolicy` are imported from `closedloop` unchanged. The policy's abstraction level picks a question of that level; `plant.plan` finds the closest layout to the budget. |
 | 8. Screen text | `plant.GeminiLearnPlant` (`gemini-3.5-flash-lite`) | Real Gemini call per screen, about 1-2 s: rewrites the key ideas, nudge, worked example and hints for the learner's level and interests. The call carries a response schema built from the layout (`plant.layout_schema`): node types, order and every count are fixed, only the text is free. A call that has not answered after 7 s is sent again (up to 3 copies). A screen that is only the question, with no text, is not sent to Gemini; the gate log says so. |
 | 9. Gate | `plant.admit` | Deterministic: schema, the screen references the right bank question, generated text does not contain the answer, measured complexity within 0.05 of the budget. Any failure renders the deterministic template. |
-| 10. Marking | `loop.grade` | Deterministic. Multiple choice: exact option. Blank: case and punctuation ignored, accepted variants, one spelling slip allowed in words of 5+ letters. Gemini never marks. |
+| 10a. Session limit | `loop.DemoSession.respond` | The check ends after 10 questions (`GENUI_DEMO_MAX_ITEMS`), or earlier once the mastery estimate passes 0.95 with at least 4 answers (`GENUI_DEMO_MIN_ITEMS`). The topic summary says which rule ended it; further answers are refused (HTTP 409). |
+| 10b. Marking | `loop.grade` | Deterministic. Multiple choice: exact option. Blank: case and punctuation ignored, accepted variants, one spelling slip allowed in words of 5+ letters. Gemini never marks. |
 | 11. Progress report | `loop.topic_report`, `GET /api/demo/learners/{id}/report` | Per topic: answers, estimate start to now, highest level, hints, questions to review with explanations, status and advice. Printable. |
 
 ## Architecture
 
 ```
 Browser: frontend/demo.html -> src/demo/*
-  onboarding -> material (upload / paste / samples) -> topics -> learn screen -> progress report
-        |                    |                                  |
-        v                    v                                  v
-  /api/demo/learners   /api/demo/packs              /api/demo/sessions[/{id}/responses]
+  onboarding -> material (upload / paste / samples) -> topics -> lab -> check (<= 10) -> summary -> report
+        |                    |                                  |       |
+        v                    v                                  v       v
+  /api/demo/learners   /api/demo/packs     /api/demo/sessions/{id}/lab  /api/demo/sessions[/{id}/responses]
+                                             LabStore: Gemini lab-ui/1 -> parse_station gate -> repair once -> template top-up
                              |                                  |
                        ingest.extract                    DemoSession (one per learner x topic)
                              |                             BKTTracker  (closedloop.bkt)      unchanged
@@ -104,7 +113,8 @@ so the research app's styles are not touched.
 | `#/start` | Onboarding in three steps (about you, interests, starting point); shows the starting estimate P(L0) |
 | `#/library` | Upload or paste material, or pick a sample pack; full-screen progress while Gemini writes the pack |
 | `#/pack/:id` | Topics of one pack, with progress for topics already started |
-| `#/learn/:sid` | Learning screen: the generated screen, "why this screen", and "under the hood" (trace chart, telemetry, gate log) |
+| `#/learn/:sid` | Step 1, the interactive lab (levels, hints, toolbox, "how this lab was made"); step 2, the check (question n of 10, "why this screen", "under the hood": trace chart, telemetry, gate log); then the topic summary |
+| `#/gallery[/:type]` | All 30 lab components, one Gemini-written, gate-checked example each, playable |
 | `#/report` | Progress report per topic; printable |
 
 Animated components are copied into the repo (no runtime CDN), adapted only to import `cn()`
@@ -136,10 +146,13 @@ cd backend && python -m pytest tests --ignore=tests/demo   # existing suite, unc
 cd e2e && npm ci && npx playwright test              # browser tests, real server, real Gemini
 ```
 
-The Playwright suite (`e2e/tests/demo.spec.ts`) starts the demo server itself (or set
-`E2E_BASE_URL` to test a deployment). It covers: the landing page, onboarding, live
-Gemini topic generation from pasted text (a run stamp makes every run a fresh generation),
-six adaptive items, the progress report, PDF upload
+The Playwright suite (`e2e/tests/demo.spec.ts`, `e2e/tests/genui.spec.ts`) starts the demo
+server itself (or set `E2E_BASE_URL` to test a deployment). It covers: the landing page,
+onboarding, live Gemini topic generation from pasted text (a run stamp makes every run a
+fresh generation), a live Gemini lab played level by level, the check running to its limit
+and the topic summary, the progress report, every one of the 30 lab components in the
+gallery (rendered, solved by clicks, drags and slider moves from its data for 23 of them,
+and put into a correct state by its worked solution for all of them), PDF upload
 (cache hit), PPTX upload, unsupported/empty file errors, profile persistence, and
 that research mode still works. In a sandbox with a preinstalled Chromium, set
 `PW_CHROMIUM` to its path.
@@ -164,6 +177,10 @@ The sample documents in `docs/demo/samples/` were written for this demo
 | `GENUI_DEMO_BANK_HEDGE_AFTER` | `45` | Seconds before a stalled bank call is sent again. |
 | `GENUI_DEMO_ITEM_TIMEOUT` | `25` | Seconds before a screen call gives up (template shown). |
 | `GENUI_DEMO_HEDGE_AFTER` / `GENUI_DEMO_HEDGE_COPIES` | `7` / `3` | Re-send a slow screen call after this many seconds, up to this many copies. |
+| `GENUI_DEMO_LAB_MODEL` | `gemini-3-flash-preview` | Model that composes the interactive labs. |
+| `GENUI_DEMO_LAB_HEDGE_AFTER` | `35` | Seconds before a slow lab call is sent again (up to 3 copies, 100 s deadline). |
+| `GENUI_DEMO_MAX_ITEMS` | `10` | Questions per topic check. |
+| `GENUI_DEMO_MIN_ITEMS` | `4` | Answers needed before the check can end early at mastery 0.95. |
 | `GENUI_DEMO_GEMINI_DAILY_CAP` | `0` (off) | Max screen calls per UTC day, then templates. |
 | `GENUI_DEMO_CACHE` | `/tmp/genui-demo-packs` | Where generated packs are cached on disk. |
 | `GENUI_DEMO_MAX_SESSIONS` | `300` | In-memory sessions kept (oldest dropped). |

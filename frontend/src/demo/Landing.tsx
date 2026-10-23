@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpenCheck, FileStack, FlaskConical, Gauge, ListChecks, Lock, ScrollText, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpenCheck, FileStack, FlaskConical, Gauge, ListChecks, Lock, ScrollText, Shapes, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { demoApi } from "./api";
 import { LoopDiagram } from "./LoopDiagram";
@@ -26,6 +26,12 @@ const FEATURES = [
     wide: true,
   },
   { icon: FileStack, title: "Built from your own material", body: "Topics, key points and questions come only from the document you upload." },
+  {
+    icon: Shapes,
+    title: "Learn by doing, then get checked",
+    body: "For each topic Gemini builds an interactive lab from 30 components: sort, match, balance, label a diagram, run a simulation, fit a line. Levels get harder, with hints and a worked solution, before a check of at most 10 questions.",
+    wide: true,
+  },
   { icon: ListChecks, title: "Marked by rules, not by AI", body: "Answers are checked against a validated question bank. The language model never decides what is correct." },
   { icon: ShieldCheck, title: "Safe by construction", body: "Generated screens are JSON for a fixed set of components. Each one is checked before it renders; failures fall back to a template." },
   {
@@ -39,7 +45,7 @@ const FEATURES = [
 const STEPS = [
   { n: "01", title: "Tell us about you", body: "Level, interests and how well you know the topic. Your prior sets the starting estimate." },
   { n: "02", title: "Add your material", body: "Upload a PDF, slides or notes, or paste text. Gemini outlines topics and writes a checked question bank." },
-  { n: "03", title: "Learn, adaptively", body: "Each answer updates the estimate; the next screen is regenerated within a complexity budget." },
+  { n: "03", title: "Learn by doing, then the check", body: "Play the topic's interactive lab, then answer up to 10 questions; each answer updates the estimate and resizes the next screen." },
   { n: "04", title: "Review the report", body: "See what is mastered and what to revisit, with explanations." },
 ];
 
@@ -116,8 +122,8 @@ export function Landing({ hasProfile }: { hasProfile: boolean }) {
                 Upload your material <ArrowRight className="size-4" />
               </span>
             </ShimmerButton>
-            <Button variant="secondary" size="lg" onClick={start}>
-              Try a sample pack
+            <Button variant="secondary" size="lg" onClick={() => go("/gallery")} data-testid="hero-gallery">
+              See the 30 interactive components
             </Button>
           </div>
         </BlurFade>

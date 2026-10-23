@@ -65,3 +65,15 @@ Legend: `[x]` done and verified, `[ ]` open. "Check" says how it was verified.
 - [x] Lowest-budget screens (bare question) now show a "Think about" nudge on guided questions (static, no extra rho or depth, leak-checked) that Gemini personalises; screens with no text skip Gemini and say so. Check: `test_loop.py`, live check of nudges.
 - [x] Report counts Gemini, template and fallback screens separately. Check: report page.
 - [x] Tests: 137 pytest pass; 7/7 Playwright pass locally, with live generation every run.
+
+## 9. Real generative UI: interactive labs (request 2026-10-23)
+- [x] Problem found: the check had no question limit, and the only generated UI was text inside a fixed question screen; nothing to manipulate. Fixed below.
+- [x] Decision (user, decision card): our own A2UI-style component library, not CopilotKit or the A2UI renderer. See GENUI_LABS.md.
+- [x] `lab-ui/1` catalog: 15 hands-on manipulatives + 15 simulations/explorables, one Pydantic model each that re-computes the solution (`widgets.py`); safe formula language (`expr.py`, `genui/expr.ts`). Check: `test_widgets.py`, `test_expr.py`.
+- [x] Lab composer after Google's practice interactives: levels getting harder, intro, goal, 2-3 hints, toolbox, worked solution; gate + one self-correction round + deterministic top-up; cached per topic and learner (`labs.py`). Check: `test_labs.py`; live labs of 3-4 valid levels in 8-35 s.
+- [x] Session flow: lab -> check of at most 10 questions (early finish at mastery 0.95 after 4) -> topic summary; 409 after the end; lab results in the summary and report. Check: `test_loop.py`, `test_routes.py`.
+- [x] Frontend: 30 React components (tap or drag, sliders, animated simulations), level shell (`Station.tsx`), lab page with toolbox and "how this lab was made" (`LabStage.tsx`), topic summary, component gallery `#/gallery`, landing updated. Check: `npx tsc -b`, `npm run build`.
+- [x] Browser test of every component: renders, 23 solved by learner-style interaction from their data, all 30 correct under the worked solution, no console errors. Check: `e2e/tests/genui.spec.ts`.
+- [x] Tests: 178 pytest pass; 9/9 Playwright pass locally (live Gemini lab included).
+- [ ] Redeploy `genui-demo` and run Playwright against the live URL.
+- [ ] Re-record the narrated walkthrough with the lab, the gallery, the limited check and the summary.

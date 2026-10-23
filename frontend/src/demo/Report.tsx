@@ -59,8 +59,9 @@ function TopicCard({ t, i }: { t: TopicReport; i: number }) {
             </span>
           </div>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {[
+            ["Lab levels", t.lab?.stations ? `${t.lab.solved}/${t.lab.stations} solved · ${t.lab.first_try} first try` : "—"],
             ["Answers", `${t.correct}/${t.answered} correct`],
             ["Highest level", t.highest_level ? `${t.highest_level} · ${LEVELS[t.highest_level - 1]}` : "—"],
             ["Hints opened", String(t.hints_opened)],

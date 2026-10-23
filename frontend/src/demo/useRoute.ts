@@ -6,7 +6,8 @@ export type Route =
   | { name: "library" }
   | { name: "pack"; id: string; cached: boolean }
   | { name: "learn"; sid: string }
-  | { name: "report" };
+  | { name: "report" }
+  | { name: "gallery"; type?: string };
 
 function parse(hash: string): Route {
   const [, name, arg, flag] = hash.replace(/^#/, "").split("/");
@@ -15,6 +16,7 @@ function parse(hash: string): Route {
   if (name === "pack" && arg) return { name: "pack", id: arg, cached: flag === "cached" };
   if (name === "learn" && arg) return { name: "learn", sid: arg };
   if (name === "report") return { name: "report" };
+  if (name === "gallery") return { name: "gallery", type: arg };
   return { name: "landing" };
 }
 

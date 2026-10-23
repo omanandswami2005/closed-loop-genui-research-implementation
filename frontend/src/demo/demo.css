@@ -70,3 +70,37 @@ body {
   .no-print { display: none !important; }
   .glass { background: #fff; border-color: #cbd5e1; backdrop-filter: none; }
 }
+
+/* lab-ui/1 sliders */
+.genui-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.genui-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  border: 3px solid #22d3ee;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.18), 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s;
+}
+.genui-range:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+.genui-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #fff;
+  border: 3px solid #22d3ee;
+}
+.genui-range:focus-visible {
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.35);
+}

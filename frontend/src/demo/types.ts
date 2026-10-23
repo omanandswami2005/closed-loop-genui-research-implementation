@@ -119,6 +119,12 @@ export interface DemoView {
   plant: "gemini" | "deterministic";
   notice: string | null;
   outcome: Outcome | null;
+  stage: "explore" | "check" | "done";
+  done: boolean;
+  end_reason: string | null;
+  answered: number;
+  max_items: number;
+  lab_results: Record<string, { type: string; solved: boolean; attempts: number; revealed: boolean; seconds: number }>;
 }
 
 export interface TopicReport {
@@ -142,6 +148,9 @@ export interface TopicReport {
   status: "mastered" | "in progress" | "needs support" | "not started";
   advice: string;
   trace: number[];
+  stage?: "explore" | "check" | "done";
+  end_reason?: string | null;
+  lab?: { stations: number; solved: number; first_try: number; components: string[] };
   missed: { prompt: string; your_answer: string; correct_answer: string; explanation: string; level: number }[];
 }
 

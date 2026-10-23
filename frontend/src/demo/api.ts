@@ -1,3 +1,4 @@
+import type { Lab, Station } from "./genui/types";
 import type { DemoView, LearnerReport, PackSummary, Profile } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
@@ -47,5 +48,10 @@ export const demoApi = {
   session: (sid: string) => get<DemoView>(`/api/demo/sessions/${sid}`),
   respond: (sid: string, answer: string, hints_opened: number, justification: string) =>
     post<DemoView>(`/api/demo/sessions/${sid}/responses`, { answer, hints_opened, justification }),
+  gallery: () => get<{ stations: Station[]; rejected: string[]; hands_on: string[]; simulations: string[]; count: number }>("/api/demo/gallery"),
+  lab: (sid: string) => post<Lab>(`/api/demo/sessions/${sid}/lab`, {}),
+  labResult: (sid: string, r: { station_id: string; type: string; solved: boolean; attempts: number; revealed: boolean; seconds: number }) =>
+    post<{ ok: boolean }>(`/api/demo/sessions/${sid}/lab/results`, r),
+  finishLab: (sid: string) => post<DemoView>(`/api/demo/sessions/${sid}/lab/finish`, {}),
   report: (lid: string) => get<LearnerReport>(`/api/demo/learners/${lid}/report`),
 };

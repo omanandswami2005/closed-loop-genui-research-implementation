@@ -8,10 +8,11 @@ the content (bank questions), the component pack and the grader differ.
 
 from __future__ import annotations
 
+import os
 import random
 import re
 import time
-from dataclasses import asdict, dataclass, field, replace
+from dataclasses import asdict, dataclass, replace
 
 from closedloop.bkt import BKTParams, BKTTracker
 from closedloop.governor import GovernorConfig, PIDGovernor
@@ -26,6 +27,11 @@ from .plant import Admission, GeminiLearnPlant, admit, build, plan
 PRIOR = {"new": 0.10, "little": 0.25, "well": 0.45}
 # Multiple choice with 4 options can be guessed 1 time in 4 (research math items use 0.20).
 DEMO_BKT = dict(p_t=0.12, p_g=0.25, p_s=0.08, lapse_threshold=LAPSE_H)
+# A topic's check ends after MAX_ITEMS answers, or earlier once the estimate passes the
+# mastery threshold with at least MIN_ITEMS answers.
+MASTERED = 0.95  # same mastery threshold as the governor setpoint P*
+MAX_ITEMS = int(os.environ.get("GENUI_DEMO_MAX_ITEMS", "10"))
+MIN_ITEMS = int(os.environ.get("GENUI_DEMO_MIN_ITEMS", "4"))
 
 
 def _edit_distance_le1(a: str, b: str) -> bool:
@@ -117,6 +123,9 @@ class DemoSession:
         self.log: list[LogEntry] = []
         self.asked: dict[str, int] = {}
         self.started = time.time()
+        self.stage = "explore"  # explore (interactive lab) -> check (adaptive questions) -> done
+        self.lab_results: dict[str, dict] = {}
+        self.end_reason: str | None = None
         self.current = self._next_item()
 
     # -- question selection -------------------------------------------------
@@ -216,6 +225,8 @@ class DemoSession:
         return Item(q, doc, tel, self._client_view(q, doc), time.time())
 
     def respond(self, answer: str, hints_opened: int = 0) -> dict:
+        if self.stage == "done":
+            raise RuntimeError("this topic's check is finished")
         item = self.current
         q = item.question
         g = grade(q, answer)
@@ -241,8 +252,19 @@ class DemoSession:
                 fallback_used=item.telemetry.fallback_used,
             )
         )
-        self.current = self._next_item()
+        n = len(self.log)
+        if n >= MAX_ITEMS:
+            self.stage, self.end_reason = "done", f"all {MAX_ITEMS} questions answered"
+        elif n >= MIN_ITEMS and after >= MASTERED:
+            self.stage, self.end_reason = "done", "mastery estimate passed the threshold"
+        else:
+            self.current = self._next_item()
         return {"correct": g.correct, "message": g.message, "correct_answer": q.answer, "explanation": q.explanation, "prompt": q.prompt}
+
+    def record_lab(self, station_id: str, kind: str, solved: bool, attempts: int, revealed: bool, seconds: float) -> None:
+        self.lab_results[station_id] = {
+            "type": kind, "solved": solved, "attempts": attempts, "revealed": revealed, "seconds": round(seconds, 1),
+        }
 
 
 def _find_question(node: dict) -> dict:
@@ -253,9 +275,6 @@ def _find_question(node: dict) -> dict:
                 return found
         return {}
     return node if node["type"] in ("ChoiceQuestion", "BlankQuestion") else {}
-
-
-MASTERED = 0.95  # same mastery threshold as the governor setpoint P*
 
 
 def topic_report(s: DemoSession) -> dict:
@@ -292,6 +311,14 @@ def topic_report(s: DemoSession) -> dict:
         "status": status,
         "advice": advice,
         "trace": [round(e.mastery_after, 3) for e in s.log],
+        "stage": s.stage,
+        "end_reason": s.end_reason,
+        "lab": {
+            "stations": len(s.lab_results),
+            "solved": sum(r["solved"] for r in s.lab_results.values()),
+            "first_try": sum(r["solved"] and r["attempts"] <= 1 and not r["revealed"] for r in s.lab_results.values()),
+            "components": [r["type"] for r in s.lab_results.values()],
+        },
         "missed": [
             {"prompt": e.prompt, "your_answer": e.answer, "correct_answer": e.correct_answer, "explanation": e.explanation, "level": e.level}
             for e in s.log

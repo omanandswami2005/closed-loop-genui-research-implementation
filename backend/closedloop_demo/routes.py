@@ -20,7 +20,8 @@ from pydantic import BaseModel, Field
 
 from .bank import LEVEL_NAME, Pack, PackStore
 from .ingest import MAX_BYTES, IngestError, extract, from_paste
-from .loop import DemoSession, topic_report
+from .labs import LabStore, catalog_summary, gallery_json, lab_json
+from .loop import MAX_ITEMS, DemoSession, topic_report
 from .plant import GeminiLearnPlant
 from .vertex import GeminiUnavailable
 
@@ -30,6 +31,7 @@ DEFAULT_PLANT = os.environ.get("GENUI_DEMO_PLANT", "gemini")
 router = APIRouter(prefix="/api/demo")
 store = PackStore()
 gemini = GeminiLearnPlant()
+labs = LabStore()
 _learners: dict[str, dict] = {}
 _sessions: OrderedDict[str, tuple[DemoSession, threading.Lock, str]] = OrderedDict()  # sid -> (session, lock, learner)
 _lock = threading.Lock()
@@ -53,6 +55,15 @@ class SessionIn(BaseModel):
     topic_id: str = Field(max_length=10)
     plant: Literal["gemini", "deterministic"] | None = None
     seed: int | None = Field(default=None, ge=0, lt=2**31)
+
+
+class LabResultIn(BaseModel):
+    station_id: str = Field(max_length=10)
+    type: str = Field(max_length=40)
+    solved: bool
+    attempts: int = Field(default=0, ge=0, le=999)
+    revealed: bool = False
+    seconds: float = Field(default=0, ge=0, le=86400)
 
 
 class ResponseIn(BaseModel):
@@ -103,6 +114,12 @@ def _view(sid: str, s: DemoSession, outcome: dict | None = None) -> dict:
             else None
         ),
         "outcome": outcome,
+        "stage": s.stage,
+        "done": s.stage == "done",
+        "end_reason": s.end_reason,
+        "answered": len(s.log),
+        "max_items": MAX_ITEMS,
+        "lab_results": s.lab_results,
     }
 
 
@@ -197,10 +214,48 @@ async def respond(sid: str, req: ResponseIn) -> dict:
 
     def run() -> dict:
         with lock:
+            if session.stage == "done":
+                raise HTTPException(409, "this topic's check is finished")
             outcome = session.respond(req.answer, req.hints_opened)
             return _view(sid, session, outcome)
 
     return await run_in_threadpool(run)
+
+
+@router.get("/catalog")
+def catalog() -> dict:
+    return catalog_summary()
+
+
+@router.get("/gallery")
+def gallery() -> dict:
+    """One validated example of every lab-ui/1 component (written by Gemini once, checked on every load)."""
+    return gallery_json()
+
+
+@router.post("/sessions/{sid}/lab")
+async def session_lab(sid: str) -> dict:
+    """The topic's interactive lab, composed by Gemini for this learner (cached), validated, with fallback."""
+    session, _, _ = _get(sid)
+    lab = await run_in_threadpool(labs.get, session.pack, session.topic, session.profile, use_gemini=session.plant is not None)
+    return lab_json(lab)
+
+
+@router.post("/sessions/{sid}/lab/results")
+def lab_result(sid: str, req: LabResultIn) -> dict:
+    session, lock, _ = _get(sid)
+    with lock:
+        session.record_lab(req.station_id, req.type, req.solved, req.attempts, req.revealed, req.seconds)
+        return {"ok": True, "lab_results": session.lab_results}
+
+
+@router.post("/sessions/{sid}/lab/finish")
+def lab_finish(sid: str) -> dict:
+    session, lock, _ = _get(sid)
+    with lock:
+        if session.stage == "explore":
+            session.stage = "check"
+        return _view(sid, session)
 
 
 @router.get("/learners/{lid}/report")

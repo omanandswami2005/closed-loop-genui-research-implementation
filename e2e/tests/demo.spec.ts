@@ -17,6 +17,24 @@ async function onboard(page: Page, name = "Asha", prior: "New to me" | "I know a
   await expect(page.getByTestId("dropzone")).toBeVisible();
 }
 
+/** Plays the topic's interactive lab: solves nothing on purpose, so every level is skipped or its solution shown. */
+async function playLab(page: Page) {
+  await expect(page.getByTestId("lab-title")).toBeVisible({ timeout: 150_000 });
+  await expect(page.getByTestId("toolbox")).toBeVisible();
+  await expect(page.getByTestId("lab-gate")).toBeVisible();
+  const levels = await page.getByTestId("lab-steps").locator("button").count();
+  expect(levels).toBeGreaterThanOrEqual(3);
+  for (let i = 0; i < levels; i++) {
+    await expect(page.getByTestId("station")).toBeVisible();
+    await page.getByTestId("skip-level").click();
+    await expect(page.getByTestId("station-result")).toBeVisible();
+    await page.getByTestId("station-next").click();
+  }
+  await expect(page.getByTestId("lab-done")).toBeVisible();
+  await page.getByTestId("start-check").click();
+  await expect(page.getByTestId("question-prompt")).toBeVisible({ timeout: 60_000 });
+}
+
 /** Answers the current item: option A for multiple choice, the first chip or a guess for blanks. */
 async function answerItem(page: Page, wrong = false) {
   const before = await page.getByTestId("item-label").textContent();
@@ -27,8 +45,10 @@ async function answerItem(page: Page, wrong = false) {
     await page.getByTestId(wrong ? "option-1" : "option-0").click();
   }
   await page.getByTestId("submit").click();
-  await expect(page.getByTestId("item-label")).not.toHaveText(before ?? "", { timeout: 60_000 });
+  await expect(page.getByTestId("topic-done").or(page.getByTestId("item-label").filter({ hasNotText: before ?? "" }))).toBeVisible({ timeout: 60_000 });
+  if (await page.getByTestId("topic-done").isVisible()) return true;
   await expect(page.getByTestId("outcome")).toBeVisible();
+  return false;
 }
 
 test("full flow: onboarding, live Gemini topic generation from pasted text, adaptive items, progress report", async ({ page }) => {
@@ -47,21 +67,38 @@ test("full flow: onboarding, live Gemini topic generation from pasted text, adap
   await page.screenshot({ path: `${SHOTS}/01-topics-live.png`, fullPage: true });
 
   await page.getByTestId("learn-t1").click();
-  await expect(page.getByTestId("question-prompt")).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByTestId("lab-loading")).toBeVisible();
+  await expect(page.getByTestId("lab-title")).toBeVisible({ timeout: 150_000 });
+  await page.screenshot({ path: `${SHOTS}/02-lab.png`, fullPage: true });
+  await playLab(page);
   await expect(page.getByTestId("explain")).toContainText("mastery estimate");
-  await page.screenshot({ path: `${SHOTS}/02-first-item.png`, fullPage: true });
+  await expect(page.getByTestId("item-label")).toContainText("question 1 of 10");
+  await page.screenshot({ path: `${SHOTS}/03-first-item.png`, fullPage: true });
 
-  for (let i = 0; i < 6; i++) await answerItem(page, i === 2);
-  await page.screenshot({ path: `${SHOTS}/03-after-six.png`, fullPage: true });
-  // Telemetry advanced: the gate log has one row per screen generated.
-  await expect(page.locator("tbody tr")).toHaveCount(7);
+  // The check is limited: it ends after at most 10 questions (or earlier once mastery passes 0.95) with a summary.
+  let done = false;
+  let answered = 0;
+  while (!done && answered < 10) {
+    done = await answerItem(page, answered % 3 === 2);
+    answered += 1;
+    if (!done) {
+      await expect(page.getByTestId("item-label")).toContainText(`question ${answered + 1} of 10`);
+      // Telemetry advanced: the gate log has one row per screen generated.
+      await expect(page.locator("tbody tr")).toHaveCount(answered + 1);
+    }
+    if (answered === 3) await page.screenshot({ path: `${SHOTS}/03b-after-three.png`, fullPage: true });
+  }
+  expect(done).toBe(true);
+  await expect(page.getByTestId("end-reason")).toContainText("The check ended:");
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: `${SHOTS}/04-topic-done.png`, fullPage: true });
 
   await page.getByTestId("to-report").click();
   await expect(page.getByTestId("report-name")).toHaveText("Asha");
   await expect(page.getByTestId("report-started")).toHaveText("1");
   await expect(page.getByTestId("report-status")).toBeVisible();
   await page.waitForTimeout(1500);
-  await page.screenshot({ path: `${SHOTS}/04-report.png`, fullPage: true });
+  await page.screenshot({ path: `${SHOTS}/05-report.png`, fullPage: true });
 });
 
 test("PDF upload of a sample is served from the cache and opens its topics", async ({ page }) => {
@@ -78,6 +115,8 @@ test("PPTX upload works and a topic starts", async ({ page }) => {
   await page.getByTestId("generate-file").click();
   await expect(page.getByTestId("pack-title")).toBeVisible();
   await page.getByTestId("learn-t1").click();
+  await expect(page.getByTestId("lab-title")).toBeVisible({ timeout: 150_000 });
+  await page.getByTestId("skip-lab").click();
   await expect(page.getByTestId("question-prompt")).toBeVisible({ timeout: 60_000 });
 });
 

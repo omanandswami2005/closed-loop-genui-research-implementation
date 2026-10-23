@@ -1,5 +1,14 @@
+import pytest
+from closedloop_demo import loop
 from closedloop_demo.loop import NO_TEXT, PRIOR, DemoSession, grade, topic_report
 from closedloop_demo.plant import Emission
+
+
+@pytest.fixture(autouse=True)
+def long_sessions(monkeypatch):
+    """Most tests here drive a session for longer than the demo's 10-question check."""
+    monkeypatch.setattr(loop, "MAX_ITEMS", 100)
+    monkeypatch.setattr(loop, "MIN_ITEMS", 100)
 
 
 def _session(store, plant=None, prior="little"):
@@ -106,3 +115,40 @@ def test_guided_question_without_a_card_shows_a_nudge(seeded_store):
     node = root if root["type"] == "ChoiceQuestion" else None
     if node is not None and node["style"] == "guided":
         assert node["key_idea"] == q.hints[0]
+
+
+def test_check_ends_after_max_items(seeded_store, monkeypatch):
+    monkeypatch.setattr(loop, "MAX_ITEMS", 10)
+    monkeypatch.setattr(loop, "MIN_ITEMS", 4)
+    s = _session(seeded_store, prior="new")
+    assert s.stage == "explore"
+    for i in range(10):
+        assert s.stage != "done"
+        s.respond("wrong" if i % 2 else s.current.question.answer)
+    assert s.stage == "done" and s.end_reason == "all 10 questions answered"
+    with pytest.raises(RuntimeError):
+        s.respond("x")
+    r = topic_report(s)
+    assert r["answered"] == 10 and r["stage"] == "done" and r["end_reason"]
+
+
+def test_check_ends_early_at_mastery(seeded_store, monkeypatch):
+    monkeypatch.setattr(loop, "MAX_ITEMS", 10)
+    monkeypatch.setattr(loop, "MIN_ITEMS", 4)
+    s = _session(seeded_store, prior="well")
+    n = 0
+    while s.stage != "done":
+        s.respond(s.current.question.answer)
+        n += 1
+    assert 4 <= n < 10
+    assert s.end_reason == "mastery estimate passed the threshold"
+    assert s.tracker.mastery >= loop.MASTERED
+
+
+def test_lab_results_are_recorded_and_reported(seeded_store):
+    s = _session(seeded_store)
+    s.record_lab("s1", "BalanceScale", True, 1, False, 12.34)
+    s.record_lab("s2", "Projectile", False, 3, True, 40)
+    s.record_lab("s1", "BalanceScale", True, 2, False, 15)  # a retry replaces the earlier result
+    lab = topic_report(s)["lab"]
+    assert lab == {"stations": 2, "solved": 1, "first_try": 0, "components": ["BalanceScale", "Projectile"]}

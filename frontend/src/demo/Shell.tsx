@@ -1,4 +1,4 @@
-import { BookOpen, FlaskConical, LineChart, UserRound } from "lucide-react";
+import { BookOpen, FlaskConical, LineChart, Shapes, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "./lib/utils";
 import type { Profile } from "./types";
@@ -40,6 +40,9 @@ export function Shell({ route, profile, children }: { route: Route; profile: Pro
               </Tab>
               <Tab testId="nav-report" active={route.name === "report"} onClick={() => go("/report")}>
                 <LineChart className="size-4" /> <span className="hidden sm:inline">Progress</span>
+              </Tab>
+              <Tab testId="nav-gallery" active={route.name === "gallery"} onClick={() => go("/gallery")}>
+                <Shapes className="size-4" /> <span className="hidden sm:inline">Components</span>
               </Tab>
             </nav>
           )}
