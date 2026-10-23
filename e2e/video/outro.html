@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="cards.css">
+<style>
+.wrap{position:absolute;inset:0;padding:110px 140px}
+h2{font-size:20px;letter-spacing:.3em;color:var(--cob2);text-transform:uppercase}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+.col{border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:28px 32px;background:rgba(255,255,255,.035)}
+.col h3{font-size:16px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px}
+.col.real h3{color:var(--ok)} .col.not h3{color:var(--amber)}
+.col li{list-style:none;font-size:23px;line-height:1.45;padding:8px 0;border-top:1px solid rgba(255,255,255,.07);opacity:0;animation:up .6s forwards}
+.foot{margin-top:46px;font-size:21px;color:var(--mute);animation-delay:6s}
+.url{margin-top:16px;font-size:18px;line-height:1.7;color:#cbd5e1;animation-delay:7s}
+</style></head><body><div class="grid"></div>
+<div class="wrap">
+ <h2 class="mono reveal">what is real, what is not claimed</h2>
+ <div class="cols">
+  <div class="col real reveal" style="animation-delay:.4s"><h3 class="mono">real, running live</h3><ul>
+   <li style="animation-delay:1.0s">Text extraction from PDF, slides, notes</li>
+   <li style="animation-delay:1.5s">Gemini writes topics, questions, screen text</li>
+   <li style="animation-delay:2.0s">BKT, PID budget, policy, validation gate</li>
+   <li style="animation-delay:2.5s">Deterministic marking and fallback</li></ul></div>
+  <div class="col not reveal" style="animation-delay:.7s"><h3 class="mono">not evaluated</h3><ul>
+   <li style="animation-delay:3.2s">General-content mode: demo only</li>
+   <li style="animation-delay:3.7s">Quality of generated questions</li>
+   <li style="animation-delay:4.2s">Any learning gain for real learners</li>
+   <li style="animation-delay:4.7s">Paper: linear equations, simulated learners</li></ul></div>
+ </div>
+ <p class="foot reveal">Mastery shown in the app is the model's estimate, not a measured learning gain.</p>
+ <p class="url mono reveal">genui-demo-151739080904.us-central1.run.app/demo.html <br>github.com/omanandswami2005/closed-loop-genui-research-implementation</p>
+</div></body></html>

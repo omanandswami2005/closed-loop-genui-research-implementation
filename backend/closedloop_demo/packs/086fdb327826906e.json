@@ -1,0 +1,856 @@
+{
+ "id": "086fdb327826906e",
+ "title": "Newton's Laws and Motion",
+ "source_name": "newtons-laws.pptx",
+ "source_kind": "pptx",
+ "source_units": 6,
+ "chars": 2346,
+ "truncated": false,
+ "topics": [
+  {
+   "id": "t1",
+   "title": "Forces, Resultant Force, and Inertia",
+   "summary": "A force is a vector measured in newtons representing a push or pull. Newton's first law states that an object remains at rest or at constant velocity unless acted on by a resultant force.",
+   "key_points": [
+    "Forces have size and direction, making them vectors measured in newtons.",
+    "The resultant force is the single force equivalent to all forces acting together.",
+    "Inertia is the tendency of an object to resist changes in motion, which increases with mass.",
+    "Balanced forces produce a resultant force of zero."
+   ],
+   "questions": [
+    {
+     "id": "t1q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What is the single force called that has the same effect as all forces acting together on an object?",
+     "options": [
+      "Resultant force",
+      "Gravitational force",
+      "Balanced force",
+      "Terminal force"
+     ],
+     "answer": "Resultant force",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about combining multiple forces into one overall effect.",
+      "It results from combining all individual forces.",
+      "The term starts with 'result'."
+     ],
+     "explanation": "The material defines resultant force as the single force with the same effect as all forces acting together.",
+     "key_point": "The resultant force is the single force equivalent to all forces acting together."
+    },
+    {
+     "id": "t1q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Why are forces classified as vectors?",
+     "options": [
+      "They have both size and direction",
+      "They are measured only in kilograms",
+      "They only act on stationary objects",
+      "They always cancel each other out"
+     ],
+     "answer": "They have both size and direction",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what information is required to fully describe a force.",
+      "Vectors have two main properties, unlike scalars.",
+      "Forces have magnitude and a specific way they point."
+     ],
+     "explanation": "Forces have both size and direction, which makes them vectors.",
+     "key_point": "Forces have size and direction, making them vectors measured in newtons."
+    },
+    {
+     "id": "t1q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What happens when forces acting on an object are balanced?",
+     "options": [
+      "The resultant force is zero",
+      "The object accelerates rapidly",
+      "The mass of the object decreases",
+      "The resultant force equals the object's weight"
+     ],
+     "answer": "The resultant force is zero",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what 'balanced' means for opposing forces.",
+      "Opposing forces of equal magnitude cancel out.",
+      "The net or combined force becomes zero."
+     ],
+     "explanation": "Balanced forces have equal and opposite effects, meaning their resultant force is zero.",
+     "key_point": "Balanced forces produce a resultant force of zero."
+    },
+    {
+     "id": "t1q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does a passenger lurch forward when a bus suddenly brakes?",
+     "options": [
+      "Their inertia causes their body to resist the change in velocity",
+      "A forward resultant force pushes their body ahead",
+      "The bus's mass suddenly transfers to the passenger",
+      "Air resistance inside the bus pushes them forward"
+     ],
+     "answer": "Their inertia causes their body to resist the change in velocity",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what property makes objects keep doing what they were doing.",
+      "The passenger was already moving and resists changing that motion.",
+      "This is an example of Newton's first law and inertia."
+     ],
+     "explanation": "Due to inertia, the passenger's body tends to maintain its previous velocity when the bus slows down.",
+     "key_point": "Inertia is the tendency of an object to resist changes in motion, which increases with mass."
+    },
+    {
+     "id": "t1q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "How does increasing an object's mass affect its inertia?",
+     "options": [
+      "It increases its inertia",
+      "It decreases its inertia",
+      "It eliminates its inertia",
+      "It has no effect on its inertia"
+     ],
+     "answer": "It increases its inertia",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider whether heavier objects are harder or easier to accelerate.",
+      "Greater mass means more resistance to changing motion.",
+      "More mass directly leads to more inertia."
+     ],
+     "explanation": "Inertia is directly related to mass; having more mass means an object has more inertia.",
+     "key_point": "Inertia is the tendency of an object to resist changes in motion, which increases with mass."
+    },
+    {
+     "id": "t1q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "If an object is moving at a constant velocity, what can be inferred about the forces acting on it?",
+     "options": [
+      "The forces are balanced",
+      "There is a non-zero resultant force",
+      "A forward resultant force is speeding it up",
+      "Only friction is acting on the object"
+     ],
+     "answer": "The forces are balanced",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Recall Newton's first law regarding constant velocity.",
+      "If velocity does not change, no overall net force is acting.",
+      "The resultant force must be zero, meaning forces are balanced."
+     ],
+     "explanation": "According to Newton's first law, an object stays at constant velocity when the resultant force is zero (forces are balanced).",
+     "key_point": "Balanced forces produce a resultant force of zero."
+    },
+    {
+     "id": "t1q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Forces have size and direction, so they are ____ measured in newtons.",
+     "options": [],
+     "answer": "vectors",
+     "accepted": [
+      "vector quantities"
+     ],
+     "distractors": [
+      "scalars",
+      "accelerations",
+      "masses"
+     ],
+     "hints": [
+      "This term describes any quantity with magnitude and direction.",
+      "It contrasts with scalars.",
+      "It starts with the letter 'v'."
+     ],
+     "explanation": "Because forces possess both magnitude (size) and direction, they are categorized as vectors.",
+     "key_point": "Forces have size and direction, making them vectors measured in newtons."
+    },
+    {
+     "id": "t1q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "The tendency of an object to resist changes to its motion is called ____ .",
+     "options": [],
+     "answer": "inertia",
+     "accepted": [],
+     "distractors": [
+      "velocity",
+      "acceleration",
+      "friction"
+     ],
+     "hints": [
+      "This concept is central to Newton's first law of motion.",
+      "It increases with an object's mass.",
+      "The word begins with 'in-'."
+     ],
+     "explanation": "Inertia is defined as the natural tendency of any object to resist changes in its state of motion.",
+     "key_point": "Inertia is the tendency of an object to resist changes in motion, which increases with mass."
+    },
+    {
+     "id": "t1q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "When all forces acting on an object cancel out, the ____ force is zero.",
+     "options": [],
+     "answer": "resultant",
+     "accepted": [
+      "net"
+     ],
+     "distractors": [
+      "gravitational",
+      "frictional",
+      "applied"
+     ],
+     "hints": [
+      "This refers to the single overall force combining all acting forces.",
+      "When forces are balanced, this overall force is zero.",
+      "It starts with 'r'."
+     ],
+     "explanation": "Balanced forces cancel each other completely, producing a resultant force of zero.",
+     "key_point": "The resultant force is the single force equivalent to all forces acting together."
+    },
+    {
+     "id": "t1q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A box is pulled to the right with 15 N and to the left with 15 N. What is the motion of the box if it was initially stationary?",
+     "options": [
+      "It remains at rest",
+      "It accelerates to the right",
+      "It moves at increasing speed to the left",
+      "It moves at constant velocity to the right"
+     ],
+     "answer": "It remains at rest",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Calculate the resultant force acting on the box.",
+      "15 N right minus 15 N left gives a resultant force of zero.",
+      "An object at rest stays at rest when forces are balanced."
+     ],
+     "explanation": "The opposing 15 N forces balance out, giving a resultant force of zero. By Newton's first law, a stationary object remains at rest.",
+     "key_point": "Balanced forces produce a resultant force of zero."
+    },
+    {
+     "id": "t1q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A 1000 kg car and a 50 kg cart are both at rest. Which requires a larger resultant force to achieve the same change in motion, and why?",
+     "options": [
+      "The car, because it has greater mass and therefore more inertia",
+      "The cart, because smaller masses resist motion changes more",
+      "Both require the same force because they are both at rest",
+      "The car, because its resultant force is naturally zero"
+     ],
+     "answer": "The car, because it has greater mass and therefore more inertia",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider how mass affects an object's resistance to changing motion.",
+      "More mass means more inertia.",
+      "A greater inertia requires a greater force to produce the same change."
+     ],
+     "explanation": "Because the car has a larger mass, it has significantly more inertia and resists changes to its motion more than the lighter cart.",
+     "key_point": "Inertia is the tendency of an object to resist changes in motion, which increases with mass."
+    },
+    {
+     "id": "t1q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A space probe drifts in deep space far from any gravitational forces at 500 m/s. What will happen to its velocity if no forces act on it?",
+     "options": [
+      "It will continue moving at 500 m/s in a straight line",
+      "It will gradually slow down to a complete stop",
+      "It will speed up because there is no friction",
+      "Its direction will randomly change over time"
+     ],
+     "answer": "It will continue moving at 500 m/s in a straight line",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Apply Newton's first law of motion.",
+      "No resultant force is acting on the probe.",
+      "Without a resultant force, constant velocity is maintained."
+     ],
+     "explanation": "Without any resultant force acting on it, an object in motion maintains its constant velocity according to Newton's first law.",
+     "key_point": "The resultant force is the single force equivalent to all forces acting together."
+    }
+   ]
+  },
+  {
+   "id": "t2",
+   "title": "Newton's Second and Third Laws",
+   "summary": "Newton's second law relates resultant force to mass and acceleration through the equation F = m a. The third law states that interacting objects exert equal and opposite forces of the same type on each other.",
+   "key_points": [
+    "Resultant force equals mass multiplied by acceleration (F = m a).",
+    "Doubling the resultant force doubles acceleration, while doubling mass halves it.",
+    "When object A exerts a force on object B, B exerts an equal and opposite force on A.",
+    "Action-reaction pairs act on different objects and therefore do not cancel."
+   ],
+   "questions": [
+    {
+     "id": "t2q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "According to Newton's second law, what does resultant force equal?",
+     "options": [
+      "Mass multiplied by acceleration",
+      "Mass divided by acceleration",
+      "Weight multiplied by velocity",
+      "Inertia divided by mass"
+     ],
+     "answer": "Mass multiplied by acceleration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Look at the formula F = m a.",
+      "Recall the terms represented by m and a.",
+      "F is force, m is mass, and a is acceleration."
+     ],
+     "explanation": "Newton's second law defines resultant force as mass multiplied by acceleration (F = m a).",
+     "key_point": "Resultant force equals mass multiplied by acceleration (F = m a)."
+    },
+    {
+     "id": "t2q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What happens to an object's acceleration if the resultant force acting on it is doubled?",
+     "options": [
+      "It doubles",
+      "It halves",
+      "It stays the same",
+      "It quadruples"
+     ],
+     "answer": "It doubles",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Acceleration is directly proportional to resultant force.",
+      "Consider the formula a = F / m.",
+      "Multiplying F by 2 multiplies a by 2."
+     ],
+     "explanation": "Acceleration is proportional to resultant force, so doubling the force doubles the acceleration.",
+     "key_point": "Doubling the resultant force doubles acceleration, while doubling mass halves it."
+    },
+    {
+     "id": "t2q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What does Newton's third law state about object A exerting a force on object B?",
+     "options": [
+      "Object B exerts an equal and opposite force on object A",
+      "Object B exerts a smaller force in the same direction on object A",
+      "Object A cancels out all forces acting on object B",
+      "Object B experiences zero net force from object A"
+     ],
+     "answer": "Object B exerts an equal and opposite force on object A",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "This law describes action and reaction pairs.",
+      "Forces in interaction pairs are equal in magnitude.",
+      "The direction of the reaction force is opposite to the action force."
+     ],
+     "explanation": "Newton's third law states that if object A exerts a force on object B, B exerts an equal and opposite force on A.",
+     "key_point": "When object A exerts a force on object B, B exerts an equal and opposite force on A."
+    },
+    {
+     "id": "t2q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why do action-reaction force pairs never cancel each other out?",
+     "options": [
+      "They act on different objects",
+      "They act in the same direction",
+      "They are of different types of forces",
+      "They have different magnitudes"
+     ],
+     "answer": "They act on different objects",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Forces can only cancel if they act on the same body.",
+      "Think about where each force of the pair is applied.",
+      "One force acts on object A, while the other acts on object B."
+     ],
+     "explanation": "Action and reaction forces act on two separate objects, so they cannot cancel each other.",
+     "key_point": "Action-reaction pairs act on different objects and therefore do not cancel."
+    },
+    {
+     "id": "t2q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "If you apply the same resultant force to an object with twice the mass, how does the acceleration change?",
+     "options": [
+      "It is halved",
+      "It is doubled",
+      "It remains unchanged",
+      "It becomes zero"
+     ],
+     "answer": "It is halved",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Acceleration is inversely proportional to mass.",
+      "Look at the formula a = F / m.",
+      "Doubling the denominator halves the value of acceleration."
+     ],
+     "explanation": "From a = F / m, doubling the mass while keeping force constant halves the acceleration.",
+     "key_point": "Doubling the resultant force doubles acceleration, while doubling mass halves it."
+    },
+    {
+     "id": "t2q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "A swimmer pushes backwards against the water. According to Newton's third law, what propels the swimmer forward?",
+     "options": [
+      "The water pushing forward on the swimmer",
+      "The swimmer's inertia overcoming friction",
+      "A decrease in the swimmer's mass",
+      "Balanced forces canceling resistance"
+     ],
+     "answer": "The water pushing forward on the swimmer",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Identify the interaction pair.",
+      "The swimmer exerts a force on the water.",
+      "The water exerts an equal and opposite reaction force on the swimmer."
+     ],
+     "explanation": "By Newton's third law, the water exerts an equal and opposite forward force on the swimmer.",
+     "key_point": "When object A exerts a force on object B, B exerts an equal and opposite force on A."
+    },
+    {
+     "id": "t2q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Resultant force is calculated by multiplying mass by ____ .",
+     "options": [],
+     "answer": "acceleration",
+     "accepted": [
+      "accel"
+     ],
+     "distractors": [
+      "velocity",
+      "inertia",
+      "gravity"
+     ],
+     "hints": [
+      "Recall the formula F = m a.",
+      "The symbol 'a' stands for this quantity.",
+      "It measures the rate of change of velocity."
+     ],
+     "explanation": "Newton's second law is F = m a, where resultant force equals mass multiplied by acceleration.",
+     "key_point": "Resultant force equals mass multiplied by acceleration (F = m a)."
+    },
+    {
+     "id": "t2q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Doubling an object's mass causes its acceleration under a constant resultant force to be ____ .",
+     "options": [],
+     "answer": "halved",
+     "accepted": [
+      "cut in half",
+      "divided by two",
+      "half"
+     ],
+     "distractors": [
+      "doubled",
+      "zero",
+      "quadrupled"
+     ],
+     "hints": [
+      "Acceleration is inversely proportional to mass.",
+      "Increasing mass makes it harder to accelerate.",
+      "2 times the mass results in 1/2 the acceleration."
+     ],
+     "explanation": "Since a = F / m, doubling the mass halves the resulting acceleration.",
+     "key_point": "Doubling the resultant force doubles acceleration, while doubling mass halves it."
+    },
+    {
+     "id": "t2q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Action and reaction pairs do not cancel because they act on ____ objects.",
+     "options": [],
+     "answer": "different",
+     "accepted": [
+      "separate",
+      "two different"
+     ],
+     "distractors": [
+      "identical",
+      "stationary",
+      "balanced"
+     ],
+     "hints": [
+      "Forces only balance if applied to the same object.",
+      "Consider whether the two forces act on one body or two bodies.",
+      "Object A acts on B, and B acts on A."
+     ],
+     "explanation": "Action-reaction forces do not cancel because they act on different objects rather than the same one.",
+     "key_point": "Action-reaction pairs act on different objects and therefore do not cancel."
+    },
+    {
+     "id": "t2q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A resultant force of 12 N acts on a 4 kg cart. What is the acceleration of the cart?",
+     "options": [
+      "3 m/s^2",
+      "48 m/s^2",
+      "8 m/s^2",
+      "0.33 m/s^2"
+     ],
+     "answer": "3 m/s^2",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Use the formula a = F / m.",
+      "Divide the force by the mass.",
+      "Compute 12 divided by 4."
+     ],
+     "explanation": "Using a = F / m, acceleration = 12 N / 4 kg = 3 m/s^2.",
+     "key_point": "Resultant force equals mass multiplied by acceleration (F = m a)."
+    },
+    {
+     "id": "t2q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A rocket engine expels hot exhaust gases downwards. What is the reaction force according to Newton's third law?",
+     "options": [
+      "The gases pushing the rocket upwards",
+      "Gravity pulling the rocket downwards",
+      "Air resistance pushing against the rocket",
+      "The rocket pulling the Earth upwards"
+     ],
+     "answer": "The gases pushing the rocket upwards",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Identify the two objects interacting: rocket and exhaust gas.",
+      "The action is rocket pushing gas downwards.",
+      "The reaction is gas pushing rocket in the opposite direction."
+     ],
+     "explanation": "When the rocket exerts a downward force on the gas, the gas exerts an equal and opposite upward force on the rocket.",
+     "key_point": "When object A exerts a force on object B, B exerts an equal and opposite force on A."
+    },
+    {
+     "id": "t2q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A cart's mass is doubled while the resultant force acting on it is also doubled. How does its new acceleration compare to the original?",
+     "options": [
+      "It is the same",
+      "It is doubled",
+      "It is halved",
+      "It is four times greater"
+     ],
+     "answer": "It is the same",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Doubling force doubles acceleration.",
+      "Doubling mass halves acceleration.",
+      "Consider the combined effect of (2 * F) / (2 * m)."
+     ],
+     "explanation": "Doubling force doubles acceleration, but doubling mass halves it, resulting in the same acceleration.",
+     "key_point": "Doubling the resultant force doubles acceleration, while doubling mass halves it."
+    }
+   ]
+  },
+  {
+   "id": "t3",
+   "title": "Weight, Friction, and Terminal Velocity",
+   "summary": "Weight is the product of mass and gravitational field strength, while friction and air resistance oppose motion. A falling object reaches terminal velocity when opposing air resistance balances its downward weight.",
+   "key_points": [
+    "Weight is calculated as mass multiplied by gravitational field strength (W = m g).",
+    "Friction and air resistance act against the direction of an object's motion.",
+    "Terminal velocity is reached when air resistance equals weight, resulting in balanced forces.",
+    "Opening a parachute increases air resistance, which lowers the terminal velocity."
+   ],
+   "questions": [
+    {
+     "id": "t3q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "How is an object's weight calculated according to Newton's laws and mechanics?",
+     "options": [
+      "Mass multiplied by gravitational field strength",
+      "Mass divided by acceleration",
+      "Mass multiplied by acceleration due to friction",
+      "Resultant force divided by gravitational field strength"
+     ],
+     "answer": "Mass multiplied by gravitational field strength",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Recall the formula W = m g.",
+      "Consider what 'm' and 'g' represent in the equation for weight.",
+      "Weight is the product of mass and the strength of the local gravitational field."
+     ],
+     "explanation": "Weight is given by the formula W = m g, which is mass multiplied by gravitational field strength.",
+     "key_point": "Weight is calculated as mass multiplied by gravitational field strength (W = m g)."
+    },
+    {
+     "id": "t3q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "In which direction do friction and air resistance act on a moving object?",
+     "options": [
+      "Against the direction of motion",
+      "In the same direction as motion",
+      "Perpendicular to the direction of motion",
+      "Directly downwards towards Earth"
+     ],
+     "answer": "Against the direction of motion",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "These forces oppose movement.",
+      "Think about what resistive forces do to motion.",
+      "They push or pull opposite to the object's travel direction."
+     ],
+     "explanation": "Friction and air resistance always act against the direction of an object's motion.",
+     "key_point": "Friction and air resistance act against the direction of an object's motion."
+    },
+    {
+     "id": "t3q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What happens to a falling object when the upward air resistance equals its downward weight?",
+     "options": [
+      "It falls at terminal velocity",
+      "It comes to an immediate stop",
+      "It begins to accelerate upwards",
+      "Its weight decreases to zero"
+     ],
+     "answer": "It falls at terminal velocity",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "The forces on the falling object become balanced.",
+      "When resultant force is zero, velocity remains constant.",
+      "This maximum steady speed is called terminal velocity."
+     ],
+     "explanation": "When upward air resistance matches weight, forces balance and the object reaches terminal velocity.",
+     "key_point": "Terminal velocity is reached when air resistance equals weight, resulting in balanced forces."
+    },
+    {
+     "id": "t3q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does a skydiver stop accelerating once they reach terminal velocity?",
+     "options": [
+      "Air resistance balances weight, so the resultant force is zero",
+      "Gravity stops acting on the skydiver at high speeds",
+      "The skydiver's mass decreases as they fall",
+      "Air resistance becomes much greater than the skydiver's weight"
+     ],
+     "answer": "Air resistance balances weight, so the resultant force is zero",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about Newton's first law and balanced forces.",
+      "Acceleration requires a non-zero resultant force.",
+      "At terminal velocity, the upward drag matches downward gravitational pull."
+     ],
+     "explanation": "When air resistance equals weight, the resultant force becomes zero, meaning acceleration stops and velocity stays constant.",
+     "key_point": "Terminal velocity is reached when air resistance equals weight, resulting in balanced forces."
+    },
+    {
+     "id": "t3q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does opening a parachute cause a skydiver to fall at a lower terminal velocity?",
+     "options": [
+      "It increases air resistance, balancing weight at a slower speed",
+      "It reduces the skydiver's total weight",
+      "It eliminates gravitational pull entirely",
+      "It changes the direction of the gravitational field"
+     ],
+     "answer": "It increases air resistance, balancing weight at a slower speed",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider the effect of a parachute on drag.",
+      "A larger surface area creates more air resistance for a given speed.",
+      "Because drag increases, balance occurs at a lower speed."
+     ],
+     "explanation": "Opening a parachute greatly increases air resistance, so upward drag equals downward weight at a much lower speed.",
+     "key_point": "Opening a parachute increases air resistance, which lowers the terminal velocity."
+    },
+    {
+     "id": "t3q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "A car moves horizontally forward on a flat road. Which force acts directly backwards against its motion?",
+     "options": [
+      "Friction",
+      "Weight",
+      "Gravitational field strength",
+      "Inertia"
+     ],
+     "answer": "Friction",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Identify the resistive contact force.",
+      "Weight acts vertically downwards, not backwards.",
+      "Resistive forces such as friction act opposite to the direction of travel."
+     ],
+     "explanation": "Friction acts against the forward direction of motion, opposing the car's movement.",
+     "key_point": "Friction and air resistance act against the direction of an object's motion."
+    },
+    {
+     "id": "t3q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Weight is calculated by multiplying mass by ____ field strength.",
+     "options": [],
+     "answer": "gravitational",
+     "accepted": [
+      "gravity"
+     ],
+     "distractors": [
+      "magnetic",
+      "electric",
+      "frictional"
+     ],
+     "hints": [
+      "It is the field that gives rise to the 'g' in W = m g.",
+      "This field is caused by Earth's gravity.",
+      "The term starts with 'grav-'"
+     ],
+     "explanation": "Weight is defined by W = m g, where g represents gravitational field strength.",
+     "key_point": "Weight is calculated as mass multiplied by gravitational field strength (W = m g)."
+    },
+    {
+     "id": "t3q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "A falling object reaches ____ velocity when the upward air resistance equals its downward weight.",
+     "options": [],
+     "answer": "terminal",
+     "accepted": [],
+     "distractors": [
+      "initial",
+      "instantaneous",
+      "zero"
+     ],
+     "hints": [
+      "It is the final, steady speed of a falling object.",
+      "The word starts with 't'.",
+      "It refers to the constant velocity reached when forces are balanced."
+     ],
+     "explanation": "Terminal velocity is the steady speed reached when opposing drag balances the downward pull of weight.",
+     "key_point": "Terminal velocity is reached when air resistance equals weight, resulting in balanced forces."
+    },
+    {
+     "id": "t3q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Opening a parachute increases air resistance, resulting in a ____ terminal velocity.",
+     "options": [],
+     "answer": "lower",
+     "accepted": [
+      "smaller",
+      "reduced"
+     ],
+     "distractors": [
+      "higher",
+      "greater",
+      "constant"
+     ],
+     "hints": [
+      "Parachutes are used to make landing safer and slower.",
+      "More air resistance means you do not need to fall as fast to balance weight.",
+      "Does terminal velocity become higher or lower?"
+     ],
+     "explanation": "A parachute increases air resistance, allowing weight to be balanced at a much lower terminal velocity.",
+     "key_point": "Opening a parachute increases air resistance, which lowers the terminal velocity."
+    },
+    {
+     "id": "t3q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "An astronaut with a mass of 80 kg stands on a planet where g = 4 N/kg. What is their weight?",
+     "options": [
+      "320 N",
+      "20 N",
+      "84 N",
+      "784 N"
+     ],
+     "answer": "320 N",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Use the formula W = m g.",
+      "Multiply the mass (80 kg) by the gravitational field strength (4 N/kg).",
+      "80 times 4 equals 320."
+     ],
+     "explanation": "Using W = m g, Weight = 80 kg × 4 N/kg = 320 N.",
+     "key_point": "Weight is calculated as mass multiplied by gravitational field strength (W = m g)."
+    },
+    {
+     "id": "t3q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A 500 N skydiver is falling at terminal velocity. What is the magnitude of the air resistance acting on them?",
+     "options": [
+      "500 N",
+      "0 N",
+      "9.8 N",
+      "4900 N"
+     ],
+     "answer": "500 N",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "At terminal velocity, the forces are balanced.",
+      "The downward force is the skydiver's weight of 500 N.",
+      "The upward air resistance must exactly balance the downward weight."
+     ],
+     "explanation": "At terminal velocity, the forces are balanced, meaning air resistance equals weight (500 N).",
+     "key_point": "Terminal velocity is reached when air resistance equals weight, resulting in balanced forces."
+    },
+    {
+     "id": "t3q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A crate slides to the right across a warehouse floor. What is the direction of the frictional force acting on the crate?",
+     "options": [
+      "To the left",
+      "To the right",
+      "Directly downwards",
+      "Directly upwards"
+     ],
+     "answer": "To the left",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Friction opposes the direction of motion.",
+      "The crate is moving horizontally to the right.",
+      "The opposing direction to right is left."
+     ],
+     "explanation": "Because friction acts against the direction of motion, it acts to the left when an object moves to the right.",
+     "key_point": "Friction and air resistance act against the direction of an object's motion."
+    }
+   ]
+  }
+ ],
+ "model": "gemini-3.7-flash",
+ "created": "2026-10-23T12:25:18Z",
+ "generation_ms": 56665.2,
+ "dropped_questions": 0,
+ "seeded": true
+}

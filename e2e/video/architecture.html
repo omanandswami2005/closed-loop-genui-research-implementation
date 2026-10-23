@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="cards.css">
+<style>
+h2{position:absolute;top:56px;left:110px;font-size:20px;letter-spacing:.3em;color:var(--cob2);text-transform:uppercase}
+svg{position:absolute;inset:0;width:100%;height:100%}
+.node rect{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.14);stroke-width:1.5}
+.node.hot rect{stroke:#22d3ee;stroke-width:2.5;filter:drop-shadow(0 0 12px rgba(34,211,238,.45))}
+.node text{fill:#e2e8f0;font-family:Inter;font-size:21px;font-weight:600}
+.node text.s{fill:#94a3b8;font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:400}
+.node{opacity:0}
+.node.on{animation:nodein .55s ease forwards}
+@keyframes nodein{from{opacity:0}to{opacity:1}}
+.edge{fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:600;stroke-dashoffset:600}
+.edge.on{animation:draw .9s ease forwards}
+.edge.loop{stroke:var(--cobalt)}
+.lbl{fill:#64748b;font-family:"JetBrains Mono",monospace;font-size:13px;opacity:0}
+.lbl.on{animation:fade .6s forwards}
+#dot{opacity:0}
+#dot.on{opacity:1}
+.foot{position:absolute;bottom:46px;left:110px;right:110px;font-size:18px;color:var(--mute);opacity:0}
+.foot.on{animation:up .8s forwards}
+</style></head><body><div class="grid"></div><h2 class="mono reveal">the loop</h2>
+<svg viewBox="0 0 1600 900">
+ <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#64748b"/></marker>
+ <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#2563eb"/></marker></defs>
+ <!-- once per document -->
+ <g class="node" data-t="0.02" transform="translate(110,150)"><rect rx="16" width="250" height="96"/><text x="20" y="42">Your material</text><text class="s" x="20" y="70">PDF · PPTX · TXT · MD</text></g>
+ <path class="edge" data-t="0.06" d="M360 198 L440 198" marker-end="url(#a)"/>
+ <g class="node hot" data-t="0.08" transform="translate(440,150)"><rect rx="16" width="290" height="96"/><text x="20" y="42">Gemini: question bank</text><text class="s" x="20" y="70">topics · 12 questions each</text></g>
+ <path class="edge" data-t="0.13" d="M730 198 L810 198" marker-end="url(#a)"/>
+ <g class="node" data-t="0.15" transform="translate(810,150)"><rect rx="16" width="270" height="96"/><text x="20" y="42">Bank validation</text><text class="s" x="20" y="70">answer in options · 1 gap</text></g>
+ <path class="edge" data-t="0.17" d="M1080 198 L1160 198" marker-end="url(#a)"/>
+ <g class="node hot" data-t="0.19" transform="translate(1160,150)"><rect rx="16" width="330" height="96"/><text x="20" y="42">Gemini: interactive lab</text><text class="s" x="20" y="70">30 components · solvable? · fix once</text></g>
+ <text class="lbl" data-t="0.17" x="110" y="120">ONCE PER DOCUMENT · LAB ONCE PER TOPIC</text>
+ <!-- per screen loop -->
+ <text class="lbl" data-t="0.22" x="110" y="390">EVERY SCREEN OF THE CHECK (MAX 10)</text>
+ <g class="node" data-t="0.24" transform="translate(110,420)"><rect rx="16" width="250" height="96"/><text x="20" y="42">BKT mastery</text><text class="s" x="20" y="70">P(L) from answers</text></g>
+ <path class="edge loop" data-t="0.33" d="M360 468 L440 468" marker-end="url(#b)"/>
+ <g class="node" data-t="0.35" transform="translate(440,420)"><rect rx="16" width="250" height="96"/><text x="20" y="42">PID governor</text><text class="s" x="20" y="70">budget M_I*</text></g>
+ <path class="edge loop" data-t="0.45" d="M690 468 L770 468" marker-end="url(#b)"/>
+ <g class="node" data-t="0.47" transform="translate(770,420)"><rect rx="16" width="250" height="96"/><text x="20" y="42">Policy</text><text class="s" x="20" y="70">scaffold · hints · level</text></g>
+ <path class="edge loop" data-t="0.57" d="M1020 468 L1100 468" marker-end="url(#b)"/>
+ <g class="node hot" data-t="0.59" transform="translate(1100,420)"><rect rx="16" width="300" height="96"/><text x="20" y="42">Gemini: screen text</text><text class="s" x="20" y="70">learn-ui/1 JSON, in budget</text></g>
+ <path class="edge loop" data-t="0.70" d="M1250 516 L1250 610" marker-end="url(#b)"/>
+ <g class="node" data-t="0.72" transform="translate(1100,610)"><rect rx="16" width="300" height="96"/><text x="20" y="42">Validation gate</text><text class="s" x="20" y="70">schema · no leak · |ΔM| ≤ 0.05</text></g>
+ <path class="edge loop" data-t="0.80" d="M1100 658 L1020 658" marker-end="url(#b)"/>
+ <g class="node" data-t="0.82" transform="translate(770,610)"><rect rx="16" width="250" height="96"/><text x="20" y="42">Renderer</text><text class="s" x="20" y="70">fixed components</text></g>
+ <path class="edge loop" data-t="0.87" d="M770 658 L360 658" marker-end="url(#b)"/>
+ <g class="node" data-t="0.89" transform="translate(110,610)"><rect rx="16" width="250" height="96"/><text x="20" y="42">Learner answers</text><text class="s" x="20" y="70">marked vs. the bank</text></g>
+ <path class="edge loop" data-t="0.93" d="M235 610 L235 516" marker-end="url(#b)"/>
+ <path class="edge" data-t="0.30" d="M945 246 C945 330 1250 330 1250 420" marker-end="url(#a)"/>
+ <text class="lbl" data-t="0.31" x="1010" y="318">questions</text>
+ <circle id="dot" r="7" fill="#60a5fa"><animateMotion dur="5s" repeatCount="indefinite" path="M235 468 L1250 468 L1250 658 L235 658 Z"/></circle>
+</svg>
+<div class="foot" data-t="0.95">Fallback: any rejected screen is replaced by a deterministic template built from the same bank.</div>
+<script>
+const d = parseFloat(new URLSearchParams(location.search).get("d") || "25") * 1000;
+document.querySelectorAll("[data-t]").forEach(el => setTimeout(() => el.classList.add("on"), parseFloat(el.dataset.t) * d));
+setTimeout(() => document.getElementById("dot").classList.add("on"), 0.95 * d);
+</script>
+</body></html>

@@ -1,0 +1,1179 @@
+{
+ "schema_version": "lab-ui/1",
+ "stations": [
+  {
+   "id": "g1",
+   "title": "The Path of a Bill to Law",
+   "intro": "A bill must navigate a complex series of approvals in both the House and the Senate before it can become a law. Arrange these key stages of the legislative process in the correct chronological order.",
+   "goal": "Order the legislative steps from the initial introduction to the final presidential action.",
+   "hints": [
+    "A bill must be debated and passed in its original chamber before it moves to the second chamber.",
+    "If the House and Senate pass different versions, they must resolve differences before the President sees it.",
+    "The President's signature is the final step in the standard process."
+   ],
+   "solution": "The bill begins with introduction, moves to committee review, then to a floor vote in the first chamber. It then repeats the process in the second chamber. Differences are reconciled in a conference committee before the final bill is sent to the President for a signature.",
+   "explain": "This sequence follows the standard constitutional process (Article I, Section 7). A bill must pass both the House of Representatives and the Senate in identical form before being presented to the President, who has the power to sign it into law or veto it.",
+   "type": "SequenceSort",
+   "items": [
+    "A member of Congress introduces the bill in their chamber.",
+    "The bill is reviewed, debated, and voted on in committee.",
+    "The full chamber debates and passes the bill.",
+    "The second chamber debates and passes its version of the bill.",
+    "A conference committee resolves differences between the two versions.",
+    "The President signs the bill or allows it to become law."
+   ]
+  },
+  {
+   "id": "g2",
+   "title": "Classifying Energy Sources",
+   "intro": "Energy sources are classified based on how quickly they can be replenished. Sort these common energy sources into the correct category based on their sustainability.",
+   "goal": "Correctly categorize all energy sources as either renewable or non-renewable.",
+   "hints": [
+    "Think about which sources take millions of years to form deep underground.",
+    "Renewable sources are generally replenished by natural processes within a human lifetime.",
+    "Nuclear energy uses uranium, which is a finite mineral resource mined from the earth."
+   ],
+   "solution": "Renewable: Solar, Wind, Geothermal, Hydroelectric, Biomass. Non-Renewable: Coal, Natural Gas, Crude Oil, Uranium, Lignite.",
+   "explain": "Renewable energy sources come from processes that are naturally replenished on a human timescale, such as sunlight and wind. Non-renewable sources, like fossil fuels (coal, oil, gas) and nuclear fuel (uranium), exist in finite amounts and take millions of years to form or are simply not replaced once consumed.",
+   "type": "CategorySort",
+   "categories": [
+    {
+     "name": "Renewable",
+     "items": [
+      "Solar Photovoltaic",
+      "Wind Turbines",
+      "Geothermal Heat",
+      "Hydroelectric Power",
+      "Biomass"
+     ]
+    },
+    {
+     "name": "Non-Renewable",
+     "items": [
+      "Anthracite Coal",
+      "Natural Gas",
+      "Crude Oil",
+      "Uranium Ore",
+      "Lignite"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "g3",
+   "title": "Matching Cell Organelles to Their Functions",
+   "intro": "Every part of a cell has a specific job to keep the organism alive. Match each organelle to the primary function it performs within the cell.",
+   "goal": "Correctly link all five organelles to their biological roles.",
+   "hints": [
+    "Think of the mitochondria as a power plant generating energy for the cell.",
+    "The nucleus acts like a library or a brain, holding all the genetic instructions.",
+    "Ribosomes are like tiny factories that build proteins based on instructions."
+   ],
+   "solution": "Nucleus: DNA control; Mitochondria: Energy; Ribosomes: Protein synthesis; Cell Membrane: Gatekeeper; Chloroplast: Photosynthesis.",
+   "explain": "The nucleus stores genetic information; mitochondria provide energy; ribosomes build proteins; the cell membrane provides protection and transport; and chloroplasts enable plants to make their own food using light.",
+   "type": "MatchPairs",
+   "pairs": [
+    {
+     "left": "Nucleus",
+     "right": "Contains DNA and acts as the control center of the cell."
+    },
+    {
+     "left": "Mitochondria",
+     "right": "Converts nutrients into energy (ATP) through cellular respiration."
+    },
+    {
+     "left": "Ribosomes",
+     "right": "Small structures responsible for the synthesis of proteins."
+    },
+    {
+     "left": "Cell Membrane",
+     "right": "Regulates the movement of substances into and out of the cell."
+    },
+    {
+     "left": "Chloroplast",
+     "right": "Captures sunlight to produce glucose through photosynthesis."
+    }
+   ]
+  },
+  {
+   "id": "g4",
+   "title": "The Earth's Continuous Water Cycle",
+   "intro": "Water on Earth is constantly moving through a closed system driven by solar energy and gravity. This cycle involves changes in state and movement between the atmosphere and the surface.",
+   "goal": "Place the stages of the water cycle in the correct chronological order to complete the loop.",
+   "hints": [
+    "Sunlight provides the energy for liquid water to turn into vapor.",
+    "Water vapor must lose heat and turn back into liquid droplets to form clouds.",
+    "Gravity pulls water down from the sky and across the land."
+   ],
+   "solution": "The cycle moves from Evaporation to Condensation, then Precipitation, and finally Runoff/Collection.",
+   "explain": "Solar energy causes evaporation. As vapor rises, it cools and condenses into clouds. When droplets become heavy, they fall as precipitation and eventually flow back to the ocean via runoff.",
+   "type": "CycleBuilder",
+   "center": "Hydrologic Cycle",
+   "stages": [
+    "Evaporation from water bodies",
+    "Condensation into clouds",
+    "Precipitation as rain or snow",
+    "Surface runoff and collection"
+   ]
+  },
+  {
+   "id": "g5",
+   "title": "Key Milestones in Human Space Exploration",
+   "intro": "From the first satellite to the first steps on the Moon, humans have rapidly expanded their reach into the cosmos. Arrange these historic missions in the correct chronological order.",
+   "goal": "Place the five major space exploration milestones on the timeline according to the year they occurred.",
+   "hints": [
+    "Sputnik 1 kicked off the space race in the late 1950s.",
+    "The Apollo 11 moon landing happened exactly 12 years after the first satellite launch.",
+    "The International Space Station (ISS) is the most recent event on this list, beginning assembly in the late 1990s."
+   ],
+   "solution": "The correct order is: Sputnik 1 (1957), Vostok 1 (1961), Apollo 11 (1969), Voyager 1 (1977), and the ISS Zarya Module (1998).",
+   "explain": "Space exploration progressed from unmanned satellites (Sputnik, 1957) to the first human in orbit (Yuri Gagarin in Vostok 1, 1961). This led to the lunar landing in 1969. Later, focus shifted to deep space probes like Voyager 1 (1977) and long-term habitation like the ISS (1998).",
+   "type": "Timeline",
+   "unit": "Year",
+   "events": [
+    {
+     "label": "Sputnik 1: First Artificial Satellite",
+     "value": 1957.0,
+     "display": "1957"
+    },
+    {
+     "label": "Vostok 1: First Human in Space",
+     "value": 1961.0,
+     "display": "1961"
+    },
+    {
+     "label": "Apollo 11: First Moon Landing",
+     "value": 1969.0,
+     "display": "1969"
+    },
+    {
+     "label": "Voyager 1: Launch to Outer Planets",
+     "value": 1977.0,
+     "display": "1977"
+    },
+    {
+     "label": "ISS: First Module (Zarya) Launched",
+     "value": 1998.0,
+     "display": "1998"
+    }
+   ]
+  },
+  {
+   "id": "g6",
+   "title": "Mapping the Interior Layers of Earth",
+   "intro": "Earth is composed of distinct layers that vary in thickness, temperature, and composition. Identify each layer based on its position and physical properties.",
+   "goal": "Correctly label the four primary layers of the Earth from the surface to the center.",
+   "hints": [
+    "The thinnest, outermost layer where we live is the crust.",
+    "The core is divided into a liquid outer part and a solid inner part.",
+    "The mantle makes up the largest volume of Earth's interior."
+   ],
+   "solution": "From outside to inside: Crust, Mantle, Outer Core, Inner Core.",
+   "explain": "The Earth is structured like an onion: the Crust is the thin rocky shell; the Mantle is a thick layer of hot, solid rock; the Outer Core is liquid iron and nickel; and the Inner Core is a solid ball of metal kept solid by intense pressure.",
+   "type": "LabelDiagram",
+   "layout": "layers",
+   "center": "Earth's Internal Structure",
+   "parts": [
+    {
+     "label": "Crust",
+     "clue": "The outermost, thinnest layer made of solid rock."
+    },
+    {
+     "label": "Mantle",
+     "clue": "The thickest layer, located between the crust and the core."
+    },
+    {
+     "label": "Outer Core",
+     "clue": "A layer of liquid iron and nickel that creates Earth's magnetic field."
+    },
+    {
+     "label": "Inner Core",
+     "clue": "The extremely hot, solid center of the planet."
+    }
+   ]
+  },
+  {
+   "id": "g7",
+   "title": "Conservation of Mass in a Sealed Reaction",
+   "intro": "According to the Law of Conservation of Mass, the total mass of the reactants must equal the total mass of the products in a closed system. Observe the reaction between vinegar and baking soda to find the missing mass.",
+   "goal": "Balance the scale by placing the correct mass of the products (sodium acetate, water, and carbon dioxide) on the right tray.",
+   "hints": [
+    "The total mass before the reaction is the sum of the flask, vinegar, and baking soda.",
+    "Matter cannot be created or destroyed; it only changes form.",
+    "Add up all the components on the left side first to find your target mass."
+   ],
+   "solution": "The total mass of the reactants and the flask is 185.5g (125 + 50 + 10.5). To balance the scale, you must select the Flask + Liquid Products (181.2g) and the Captured CO2 Gas (4.3g), which together equal 185.5g.",
+   "explain": "In a chemical reaction, atoms are rearranged but not lost. Even though the baking soda and vinegar reacted to form a gas, that gas still has mass. By capturing the carbon dioxide in a sealed system, the total mass remains exactly the same as the starting mass of the reactants.",
+   "type": "BalanceScale",
+   "unit": "g",
+   "left": [
+    {
+     "label": "Erlenmeyer Flask",
+     "value": 125.0
+    },
+    {
+     "label": "Vinegar (Reactant)",
+     "value": 50.0
+    },
+    {
+     "label": "Baking Soda (Reactant)",
+     "value": 10.5
+    }
+   ],
+   "tray": [
+    {
+     "label": "Flask + Liquid Products",
+     "value": 181.2
+    },
+    {
+     "label": "Captured CO2 Gas",
+     "value": 4.3
+    },
+    {
+     "label": "Spilled Residue",
+     "value": 2.1
+    },
+    {
+     "label": "Extra Weight",
+     "value": 10.0
+    }
+   ],
+   "answer": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "g8",
+   "title": "Mapping the pH of Everyday Substances",
+   "intro": "The pH scale measures how acidic or basic a substance is, ranging from 0 to 14. Place these common household items at their correct positions on the scale.",
+   "goal": "Correctally place the markers for lemon juice, pure water, and bleach on the pH number line.",
+   "hints": [
+    "Pure water is neutral, which is exactly in the middle of the 0-14 scale.",
+    "Lemon juice is highly acidic, so its pH will be a low number near the start of the scale.",
+    "Strong cleaners like bleach are very basic (alkaline), placing them near the high end of the scale."
+   ],
+   "solution": "Lemon Juice: 2, Pure Water: 7, Bleach: 13",
+   "explain": "The pH scale is logarithmic: values below 7 are acidic, 7 is neutral, and values above 7 are basic. Lemon juice contains citric acid (pH ~2), pure water is the standard for neutrality (pH 7), and household bleach is a strong base (pH ~13).",
+   "type": "NumberLine",
+   "min": 0.0,
+   "max": 14.0,
+   "step": 1.0,
+   "unit": "pH",
+   "markers": [
+    {
+     "label": "Lemon Juice (Acidic)",
+     "value": 2.0
+    },
+    {
+     "label": "Pure Water (Neutral)",
+     "value": 7.0
+    },
+    {
+     "label": "Bleach (Basic)",
+     "value": 13.0
+    }
+   ]
+  },
+  {
+   "id": "g9",
+   "title": "Linking Climate Drivers to Environmental Impacts",
+   "intro": "Climate change is driven by human activities that alter the atmosphere, leading to significant shifts in our global environment. Connect each human-driven cause to its direct environmental effect.",
+   "goal": "Correctly match the primary causes of climate change to their specific environmental consequences.",
+   "hints": [
+    "Think about how trapping heat in the atmosphere affects frozen water sources.",
+    "Consider how excess carbon dioxide in the air interacts with the surface of the ocean.",
+    "Recall that warmer air can hold more moisture, leading to more intense weather events."
+   ],
+   "solution": "Burning fossil fuels increases atmospheric heat, causing glaciers to melt. Deforestation removes carbon sinks, leading to higher CO2 levels. Increased CO2 in the atmosphere is absorbed by oceans, causing acidification. Rising global temperatures lead to more frequent and intense heatwaves.",
+   "explain": "Burning fossil fuels and deforestation increase the concentration of greenhouse gases like CO2. This traps heat (the greenhouse effect), which melts polar ice and causes heatwaves. Additionally, the ocean absorbs about 30% of the CO2 we produce, which triggers a chemical reaction that increases acidity, harming marine life.",
+   "type": "CauseEffect",
+   "links": [
+    {
+     "cause": "Burning fossil fuels for energy",
+     "effect": "Melting of polar ice caps and glaciers"
+    },
+    {
+     "cause": "Widespread deforestation",
+     "effect": "Reduced CO2 absorption from the atmosphere"
+    },
+    {
+     "cause": "Increased CO2 absorption by seawater",
+     "effect": "Ocean acidification and coral bleaching"
+    },
+    {
+     "cause": "Higher global average temperatures",
+     "effect": "Increased frequency of extreme heatwaves"
+    },
+    {
+     "cause": "Warmer atmospheric conditions",
+     "effect": "Greater evaporation and heavier rainfall events"
+    }
+   ]
+  },
+  {
+   "id": "g10",
+   "title": "The Chemical Equation of Photosynthesis",
+   "intro": "Photosynthesis is the process by which green plants transform light energy into chemical energy. In this activity, you will complete the chemical equation that powers life on Earth.",
+   "goal": "Correctly identify the reactants and products in the photosynthesis equation.",
+   "hints": [
+    "The gas plants absorb from the atmosphere is the same one humans exhale.",
+    "The primary sugar produced is a simple carbohydrate used for energy.",
+    "Look for the organelle that contains the green pigment chlorophyll."
+   ],
+   "solution": "During photosynthesis, plants take in carbon dioxide and water, using energy from sunlight to produce glucose and oxygen. This process primarily occurs within the chloroplasts of the plant cells.",
+   "explain": "The balanced chemical equation for photosynthesis is 6CO2 + 6H2O + light energy -> C6H12O6 + 6O2. Carbon dioxide and water are the reactants, while glucose (sugar) and oxygen are the products. This reaction is facilitated by chlorophyll inside the chloroplasts.",
+   "type": "ClozeBank",
+   "text": "During photosynthesis, plants take in [[carbon dioxide]] and water, using energy from sunlight to produce [[glucose]] and oxygen. This process primarily occurs within the [[chloroplasts]] of the plant cells.",
+   "distractors": [
+    "nitrogen",
+    "mitochondria",
+    "carbon monoxide",
+    "sucrose"
+   ]
+  },
+  {
+   "id": "g11",
+   "title": "Major Gases in Earth's Atmosphere",
+   "intro": "Earth's atmosphere is a mixture of different gases that sustain life and regulate temperature. Use the sliders to estimate the percentage of each major gas in dry air.",
+   "goal": "Adjust the dividers to show the relative proportions of Nitrogen, Oxygen, and Argon/Trace gases.",
+   "hints": [
+    "Nitrogen is by far the most abundant gas, making up nearly four-fifths of the atmosphere.",
+    "Oxygen is the second most abundant gas, essential for respiration in most living organisms.",
+    "Argon and other gases like Carbon Dioxide make up less than 1% of the total volume."
+   ],
+   "solution": "The atmosphere is approximately 78% Nitrogen, 21% Oxygen, and 1% Argon and other trace gases.",
+   "explain": "Dry air is composed of approximately 78.08% Nitrogen (N2) and 20.95% Oxygen (O2). The remaining 1% consists of Argon (0.93%) and trace amounts of other gases like Carbon Dioxide, Neon, and Helium. While small in proportion, gases like Carbon Dioxide play a massive role in the greenhouse effect.",
+   "type": "ProportionBar",
+   "whole": "Dry Air Composition",
+   "segments": [
+    {
+     "label": "Nitrogen",
+     "value": 78.0
+    },
+    {
+     "label": "Oxygen",
+     "value": 21.0
+    },
+    {
+     "label": "Argon & Trace Gases",
+     "value": 1.0
+    }
+   ],
+   "tolerance": 2.0
+  },
+  {
+   "id": "g12",
+   "title": "Achieving Equilibrium: Balanced and Unbalanced Forces",
+   "intro": "A heavy wooden box is sitting on a frictionless floor. Adjust the applied forces to see how they combine to create a net force or achieve a state of equilibrium.",
+   "goal": "Adjust the forces so that the box is in equilibrium (balanced forces), resulting in a net force of zero.",
+   "hints": [
+    "Balanced forces occur when the sum of all forces acting on an object is zero.",
+    "Forces acting in opposite directions (left and right) subtract from each other.",
+    "To reach equilibrium, the total force to the left must equal the total force to the right."
+   ],
+   "solution": "To balance the forces, the total force to the left must equal the total force to the right. Since the 'Push Right' is fixed at 15 N, you must set 'Push Left' to 15 N. Similarly, to balance the vertical forces, 'Gravity' (down) and 'Normal Force' (up) must both be 10 N.",
+   "explain": "When the forces acting on the box are balanced, the net force is 0 N. According to Newton's First Law, the box will remain at rest because there is no unbalanced force to cause acceleration. If the forces were unbalanced (e.g., 20 N right and 15 N left), the box would accelerate in the direction of the net force.",
+   "type": "ForceArrows",
+   "object": "Wooden Box",
+   "unit": "N",
+   "step": 1.0,
+   "forces": [
+    {
+     "label": "Push Right",
+     "direction": "right",
+     "value": 15.0,
+     "adjustable": false,
+     "max": 20.0
+    },
+    {
+     "label": "Push Left",
+     "direction": "left",
+     "value": 5.0,
+     "adjustable": true,
+     "max": 20.0
+    },
+    {
+     "label": "Normal Force",
+     "direction": "up",
+     "value": 10.0,
+     "adjustable": true,
+     "max": 20.0
+    },
+    {
+     "label": "Gravity",
+     "direction": "down",
+     "value": 10.0,
+     "adjustable": false,
+     "max": 20.0
+    }
+   ],
+   "target_x": 0.0,
+   "target_y": 0.0,
+   "answer": [
+    15.0,
+    15.0,
+    10.0,
+    10.0
+   ]
+  },
+  {
+   "id": "g13",
+   "title": "Mixing a 1:3 Lemonade Concentrate Ratio",
+   "intro": "Lemonade concentrate is often too strong to drink alone. You must dilute it with water to reach the perfect flavor balance.",
+   "goal": "Create a lemonade mixture using a 1:3 ratio of concentrate to water.",
+   "hints": [
+    "A 1:3 ratio means for every 1 part of concentrate, you need 3 parts of water.",
+    "If you use 100ml of concentrate, you will need three times that amount of water.",
+    "The total volume will be the sum of both ingredients."
+   ],
+   "solution": "To achieve a 1:3 ratio, the amount of water must be exactly three times the amount of concentrate (e.g., 50ml concentrate and 150ml water).",
+   "explain": "In a 1:3 ratio, the first number represents the solute (concentrate) and the second represents the solvent (water). Multiplying the concentrate volume by 3 gives you the required water volume to maintain this specific concentration.",
+   "type": "Mixer",
+   "product": "Lemonade Mix",
+   "ingredients": [
+    {
+     "label": "Lemonade Concentrate",
+     "unit": "ml",
+     "max": 250.0,
+     "step": 10.0,
+     "answer": 50.0
+    },
+    {
+     "label": "Water",
+     "unit": "ml",
+     "max": 750.0,
+     "step": 10.0,
+     "answer": 150.0
+    }
+   ]
+  },
+  {
+   "id": "g14",
+   "title": "Controlling a Series Circuit with Two Switches",
+   "intro": "In a series circuit, components are connected one after another in a single loop. Explore how multiple switches affect the flow of electricity to a light bulb.",
+   "goal": "Flip the switches to complete the circuit and turn the light bulb on.",
+   "hints": [
+    "In a series circuit, there is only one path for the current to flow.",
+    "If any part of a series circuit is open (off), the current stops flowing entirely.",
+    "Both switches must be closed to create a continuous path from the battery to the bulb."
+   ],
+   "solution": "Turn both Switch A and Switch B to the 'on' position.",
+   "explain": "This is an example of an AND logic gate in a series circuit. Because there is only one path for the electrons, every switch in that path must be closed (on) for the current to reach the bulb. If either switch is open, the circuit is broken.",
+   "type": "ToggleSystem",
+   "switches": [
+    "Switch A",
+    "Switch B"
+   ],
+   "outcomes": [
+    {
+     "on": [
+      "Switch A",
+      "Switch B"
+     ],
+     "result": "The bulb glows brightly as the circuit is complete."
+    },
+    {
+     "on": [
+      "Switch A"
+     ],
+     "result": "The bulb is off because Switch B creates a break in the circuit."
+    },
+    {
+     "on": [
+      "Switch B"
+     ],
+     "result": "The bulb is off because Switch A creates a break in the circuit."
+    }
+   ],
+   "default_result": "The bulb is off because both switches are open.",
+   "target_result": "The bulb glows brightly as the circuit is complete."
+  },
+  {
+   "id": "g15",
+   "title": "Exploring the Structures of a Plant Cell",
+   "intro": "Plant cells have unique structures that allow them to produce their own food and maintain a rigid shape. Explore the diagram to learn about the function of each organelle.",
+   "goal": "Examine all the key organelles of a plant cell to understand how they support life.",
+   "hints": [
+    "Click on the green structures to learn about photosynthesis.",
+    "Look at the large central space that stores water and nutrients.",
+    "Don't forget to check the rigid outer layer that provides support."
+   ],
+   "solution": "The learner must click and read the details for all six labeled parts of the plant cell diagram.",
+   "explain": "Plant cells are eukaryotic cells characterized by a rigid cell wall, a large central vacuole for turgor pressure, and chloroplasts for photosynthesis, distinguishing them from animal cells.",
+   "type": "ExploreDiagram",
+   "layout": "layers",
+   "center": "Plant Cell",
+   "parts": [
+    {
+     "label": "Cell Wall",
+     "detail": "A rigid outer layer made of cellulose that provides structural support and protection for the cell."
+    },
+    {
+     "label": "Chloroplast",
+     "detail": "The site of photosynthesis, containing chlorophyll which captures sunlight to produce glucose."
+    },
+    {
+     "label": "Large Central Vacuole",
+     "detail": "A fluid-filled sac that stores water and nutrients, helping to maintain turgor pressure against the cell wall."
+    },
+    {
+     "label": "Nucleus",
+     "detail": "The control center of the cell that contains genetic material (DNA) and coordinates growth and reproduction."
+    },
+    {
+     "label": "Mitochondria",
+     "detail": "Known as the powerhouse of the cell, these organelles convert glucose into usable energy through cellular respiration."
+    },
+    {
+     "label": "Cell Membrane",
+     "detail": "A semi-permeable layer inside the cell wall that controls which substances enter and leave the cell."
+    }
+   ]
+  },
+  {
+   "id": "g16",
+   "title": "Finding the Right Resistance for Target Current",
+   "intro": "Ohm's Law states that the current flowing through a conductor is directly proportional to the voltage across it and inversely proportional to its resistance. Use the formula V = I * R to adjust the circuit parameters.",
+   "goal": "Adjust the Voltage and Resistance to achieve a target current of exactly 5 Amperes.",
+   "hints": [
+    "Remember the formula: I = V / R.",
+    "If you want to increase the current (I), you can either increase the Voltage (V) or decrease the Resistance (R).",
+    "Try setting the Resistance to 10 Ω and see what Voltage is needed to get 5 A."
+   ],
+   "solution": "One possible solution is setting the Voltage to 50 V and the Resistance to 10 Ω, since 50 / 10 = 5.",
+   "explain": "According to Ohm's Law (V = I * R), current is calculated as I = V / R. To reach 5 Amperes, the ratio of voltage to resistance must be 5:1. For example, 50V / 10Ω = 5A, or 25V / 5Ω = 5A.",
+   "type": "ParameterLab",
+   "expression": "voltage / resistance",
+   "output_label": "Current",
+   "output_unit": "A",
+   "params": [
+    {
+     "name": "voltage",
+     "label": "Voltage",
+     "unit": "V",
+     "min": 0.0,
+     "max": 100.0,
+     "step": 5.0,
+     "value": 10.0,
+     "answer": 50.0
+    },
+    {
+     "name": "resistance",
+     "label": "Resistance",
+     "unit": "Ω",
+     "min": 1.0,
+     "max": 20.0,
+     "step": 1.0,
+     "value": 10.0,
+     "answer": 10.0
+    }
+   ],
+   "target": 5.0,
+   "tolerance": 0.01
+  },
+  {
+   "id": "g17",
+   "title": "Mastering the Slope and Y-Intercept",
+   "intro": "The equation y = mx + c describes a straight line where m is the steepness and c is the starting point on the y-axis. Use the sliders to align your line with the target.",
+   "goal": "Adjust the slope (m) and the y-intercept (c) until your solid line perfectly overlaps the dashed target line.",
+   "hints": [
+    "The y-intercept (c) is the point where the line crosses the vertical axis.",
+    "The slope (m) determines the 'rise over run'; a positive value means the line goes up as it moves right.",
+    "Try setting the y-intercept first to fix the line's position, then adjust the slope."
+   ],
+   "solution": "The target line has a slope (m) of 2 and a y-intercept (c) of -3, resulting in the equation y = 2x - 3.",
+   "explain": "In the linear equation y = mx + c, 'm' is the slope which represents the rate of change. A slope of 2 means for every 1 unit you move right, the line goes up 2 units. The 'c' value is the y-intercept, which is the y-coordinate where the line intersects the y-axis (when x = 0).",
+   "type": "FunctionPlot",
+   "expression": "m * x + c",
+   "x_min": -10.0,
+   "x_max": 10.0,
+   "x_label": "x-axis",
+   "y_label": "y-axis",
+   "params": [
+    {
+     "name": "m",
+     "label": "Slope (m)",
+     "unit": "",
+     "min": -5.0,
+     "max": 5.0,
+     "step": 0.5,
+     "value": 0.0,
+     "answer": 2.0
+    },
+    {
+     "name": "c",
+     "label": "Y-Intercept (c)",
+     "unit": "",
+     "min": -5.0,
+     "max": 5.0,
+     "step": 1.0,
+     "value": 0.0,
+     "answer": -3.0
+    }
+   ]
+  },
+  {
+   "id": "g18",
+   "title": "Target Practice: Mastering Projectile Motion",
+   "intro": "Adjust the launch speed and angle to see how gravity shapes the path of a projectile. Your goal is to land the object on a specific target.",
+   "goal": "Hit the target located 20 meters away from the launcher.",
+   "hints": [
+    "A 45-degree angle provides the maximum range for any given launch speed.",
+    "If you are falling short, try increasing the initial speed.",
+    "Gravity pulls the projectile down at 9.8 m/s², creating a parabolic trajectory."
+   ],
+   "solution": "Set the speed to 14 m/s and the angle to 45 degrees.",
+   "explain": "The distance a projectile travels (range) is determined by its initial speed and launch angle. At 14 m/s and 45 degrees, the horizontal and vertical components of motion combine to land the object exactly 20 meters away, as calculated by the range formula where range = (v² * sin(2θ)) / g.",
+   "type": "Projectile",
+   "speed": {
+    "min": 5.0,
+    "max": 25.0,
+    "value": 10.0,
+    "answer": 14.0
+   },
+   "angle": {
+    "min": 1.0,
+    "max": 89.0,
+    "value": 30.0,
+    "answer": 45.0
+   },
+   "gravity": 9.8,
+   "target_distance": 20.0,
+   "tolerance": 0.5
+  },
+  {
+   "id": "g19",
+   "title": "Tuning the Period of a Simple Pendulum",
+   "intro": "The time it takes for a pendulum to complete one full swing depends on its length and the local gravity. Adjust the length to achieve a specific rhythmic period.",
+   "goal": "Adjust the pendulum length so that one full oscillation takes exactly 2.0 seconds.",
+   "hints": [
+    "The period T is calculated using the formula T = 2 * pi * sqrt(L / g).",
+    "To increase the period (make it swing slower), you need to increase the length of the string.",
+    "For a 2.0 second period on Earth, the length should be slightly less than 1 meter."
+   ],
+   "solution": "Setting the length to approximately 0.994 meters results in a period of 2.0 seconds, as T = 2 * 3.14159 * sqrt(0.994 / 9.81) ≈ 2.0.",
+   "explain": "The period of a simple pendulum is independent of the mass of the bob or the angle of release (for small angles). It is determined solely by the length of the string and the acceleration due to gravity. By increasing the length, the path of the swing increases, which increases the time taken for one cycle.",
+   "type": "Pendulum",
+   "length": {
+    "min": 0.1,
+    "max": 2.0,
+    "value": 0.5,
+    "answer": 0.994
+   },
+   "gravity": 9.81,
+   "target_period": 2.0,
+   "tolerance": 0.05
+  },
+  {
+   "id": "g20",
+   "title": "Visualizing Sound: Adjusting Amplitude and Frequency",
+   "intro": "Sound waves are longitudinal waves that we can visualize as transverse waves to study their properties. In this lab, you will adjust the wave's height and speed of vibration to match a target sound profile.",
+   "goal": "Adjust the sliders so that the wave matches the target pattern, representing a high-pitched, loud sound.",
+   "hints": [
+    "Amplitude represents the volume; a 'loud' sound needs a taller wave.",
+    "Frequency represents the pitch; a 'high-pitched' sound needs more waves packed into the same space.",
+    "Look at the dashed line to see the target you are trying to reach."
+   ],
+   "solution": "Set the amplitude to 8 and the frequency to 4.",
+   "explain": "In sound physics, amplitude correlates to the intensity or loudness of the sound; a higher amplitude (8) means more energy and a louder volume. Frequency correlates to pitch; a higher frequency (4) means more cycles per second, resulting in a higher-pitched sound.",
+   "type": "WaveExplorer",
+   "amplitude": {
+    "min": 1.0,
+    "max": 10.0,
+    "value": 2.0,
+    "answer": 8.0
+   },
+   "frequency": {
+    "min": 0.5,
+    "max": 5.0,
+    "value": 1.0,
+    "answer": 4.0
+   },
+   "phase": {
+    "min": 0.0,
+    "max": 360.0,
+    "value": 0.0,
+    "answer": 0.0
+   },
+   "x_label": "Time (ms)",
+   "y_label": "Pressure (Pa)"
+  },
+  {
+   "id": "g21",
+   "title": "Modeling Bacterial Population Growth",
+   "intro": "Bacteria reproduce by binary fission, causing their population to double at regular intervals under ideal conditions. Adjust the growth rate to see how quickly a colony can reach a critical size.",
+   "goal": "Adjust the growth rate so the bacterial population reaches exactly 800 cells at the 6-hour mark.",
+   "hints": [
+    "The growth rate determines how steep the curve is; a higher rate means the population doubles faster.",
+    "Look at the y-axis for the 800-cell mark and the x-axis for the 6-hour mark.",
+    "If your curve is below the target point at 6 hours, you need to increase the growth rate."
+   ],
+   "solution": "By setting the growth rate to approximately 0.347, the exponential function (starting at 100) reaches 800 at t=6 because 100 * e^(0.347 * 6) is approximately 800.",
+   "explain": "In this exponential model, the population grows according to the formula P(t) = P0 * e^(rt). Starting with 100 bacteria, reaching 800 requires three doublings (100 to 200, 200 to 400, 400 to 800). Over 6 hours, this means the doubling time is 2 hours.",
+   "type": "GrowthCurve",
+   "model": "exponential",
+   "start_value": 100.0,
+   "capacity": null,
+   "rate": {
+    "min": 0.1,
+    "max": 1.0,
+    "value": 0.2,
+    "answer": 0.347
+   },
+   "t_max": 10.0,
+   "t_label": "Time (hours)",
+   "y_label": "Number of Bacteria",
+   "target_time": 6.0,
+   "target_value": 800.0
+  },
+  {
+   "id": "g22",
+   "title": "Study Hours vs Exam Scores Correlation",
+   "intro": "Analyze the relationship between time spent studying and final exam performance. Adjust the trend line to represent the average improvement across the group.",
+   "goal": "Position the line of best fit so that it minimizes the total distance from all data points, representing the general trend of the data.",
+   "hints": [
+    "A line of best fit should have roughly an equal number of points above and below it.",
+    "Look for the general direction: as study hours increase, do scores tend to go up or down?",
+    "The slope represents the average marks gained for every additional hour of study."
+   ],
+   "solution": "The data shows a strong positive correlation, where more study hours generally result in higher exam scores.",
+   "explain": "In statistics, a trend line helps us visualize the relationship between two variables. Here, the positive slope indicates that study time is a strong predictor of academic success, though individual variation exists due to other factors like prior knowledge or study efficiency.",
+   "type": "TrendLine",
+   "points": [
+    {
+     "x": 1.0,
+     "y": 42.0
+    },
+    {
+     "x": 2.0,
+     "y": 55.0
+    },
+    {
+     "x": 3.0,
+     "y": 50.0
+    },
+    {
+     "x": 4.0,
+     "y": 62.0
+    },
+    {
+     "x": 5.0,
+     "y": 75.0
+    },
+    {
+     "x": 6.0,
+     "y": 68.0
+    },
+    {
+     "x": 7.0,
+     "y": 82.0
+    },
+    {
+     "x": 8.0,
+     "y": 88.0
+    },
+    {
+     "x": 9.0,
+     "y": 85.0
+    },
+    {
+     "x": 10.0,
+     "y": 96.0
+    }
+   ],
+   "x_label": "Study Hours",
+   "y_label": "Exam Score (%)"
+  },
+  {
+   "id": "g23",
+   "title": "Analyzing the Cooling Curve of Tea",
+   "intro": "A cup of tea cools rapidly at first and then more slowly as it approaches room temperature. Observe this relationship by exploring the temperature data over time.",
+   "goal": "Identify the time when the tea has cooled to exactly 45°C.",
+   "hints": [
+    "Look at the y-axis for the temperature values.",
+    "The rate of cooling is steepest at the beginning when the temperature difference is greatest.",
+    "Move the cursor along the line until the y-value reads 45."
+   ],
+   "solution": "The tea reaches 45°C at the 10-minute mark.",
+   "explain": "According to Newton's Law of Cooling, the rate of heat loss is proportional to the difference in temperature between the tea and its surroundings. As the tea gets closer to room temperature (approx 22-25°C), the cooling slows down, creating a characteristic decay curve. At 10 minutes, the data shows the temperature has dropped from 85°C to 45°C.",
+   "type": "DataCursor",
+   "series": [
+    {
+     "label": "Tea Temperature (°C)",
+     "points": [
+      {
+       "x": 0.0,
+       "y": 85.0
+      },
+      {
+       "x": 2.0,
+       "y": 72.0
+      },
+      {
+       "x": 4.0,
+       "y": 63.0
+      },
+      {
+       "x": 6.0,
+       "y": 56.0
+      },
+      {
+       "x": 8.0,
+       "y": 50.0
+      },
+      {
+       "x": 10.0,
+       "y": 45.0
+      },
+      {
+       "x": 12.0,
+       "y": 41.0
+      },
+      {
+       "x": 14.0,
+       "y": 38.0
+      },
+      {
+       "x": 16.0,
+       "y": 35.0
+      },
+      {
+       "x": 18.0,
+       "y": 33.0
+      },
+      {
+       "x": 20.0,
+       "y": 31.0
+      },
+      {
+       "x": 25.0,
+       "y": 28.0
+      },
+      {
+       "x": 30.0,
+       "y": 26.0
+      }
+     ]
+    }
+   ],
+   "x_label": "Time (minutes)",
+   "y_label": "Temperature (°C)",
+   "question": "At how many minutes does the tea reach a temperature of 45°C?",
+   "answer_x": 10.0,
+   "tolerance": 0.5
+  },
+  {
+   "id": "g24",
+   "title": "Identifying the Stages of Mitosis",
+   "intro": "Mitosis is the process of cell division that results in two genetically identical daughter cells. Observe the movement of chromosomes and the formation of new nuclei as the cell divides.",
+   "goal": "Scrub through the animation and stop exactly at the stage where sister chromatids are pulled apart to opposite poles of the cell.",
+   "hints": [
+    "Look for the moment when the 'X' shaped chromosomes split into individual chromatids.",
+    "The stage you are looking for occurs immediately after the chromosomes align in the middle.",
+    "In this stage, the V-shaped chromatids are moving away from each other toward the edges of the cell."
+   ],
+   "solution": "Stop the scrubber on Anaphase.",
+   "explain": "Anaphase is characterized by the separation of sister chromatids. Once separated, each chromatid is considered an individual chromosome. This ensures that each new daughter cell will receive an identical set of genetic information.",
+   "type": "ProcessScrubber",
+   "unit": "Stage",
+   "stages": [
+    {
+     "label": "Prophase",
+     "duration": 5.0,
+     "detail": "Chromatin condenses into visible chromosomes, the nuclear envelope breaks down, and spindle fibers begin to form."
+    },
+    {
+     "label": "Metaphase",
+     "duration": 5.0,
+     "detail": "Chromosomes line up along the metaphase plate (the cell's equator) and attach to spindle fibers at their centromeres."
+    },
+    {
+     "label": "Anaphase",
+     "duration": 5.0,
+     "detail": "The centromeres split, and sister chromatids are pulled toward opposite poles of the cell by the shortening spindle fibers."
+    },
+    {
+     "label": "Telophase",
+     "duration": 5.0,
+     "detail": "Chromosomes reach the poles, new nuclear envelopes reform around each set of chromosomes, and the chromosomes begin to decondense."
+    },
+    {
+     "label": "Cytokinesis",
+     "duration": 5.0,
+     "detail": "The cytoplasm divides, resulting in two separate daughter cells, each with an identical set of chromosomes."
+    }
+   ],
+   "target_stage": "Anaphase"
+  },
+  {
+   "id": "g25",
+   "title": "The Shrinking Balloon Experiment",
+   "intro": "Imagine placing a fully inflated balloon into a cold freezer for several hours. What do you think will happen to its size as the air inside cools down?",
+   "goal": "Predict and observe the effect of temperature on the volume of a gas inside a balloon.",
+   "hints": [
+    "Think about how gas particles move when they lose thermal energy.",
+    "Consider Charles's Law, which relates the temperature and volume of a gas.",
+    "Does cold air take up more or less space than warm air?"
+   ],
+   "solution": "The balloon will shrink in size.",
+   "explain": "According to Charles's Law, the volume of a gas is directly proportional to its absolute temperature at constant pressure. When the air inside the balloon cools down in the freezer, the gas molecules lose kinetic energy and move more slowly, colliding with the walls less frequently and with less force. This causes the volume to decrease, making the balloon appear shriveled.",
+   "type": "PredictObserve",
+   "setup": "A latex balloon is inflated to a circumference of 40 cm at room temperature (25°C).",
+   "change": "The balloon is placed in a freezer at -18°C for two hours.",
+   "options": [
+    "The balloon will expand and pop.",
+    "The balloon will shrink and look shriveled.",
+    "The balloon will stay exactly the same size.",
+    "The balloon will turn into a liquid."
+   ],
+   "answer": "The balloon will shrink and look shriveled.",
+   "observation": "After two hours, the balloon has significantly decreased in size and the latex appears wrinkled. When brought back to room temperature, it gradually expands to its original size.",
+   "measure": {
+    "label": "Circumference (cm)",
+    "before": 40.0,
+    "after": 34.0
+   }
+  },
+  {
+   "id": "g26",
+   "title": "First Aid for a Minor Thermal Burn",
+   "intro": "You are in the kitchen when you accidentally touch a hot pot, resulting in a small, red, painful burn on your finger. Follow the correct first aid steps to treat this minor injury.",
+   "goal": "Successfully navigate the immediate treatment and protection of a minor burn.",
+   "hints": [
+    "Ice can actually damage the skin tissue further; use cool running water instead.",
+    "Do not pop blisters, as they act as a natural sterile barrier against infection.",
+    "Only apply ointments or bandages after the skin has been properly cooled."
+   ],
+   "solution": "First, cool the burn under cool running water for at least 10-20 minutes. Next, remove any restrictive items like rings before the area swells. Finally, cover the burn loosely with a sterile, non-stick bandage.",
+   "explain": "Minor (first-degree) burns should be cooled immediately with room-temperature or cool water to stop the burning process and reduce pain. Ice should be avoided as it can cause frostbite-like tissue damage. Keeping the area clean and protected with a loose bandage prevents infection while the skin heals.",
+   "type": "ScenarioBranch",
+   "steps": [
+    {
+     "situation": "The burn is stinging and the skin is red. What is your very first action?",
+     "choices": [
+      {
+       "text": "Apply an ice cube directly to the burn to numb the pain.",
+       "correct": false,
+       "feedback": "Incorrect. Extreme cold can cause further tissue damage (frostbite). Use cool running water instead."
+      },
+      {
+       "text": "Hold the burn under cool running water for 10 to 20 minutes.",
+       "correct": true,
+       "feedback": "Correct! Cool running water helps dissipate the heat and stops the burning process."
+      },
+      {
+       "text": "Immediately coat the burn in butter or antibiotic ointment.",
+       "correct": false,
+       "feedback": "Incorrect. Butter traps heat, and ointments should only be applied after the burn is fully cooled."
+      }
+     ]
+    },
+    {
+     "situation": "The area is starting to feel tight. You are wearing a ring on that finger. What should you do?",
+     "choices": [
+      {
+       "text": "Leave the ring on to avoid irritating the skin.",
+       "correct": false,
+       "feedback": "Incorrect. The finger will likely swell, and the ring could restrict blood flow."
+      },
+      {
+       "text": "Gently remove the ring before the area begins to swell.",
+       "correct": true,
+       "feedback": "Correct! Removing jewelry or tight clothing early prevents circulation issues if swelling occurs."
+      },
+      {
+       "text": "Wait until the next day to see if the swelling goes down.",
+       "correct": false,
+       "feedback": "Incorrect. Swelling happens quickly; you should remove restrictive items immediately."
+      }
+     ]
+    },
+    {
+     "situation": "The burn is cooled and a small blister has formed. How do you finish the treatment?",
+     "choices": [
+      {
+       "text": "Pop the blister with a sterile needle and apply a tight bandage.",
+       "correct": false,
+       "feedback": "Incorrect. Never pop blisters; they protect the underlying skin from infection."
+      },
+      {
+       "text": "Leave the burn exposed to the air so it can 'breathe'.",
+       "correct": false,
+       "feedback": "Incorrect. A loose covering protects the sensitive area from dirt and friction."
+      },
+      {
+       "text": "Cover the burn loosely with a sterile, non-stick gauze bandage.",
+       "correct": true,
+       "feedback": "Correct! A loose, sterile bandage protects the site without sticking to the damaged skin."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "g27",
+   "title": "Identifying Myths of the Solar System",
+   "intro": "Not everything you hear about space is true. Review these statements about our solar system and identify which ones contain scientific errors.",
+   "goal": "Identify the three incorrect statements and learn the actual facts about our cosmic neighborhood.",
+   "hints": [
+    "Consider the composition of the gas giants compared to the terrestrial planets.",
+    "Think about which planet is actually the hottest; it's not always the one closest to the Sun.",
+    "Check the status of Pluto and the definition of the asteroid belt's location."
+   ],
+   "solution": "Statements 1, 3, and 6 are incorrect.",
+   "explain": "While Mercury is closest to the Sun, Venus reaches higher temperatures (around 460°C) due to its dense CO2 atmosphere. Ring systems are a common feature of all gas and ice giants, not just Saturn. Pluto is a dwarf planet because it has not 'cleared the neighborhood' around its orbit.",
+   "type": "SpotTheError",
+   "statements": [
+    {
+     "text": "Mercury is the hottest planet in the solar system because it is the closest to the Sun.",
+     "wrong": true,
+     "correction": "Venus is the hottest planet because its thick atmosphere traps heat through a runaway greenhouse effect."
+    },
+    {
+     "text": "The asteroid belt is located between the orbits of Mars and Jupiter.",
+     "wrong": false,
+     "correction": ""
+    },
+    {
+     "text": "Saturn is the only planet in the solar system that has a ring system.",
+     "wrong": true,
+     "correction": "All four giant planets (Jupiter, Saturn, Uranus, and Neptune) have ring systems, though Saturn's are the most prominent."
+    },
+    {
+     "text": "Jupiter is so large that all the other planets in the solar system could fit inside it.",
+     "wrong": false,
+     "correction": ""
+    },
+    {
+     "text": "The Sun contains more than 99% of the total mass of the entire solar system.",
+     "wrong": false,
+     "correction": ""
+    },
+    {
+     "text": "Pluto is currently classified as the ninth major planet from the Sun.",
+     "wrong": true,
+     "correction": "Pluto was reclassified as a dwarf planet by the International Astronomical Union in 2006."
+    }
+   ]
+  },
+  {
+   "id": "g28",
+   "title": "Mapping Energy Flow in a Pond",
+   "intro": "Energy flows from one organism to another in a pond ecosystem. Connect these pond residents to show how energy moves through the food chain.",
+   "goal": "Correctly label the relationships between the organisms in the pond food chain.",
+   "hints": [
+    "The arrow always points from the organism being eaten to the organism that eats it.",
+    "Producers like Algae get their energy from the Sun, not from eating other organisms.",
+    "Decomposers like Bacteria break down the remains of all other levels."
+   ],
+   "solution": "The Sun provides energy to Algae (producer). Algae is eaten by Small Fish (primary consumer). Small Fish is consumed by the Heron (secondary consumer). Finally, the Heron is decomposed by Bacteria (decomposer).",
+   "explain": "In a pond food chain, energy begins with the Sun. Algae use photosynthesis to convert solar energy into food. This energy then travels up the chain as primary consumers eat producers and secondary consumers eat primary consumers. Decomposers eventually recycle the nutrients back into the ecosystem.",
+   "type": "ConceptMap",
+   "nodes": [
+    "Sun",
+    "Algae",
+    "Small Fish",
+    "Heron",
+    "Bacteria"
+   ],
+   "edges": [
+    {
+     "source": "Sun",
+     "target": "Algae",
+     "label": "provides energy to"
+    },
+    {
+     "source": "Algae",
+     "target": "Small Fish",
+     "label": "is eaten by"
+    },
+    {
+     "source": "Small Fish",
+     "target": "Heron",
+     "label": "is consumed by"
+    },
+    {
+     "source": "Heron",
+     "target": "Bacteria",
+     "label": "is decomposed by"
+    }
+   ]
+  },
+  {
+   "id": "g29",
+   "title": "Mastering Key Terms in Genetics",
+   "intro": "Test your knowledge of the fundamental vocabulary used to describe how traits are passed from parents to offspring.",
+   "goal": "Recall the definitions of essential genetic terms and self-check your understanding.",
+   "hints": [
+    "Think about the difference between the physical appearance and the actual genetic code.",
+    "Remember that alleles come in pairs, one from each parent.",
+    "Consider how some traits can be hidden by others."
+   ],
+   "solution": "Review all 6 cards to ensure you can distinguish between terms like genotype and phenotype, or homozygous and heterozygous.",
+   "explain": "Genetics relies on precise terminology: the genotype is the DNA sequence (alleles), while the phenotype is the observable trait. Alleles are different versions of a gene, which can be dominant (expressed) or recessive (hidden unless paired with another recessive allele).",
+   "type": "Flashcards",
+   "cards": [
+    {
+     "front": "Gene",
+     "back": "A segment of DNA on a chromosome that contains instructions for a specific trait."
+    },
+    {
+     "front": "Allele",
+     "back": "Different forms or variations of a single gene (e.g., blue eyes vs. brown eyes)."
+    },
+    {
+     "front": "Genotype",
+     "back": "The genetic makeup of an organism, represented by letter pairs like Bb or TT."
+    },
+    {
+     "front": "Phenotype",
+     "back": "The physical appearance or observable characteristics of an organism."
+    },
+    {
+     "front": "Homozygous",
+     "back": "Having two identical alleles for a particular gene (e.g., BB or bb)."
+    },
+    {
+     "front": "Heterozygous",
+     "back": "Having two different alleles for a particular gene (e.g., Bb)."
+    }
+   ]
+  },
+  {
+   "id": "g30",
+   "title": "Mumbai's Monsoon Rainfall Patterns",
+   "intro": "Mumbai experiences intense seasonal rainfall during the South-West monsoon. Adjust the bars to represent the average monthly precipitation for the peak monsoon months.",
+   "goal": "Set the average rainfall in millimeters for the months of June, July, August, and September.",
+   "hints": [
+    "July is historically the wettest month in Mumbai, receiving over 800 mm of rain.",
+    "Rainfall increases sharply in June and begins to decline in September as the monsoon withdraws.",
+    "August is the second wettest month, typically staying above 550 mm."
+   ],
+   "solution": "The average rainfall values are approximately: June (493 mm), July (840 mm), August (585 mm), and September (341 mm).",
+   "explain": "Mumbai's climate is characterized by a tropical wet and dry season. The South-West monsoon brings heavy rains from the Arabian Sea between June and September. July represents the peak of this season due to the maximum strength of the moisture-laden winds hitting the coast.",
+   "type": "DraggableBars",
+   "unit": "mm",
+   "y_max": 1000.0,
+   "bars": [
+    {
+     "label": "June",
+     "value": 493.0
+    },
+    {
+     "label": "July",
+     "value": 840.0
+    },
+    {
+     "label": "August",
+     "value": 585.0
+    },
+    {
+     "label": "September",
+     "value": 341.0
+    }
+   ],
+   "tolerance": 50.0
+  }
+ ]
+}
