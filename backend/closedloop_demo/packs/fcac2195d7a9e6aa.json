@@ -1,0 +1,1123 @@
+{
+ "id": "fcac2195d7a9e6aa",
+ "title": "Photosynthesis: How Plants Make Food",
+ "source_name": "photosynthesis.pdf",
+ "source_kind": "pdf",
+ "source_units": 2,
+ "chars": 3341,
+ "truncated": false,
+ "topics": [
+  {
+   "id": "t1",
+   "title": "Photosynthesis Fundamentals and Leaf Structure",
+   "summary": "Photosynthesis is an endothermic process where plants use light energy, carbon dioxide, and water to produce glucose and oxygen. It occurs primarily inside chloroplasts within leaf palisade mesophyll cells.",
+   "key_points": [
+    "Photosynthesis is an endothermic reaction with the equation 6CO2 + 6H2O -> C6H12O6 + 6O2.",
+    "Chlorophyll in chloroplasts absorbs mostly red and blue light while reflecting green light.",
+    "Carbon dioxide enters through stomata regulated by guard cells, and water is transported via xylem vessels."
+   ],
+   "questions": [
+    {
+     "id": "t1q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What is the balanced symbol equation for photosynthesis?",
+     "options": [
+      "6CO2 + 6H2O -> C6H12O6 + 6O2",
+      "C6H12O6 + 6O2 -> 6CO2 + 6H2O",
+      "6CO2 + 6O2 -> C6H12O6 + 6H2O",
+      "CO2 + H2O -> C6H12O6 + O2"
+     ],
+     "answer": "6CO2 + 6H2O -> C6H12O6 + 6O2",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what raw materials enter the plant and what is produced.",
+      "Six molecules of carbon dioxide and six molecules of water are used.",
+      "The reaction yields one molecule of glucose and six molecules of oxygen."
+     ],
+     "explanation": "Photosynthesis combines six molecules of carbon dioxide and six molecules of water to produce one molecule of glucose and six molecules of oxygen.",
+     "key_point": "Photosynthesis is an endothermic reaction with the equation 6CO2 + 6H2O -> C6H12O6 + 6O2."
+    },
+    {
+     "id": "t1q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Which colours of light does chlorophyll mostly absorb?",
+     "options": [
+      "Mostly red and blue light",
+      "Mostly green and yellow light",
+      "Only green light",
+      "Mostly yellow and blue light"
+     ],
+     "answer": "Mostly red and blue light",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Recall why leaves appear green to our eyes.",
+      "Green light is reflected rather than absorbed.",
+      "The absorbed wavelengths lie at the blue and red ends of the visible spectrum."
+     ],
+     "explanation": "Chlorophyll absorbs mainly red and blue wavelengths of light while reflecting green light.",
+     "key_point": "Chlorophyll in chloroplasts absorbs mostly red and blue light while reflecting green light."
+    },
+    {
+     "id": "t1q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Which structures regulate the opening and closing of stomata for carbon dioxide entry?",
+     "options": [
+      "Guard cells",
+      "Xylem vessels",
+      "Thylakoid membranes",
+      "Palisade cells"
+     ],
+     "answer": "Guard cells",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "These cells surround the microscopic pores on leaves.",
+      "They control the pore size to allow gas exchange.",
+      "They are paired cells known as guard cells."
+     ],
+     "explanation": "Guard cells control the opening and closing of stomatal pores on the leaf surface.",
+     "key_point": "Carbon dioxide enters through stomata regulated by guard cells, and water is transported via xylem vessels."
+    },
+    {
+     "id": "t1q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why is photosynthesis classified as an endothermic reaction?",
+     "options": [
+      "It takes in energy from its surroundings in the form of light.",
+      "It releases thermal energy into the surrounding environment.",
+      "It breaks down glucose to release stored chemical energy.",
+      "It produces oxygen which cools the internal leaf structure."
+     ],
+     "answer": "It takes in energy from its surroundings in the form of light.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what happens to energy during the reaction.",
+      "Endothermic reactions absorb energy rather than releasing it.",
+      "Light energy is absorbed from the surroundings to drive the process."
+     ],
+     "explanation": "Photosynthesis is endothermic because it absorbs energy from the surroundings in the form of light.",
+     "key_point": "Photosynthesis is an endothermic reaction with the equation 6CO2 + 6H2O -> C6H12O6 + 6O2."
+    },
+    {
+     "id": "t1q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why do plant leaves typically appear green to the human eye?",
+     "options": [
+      "Chlorophyll reflects green light rather than absorbing it.",
+      "Chlorophyll absorbs green light and emits blue light.",
+      "Green light is converted into chemical energy within chloroplasts.",
+      "Chloroplasts absorb all wavelengths of light except blue and red."
+     ],
+     "answer": "Chlorophyll reflects green light rather than absorbing it.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "We see wavelengths of light that bounce off an object.",
+      "Chlorophyll absorbs red and blue light.",
+      "Because green light is reflected, leaves appear green."
+     ],
+     "explanation": "Leaves look green because chlorophyll absorbs red and blue light and reflects green light.",
+     "key_point": "Chlorophyll in chloroplasts absorbs mostly red and blue light while reflecting green light."
+    },
+    {
+     "id": "t1q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "How does water reach the palisade mesophyll cells from the soil?",
+     "options": [
+      "It is absorbed by roots and carried upward through xylem vessels.",
+      "It is taken up through stomata via guard cell opening.",
+      "It diffuses directly into the leaf surface from atmospheric vapour.",
+      "It is transported downward from flowers through phloem tissue."
+     ],
+     "answer": "It is absorbed by roots and carried upward through xylem vessels.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about the specialized transport tissue for water.",
+      "Water begins its journey underground in the root system.",
+      "Xylem vessels transport water upwards to the photosynthetic leaves."
+     ],
+     "explanation": "Water is absorbed by the roots from the soil and transported up to the leaves via xylem vessels.",
+     "key_point": "Carbon dioxide enters through stomata regulated by guard cells, and water is transported via xylem vessels."
+    },
+    {
+     "id": "t1q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Photosynthesis is an ____ reaction because it takes in light energy from its surroundings.",
+     "options": [],
+     "answer": "endothermic",
+     "accepted": [],
+     "distractors": [
+      "exothermic",
+      "anaerobic",
+      "enzymatic"
+     ],
+     "hints": [
+      "This term describes a reaction that absorbs energy.",
+      "It is the opposite of exothermic.",
+      "The word starts with 'endo-'."
+     ],
+     "explanation": "Photosynthesis takes in energy from the surroundings in the form of light, making it an endothermic reaction.",
+     "key_point": "Photosynthesis is an endothermic reaction with the equation 6CO2 + 6H2O -> C6H12O6 + 6O2."
+    },
+    {
+     "id": "t1q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "The green pigment ____ inside chloroplasts absorbs red and blue light for photosynthesis.",
+     "options": [],
+     "answer": "chlorophyll",
+     "accepted": [],
+     "distractors": [
+      "cellulose",
+      "RuBisCO",
+      "stroma"
+     ],
+     "hints": [
+      "It gives plant leaves their characteristic green color.",
+      "It resides within the chloroplasts.",
+      "Its name begins with 'chloro-'."
+     ],
+     "explanation": "Chlorophyll is the pigment found in chloroplasts that absorbs light energy.",
+     "key_point": "Chlorophyll in chloroplasts absorbs mostly red and blue light while reflecting green light."
+    },
+    {
+     "id": "t1q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Carbon dioxide enters the leaf through tiny pores called ____ .",
+     "options": [],
+     "answer": "stomata",
+     "accepted": [
+      "stoma"
+     ],
+     "distractors": [
+      "xylem",
+      "thylakoids",
+      "chloroplasts"
+     ],
+     "hints": [
+      "These are microscopic openings mostly on the underside of a leaf.",
+      "Their opening and closing is controlled by guard cells.",
+      "The plural form of stoma."
+     ],
+     "explanation": "Carbon dioxide diffuses into leaves through small pores called stomata.",
+     "key_point": "Carbon dioxide enters through stomata regulated by guard cells, and water is transported via xylem vessels."
+    },
+    {
+     "id": "t1q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "If a plant produces 3 moles of glucose via photosynthesis, how many moles of carbon dioxide must it absorb?",
+     "options": [
+      "18 moles",
+      "6 moles",
+      "3 moles",
+      "12 moles"
+     ],
+     "answer": "18 moles",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Check the balanced equation: 6CO2 + 6H2O -> C6H12O6 + 6O2.",
+      "Notice the mole ratio of CO2 to C6H12O6 is 6 to 1.",
+      "Multiply 3 moles of glucose by 6 to find the required CO2."
+     ],
+     "explanation": "The stoichiometric equation requires 6 moles of CO2 for every 1 mole of glucose produced; therefore, producing 3 moles of glucose requires 3 * 6 = 18 moles of CO2.",
+     "key_point": "Photosynthesis is an endothermic reaction with the equation 6CO2 + 6H2O -> C6H12O6 + 6O2."
+    },
+    {
+     "id": "t1q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A plant is illuminated only with pure green light. What effect will this have on its photosynthesis rate?",
+     "options": [
+      "The rate will be very low because chlorophyll reflects green light.",
+      "The rate will increase because green light has the highest energy.",
+      "The rate will remain unchanged because chlorophyll absorbs all wavelengths equally.",
+      "The rate will double because green light activates guard cells directly."
+     ],
+     "answer": "The rate will be very low because chlorophyll reflects green light.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider which wavelengths chlorophyll absorbs and which it reflects.",
+      "Chlorophyll absorbs red and blue light, but reflects green.",
+      "Without absorbed light energy, photosynthesis cannot proceed efficiently."
+     ],
+     "explanation": "Because chlorophyll reflects green light rather than absorbing it, minimal energy is absorbed, resulting in a very low photosynthetic rate.",
+     "key_point": "Chlorophyll in chloroplasts absorbs mostly red and blue light while reflecting green light."
+    },
+    {
+     "id": "t1q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "During severe drought, guard cells close the stomata. What is the immediate effect on leaf photosynthesis?",
+     "options": [
+      "It decreases because carbon dioxide cannot enter the leaf.",
+      "It increases because water is prevented from escaping through xylem.",
+      "It stops because light energy can no longer reach chlorophyll.",
+      "It remains unaffected because carbon dioxide is supplied by roots."
+     ],
+     "answer": "It decreases because carbon dioxide cannot enter the leaf.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Identify what enters the leaf through the stomatal pores.",
+      "Stomata allow carbon dioxide to diffuse into the leaf.",
+      "When stomata close, CO2 availability drops, reducing the photosynthetic rate."
+     ],
+     "explanation": "Closing the stomata restricts the entry of carbon dioxide into the leaf, depriving the photosynthetic cells of an essential reactant.",
+     "key_point": "Carbon dioxide enters through stomata regulated by guard cells, and water is transported via xylem vessels."
+    }
+   ]
+  },
+  {
+   "id": "t2",
+   "title": "The Two Stages of Photosynthesis",
+   "summary": "Photosynthesis occurs through linked light-dependent and light-independent stages. The initial stage generates energy carriers that power the subsequent production of glucose.",
+   "key_points": [
+    "Light-dependent reactions take place on thylakoid membranes, splitting water to release oxygen and produce ATP and NADPH.",
+    "The Calvin cycle occurs in the stroma and uses ATP and NADPH to fix carbon dioxide into glucose.",
+    "The enzyme RuBisCO catalyses the first step of carbon fixation in the Calvin cycle.",
+    "The light-independent stage stops soon after dark because it relies on products from the light-dependent stage."
+   ],
+   "questions": [
+    {
+     "id": "t2q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Where do the light-dependent reactions of photosynthesis take place inside the chloroplast?",
+     "options": [
+      "On the thylakoid membranes",
+      "In the stroma",
+      "Inside the xylem vessels",
+      "Across the outer chloroplast membrane"
+     ],
+     "answer": "On the thylakoid membranes",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about where chlorophyll and membrane-bound structures are located.",
+      "It happens on internal disc-like membranes, not in the fluid space.",
+      "The name refers to thylakoid structures."
+     ],
+     "explanation": "According to the material, the light-dependent reactions take place on the thylakoid membranes.",
+     "key_point": "Light-dependent reactions take place on thylakoid membranes, splitting water to release oxygen and produce ATP and NADPH."
+    },
+    {
+     "id": "t2q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Which enzyme catalyses the first step of carbon fixation in the Calvin cycle?",
+     "options": [
+      "RuBisCO",
+      "Amylase",
+      "DNA polymerase",
+      "ATP synthase"
+     ],
+     "answer": "RuBisCO",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "This enzyme is essential for fixing carbon dioxide in the stroma.",
+      "Its name is written with a specific mix of uppercase and lowercase letters.",
+      "It begins with the letters 'Ru'."
+     ],
+     "explanation": "The text directly states that the enzyme RuBisCO catalyses the first step of carbon fixation.",
+     "key_point": "The enzyme RuBisCO catalyses the first step of carbon fixation in the Calvin cycle."
+    },
+    {
+     "id": "t2q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What are the two energy carriers produced during the light-dependent reactions?",
+     "options": [
+      "ATP and NADPH",
+      "Glucose and starch",
+      "NADH and FADH2",
+      "ADP and NADP+"
+     ],
+     "answer": "ATP and NADPH",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "These molecules store chemical energy to power the Calvin cycle.",
+      "One is a standard cellular energy molecule, and the other carries reducing power.",
+      "Look for the pair containing ATP."
+     ],
+     "explanation": "The light-dependent stage uses light energy to split water and produce the energy carriers ATP and NADPH.",
+     "key_point": "Light-dependent reactions take place on thylakoid membranes, splitting water to release oxygen and produce ATP and NADPH."
+    },
+    {
+     "id": "t2q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does the light-independent stage stop operating soon after a plant is placed in total darkness?",
+     "options": [
+      "It runs out of ATP and NADPH supplied by the light-dependent stage.",
+      "Carbon dioxide can no longer enter the stomata in the dark.",
+      "The enzyme RuBisCO immediately denatures without light.",
+      "The stroma breaks down when photons are absent."
+     ],
+     "answer": "It runs out of ATP and NADPH supplied by the light-dependent stage.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider the dependency between the two stages of photosynthesis.",
+      "The Calvin cycle relies on specific chemical products made during the day.",
+      "When the light stage stops making energy carriers, the cycle halts."
+     ],
+     "explanation": "Although light is not directly used in the Calvin cycle, it requires ATP and NADPH from the light-dependent stage, which cease production in the dark.",
+     "key_point": "The light-independent stage stops soon after dark because it relies on products from the light-dependent stage."
+    },
+    {
+     "id": "t2q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What role do ATP and NADPH play in the Calvin cycle?",
+     "options": [
+      "They provide energy and reducing power to fix carbon dioxide into glucose.",
+      "They absorb red and blue light within the stroma.",
+      "They split water molecules into oxygen and hydrogen ions.",
+      "They transport glucose molecules through the xylem vessels."
+     ],
+     "answer": "They provide energy and reducing power to fix carbon dioxide into glucose.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what the Calvin cycle synthesises from carbon dioxide.",
+      "ATP and NADPH act as chemical energy carriers generated in the previous stage.",
+      "They are required to turn inorganic carbon into sugar."
+     ],
+     "explanation": "In the stroma, ATP and NADPH produced in the first stage are used to fix carbon dioxide into glucose.",
+     "key_point": "The Calvin cycle occurs in the stroma and uses ATP and NADPH to fix carbon dioxide into glucose."
+    },
+    {
+     "id": "t2q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Where in the chloroplast is carbon dioxide fixed into glucose?",
+     "options": [
+      "In the stroma",
+      "On the thylakoid membrane",
+      "Inside the stomata",
+      "Within the chlorophyll pigment"
+     ],
+     "answer": "In the stroma",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "This is the fluid area surrounding the thylakoids.",
+      "It is the site where the Calvin cycle takes place.",
+      "The name starts with the letter 's'."
+     ],
+     "explanation": "The light-independent reactions (Calvin cycle) take place in the stroma, where carbon dioxide is fixed into glucose.",
+     "key_point": "The Calvin cycle occurs in the stroma and uses ATP and NADPH to fix carbon dioxide into glucose."
+    },
+    {
+     "id": "t2q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Light-dependent reactions split water molecules and produce ATP and ____ on thylakoid membranes.",
+     "options": [],
+     "answer": "NADPH",
+     "accepted": [
+      "reduced NADP"
+     ],
+     "distractors": [
+      "NADH",
+      "glucose",
+      "starch"
+     ],
+     "hints": [
+      "It is an energy/electron carrier produced alongside ATP.",
+      "It contains the letters 'N', 'A', 'D', 'P', and 'H'.",
+      "Its acronym ends with 'H'."
+     ],
+     "explanation": "Photolysis in the light-dependent stage releases oxygen and produces the energy carriers ATP and NADPH.",
+     "key_point": "Light-dependent reactions take place on thylakoid membranes, splitting water to release oxygen and produce ATP and NADPH."
+    },
+    {
+     "id": "t2q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "The Calvin cycle takes place in the ____ of the chloroplast.",
+     "options": [],
+     "answer": "stroma",
+     "accepted": [],
+     "distractors": [
+      "thylakoid",
+      "xylem",
+      "granum"
+     ],
+     "hints": [
+      "It is the fluid-filled region inside the chloroplast.",
+      "The light-independent stage occurs here.",
+      "This six-letter word starts with 'str'."
+     ],
+     "explanation": "The light-independent reactions, or Calvin cycle, take place in the stroma.",
+     "key_point": "The Calvin cycle occurs in the stroma and uses ATP and NADPH to fix carbon dioxide into glucose."
+    },
+    {
+     "id": "t2q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "The first step of carbon fixation in the Calvin cycle is catalysed by the enzyme ____ .",
+     "options": [],
+     "answer": "RuBisCO",
+     "accepted": [],
+     "distractors": [
+      "amylase",
+      "chlorophyll",
+      "cellulose"
+     ],
+     "hints": [
+      "It is the primary enzyme responsible for carbon fixation in plants.",
+      "Its name contains seven letters with mixed capitalisation.",
+      "It begins with 'Ru'."
+     ],
+     "explanation": "RuBisCO is the enzyme that catalyses the first step of carbon fixation in the Calvin cycle.",
+     "key_point": "The enzyme RuBisCO catalyses the first step of carbon fixation in the Calvin cycle."
+    },
+    {
+     "id": "t2q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "If a chemical inhibitor completely blocks RuBisCO activity in a plant leaf, what will be the direct outcome?",
+     "options": [
+      "Carbon dioxide fixation in the Calvin cycle will cease.",
+      "The thylakoid membranes will immediately stop absorbing light.",
+      "Water splitting (photolysis) will accelerate rapidly.",
+      "Oxygen release from the leaf will double."
+     ],
+     "answer": "Carbon dioxide fixation in the Calvin cycle will cease.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Identify the specific reaction RuBisCO catalyses.",
+      "RuBisCO is responsible for the initial step of the light-independent stage.",
+      "Inhibiting it directly blocks the incorporation of carbon dioxide."
+     ],
+     "explanation": "RuBisCO catalyses the first step of carbon fixation; blocking it directly stops the Calvin cycle from fixing carbon dioxide.",
+     "key_point": "The enzyme RuBisCO catalyses the first step of carbon fixation in the Calvin cycle."
+    },
+    {
+     "id": "t2q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A plant is exposed to light but deprived of carbon dioxide. How will the light-dependent reactions initially be affected?",
+     "options": [
+      "They will continue temporarily, splitting water and forming ATP and NADPH.",
+      "They will immediately stop splitting water.",
+      "They will convert chlorophyll into RuBisCO.",
+      "They will release carbon dioxide instead of oxygen."
+     ],
+     "answer": "They will continue temporarily, splitting water and forming ATP and NADPH.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Look at which stage requires carbon dioxide and which requires water and light.",
+      "Light-dependent reactions rely on light and water on the thylakoid membranes.",
+      "Carbon dioxide is only directly consumed in the subsequent Calvin cycle."
+     ],
+     "explanation": "The light-dependent reactions depend on light and water, not CO2 directly, so photolysis and energy carrier production continue initially.",
+     "key_point": "Light-dependent reactions take place on thylakoid membranes, splitting water to release oxygen and produce ATP and NADPH."
+    },
+    {
+     "id": "t2q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "If a plant is suddenly moved into the dark, why does glucose production continue for a brief period before stopping?",
+     "options": [
+      "Existing pools of ATP and NADPH in the stroma temporarily sustain the Calvin cycle.",
+      "RuBisCO generates its own light energy for a few minutes.",
+      "The thylakoid membranes continue photolysis without sunlight.",
+      "Stomata trap photons inside the leaf for continued energy production."
+     ],
+     "answer": "Existing pools of ATP and NADPH in the stroma temporarily sustain the Calvin cycle.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what the Calvin cycle consumes from the previous stage.",
+      "The Calvin cycle does not need light directly, only its chemical products.",
+      "Once the remaining ATP and NADPH run out, glucose synthesis ends."
+     ],
+     "explanation": "The light-independent stage does not require light directly and can run using previously generated ATP and NADPH until those reserves are depleted.",
+     "key_point": "The light-independent stage stops soon after dark because it relies on products from the light-dependent stage."
+    }
+   ]
+  },
+  {
+   "id": "t3",
+   "title": "Limiting Factors of Photosynthesis",
+   "summary": "The rate of photosynthesis is governed by light intensity, carbon dioxide concentration, and temperature. Whichever factor is in the shortest supply acts as the limiting factor.",
+   "key_points": [
+    "A limiting factor is the factor in shortest supply, and increasing it boosts the rate until another factor limits it.",
+    "The photosynthetic rate increases with temperature up to an optimum of 25 to 35 degrees Celsius before enzymes denature.",
+    "Greenhouse farmers can increase yields by using paraffin heaters to supply both heat and carbon dioxide."
+   ],
+   "questions": [
+    {
+     "id": "t3q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What defines a limiting factor in photosynthesis?",
+     "options": [
+      "Whichever factor is in shortest supply",
+      "The factor present in the greatest excess",
+      "The constant temperature inside the leaf",
+      "The total amount of chlorophyll available"
+     ],
+     "answer": "Whichever factor is in shortest supply",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what restricts a process when multiple resources are needed.",
+      "It is the resource available in the lowest relative amount.",
+      "The text explicitly defines it as the factor in shortest supply."
+     ],
+     "explanation": "A limiting factor is defined as whichever factor is in shortest supply, restricting the rate of photosynthesis until increased.",
+     "key_point": "A limiting factor is the factor in shortest supply, and increasing it boosts the rate until another factor limits it."
+    },
+    {
+     "id": "t3q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What is the typical optimum temperature range for photosynthesis in many plants?",
+     "options": [
+      "Around 25 to 35 degrees Celsius",
+      "Around 0 to 10 degrees Celsius",
+      "Around 10 to 20 degrees Celsius",
+      "Around 45 to 55 degrees Celsius"
+     ],
+     "answer": "Around 25 to 35 degrees Celsius",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Recall the temperature range given in the text before enzymes begin to denature.",
+      "It is warm, but below temperatures that cause cellular damage.",
+      "The text specifies a range between 25 and 35 degrees Celsius."
+     ],
+     "explanation": "The rate of photosynthesis increases with temperature up to an optimum of around 25 to 35 degrees Celsius for many plants.",
+     "key_point": "The photosynthetic rate increases with temperature up to an optimum of 25 to 35 degrees Celsius before enzymes denature."
+    },
+    {
+     "id": "t3q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What two factors do paraffin heaters provide to increase crop yields in greenhouses?",
+     "options": [
+      "Heat and carbon dioxide",
+      "Light and oxygen",
+      "Heat and water vapor",
+      "Carbon dioxide and light"
+     ],
+     "answer": "Heat and carbon dioxide",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what burning paraffin produces as combustion products.",
+      "One is thermal and the other is a key reactant gas.",
+      "Paraffin heaters release both warmth and CO2."
+     ],
+     "explanation": "Paraffin heaters provide both heat and carbon dioxide, helping to overcome two key limiting factors in a greenhouse.",
+     "key_point": "Greenhouse farmers can increase yields by using paraffin heaters to supply both heat and carbon dioxide."
+    },
+    {
+     "id": "t3q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does the rate of photosynthesis drop rapidly at temperatures far above 35 degrees Celsius?",
+     "options": [
+      "The enzymes involved denature",
+      "Carbon dioxide levels drop to zero",
+      "Chlorophyll turns into starch",
+      "Light energy is no longer absorbed"
+     ],
+     "answer": "The enzymes involved denature",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what high heat does to biological catalysts.",
+      "Enzymes lose their specific shape at high temperatures.",
+      "Denaturation of enzymes causes the rate to fall sharply."
+     ],
+     "explanation": "High temperatures alter the structure of photosynthetic enzymes (denaturing them), which rapidly reduces reaction rates.",
+     "key_point": "The photosynthetic rate increases with temperature up to an optimum of 25 to 35 degrees Celsius before enzymes denature."
+    },
+    {
+     "id": "t3q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What happens when you increase a limiting factor that is currently in shortest supply?",
+     "options": [
+      "Photosynthesis rate rises until another factor limits it",
+      "Photosynthesis stops immediately due to saturation",
+      "The plant switches entirely to aerobic respiration",
+      "Enzymes denature and the photosynthetic rate falls"
+     ],
+     "answer": "Photosynthesis rate rises until another factor limits it",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what happens to the overall rate when a bottleneck is removed.",
+      "The rate improves until a different factor becomes the bottleneck.",
+      "Increasing the limiting factor boosts the rate until another factor takes over as limiting."
+     ],
+     "explanation": "Increasing the factor in shortest supply increases the rate of photosynthesis until a different factor becomes the limiting factor.",
+     "key_point": "A limiting factor is the factor in shortest supply, and increasing it boosts the rate until another factor limits it."
+    },
+    {
+     "id": "t3q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "How does burning paraffin in a commercial greenhouse help overcome photosynthetic limitations?",
+     "options": [
+      "It elevates both temperature and carbon dioxide concentration",
+      "It generates intense blue and red light for chlorophyll",
+      "It increases humidity and prevents water loss completely",
+      "It provides oxygen needed for the light-dependent stage"
+     ],
+     "answer": "It elevates both temperature and carbon dioxide concentration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider which limiting factors the combustion of fuel directly raises.",
+      "Combustion releases thermal energy and carbon dioxide gas.",
+      "This simultaneously addresses temperature and CO2 supply."
+     ],
+     "explanation": "Burning paraffin releases heat and carbon dioxide, raising both environmental factors above their limiting thresholds.",
+     "key_point": "Greenhouse farmers can increase yields by using paraffin heaters to supply both heat and carbon dioxide."
+    },
+    {
+     "id": "t3q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "A limiting factor is whichever factor is in ____ supply.",
+     "options": [],
+     "answer": "shortest",
+     "accepted": [
+      "short"
+     ],
+     "distractors": [
+      "greatest",
+      "excess",
+      "equal"
+     ],
+     "hints": [
+      "Think of the word describing the least available resource.",
+      "It refers to minimum or deficit availability.",
+      "The text uses the superlative form of 'short'."
+     ],
+     "explanation": "By definition, the limiting factor is the one present in the shortest supply relative to what the plant needs.",
+     "key_point": "A limiting factor is the factor in shortest supply, and increasing it boosts the rate until another factor limits it."
+    },
+    {
+     "id": "t3q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Photosynthetic rate falls quickly past the optimum temperature because enzymes ____ .",
+     "options": [],
+     "answer": "denature",
+     "accepted": [
+      "are denatured"
+     ],
+     "distractors": [
+      "dissolve",
+      "multiply",
+      "freeze"
+     ],
+     "hints": [
+      "What happens to the structure of proteins at excessive temperatures?",
+      "They lose their functional 3D conformation.",
+      "The specific biological term is 'denature'."
+     ],
+     "explanation": "When temperatures exceed the optimum, enzymes denature, destroying their catalytic activity and reducing the rate of photosynthesis.",
+     "key_point": "The photosynthetic rate increases with temperature up to an optimum of 25 to 35 degrees Celsius before enzymes denature."
+    },
+    {
+     "id": "t3q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Greenhouse farmers can burn paraffin to supply heat and ____ dioxide to crops.",
+     "options": [],
+     "answer": "carbon",
+     "accepted": [
+      "carbon dioxide",
+      "CO2"
+     ],
+     "distractors": [
+      "sulfur",
+      "nitrogen",
+      "silicon"
+     ],
+     "hints": [
+      "This is the gaseous reactant needed for the Calvin cycle.",
+      "It combines with oxygen to form CO2.",
+      "The missing word is 'carbon'."
+     ],
+     "explanation": "Paraffin heaters produce carbon dioxide (and heat), boosting photosynthesis in greenhouse crops.",
+     "key_point": "Greenhouse farmers can increase yields by using paraffin heaters to supply both heat and carbon dioxide."
+    },
+    {
+     "id": "t3q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "On a bright, warm summer afternoon, a crop field shows no increase in photosynthesis when sunlight increases. What is most likely limiting the rate?",
+     "options": [
+      "Carbon dioxide concentration",
+      "Light intensity",
+      "Optimum chlorophyll levels",
+      "Excessive oxygen"
+     ],
+     "answer": "Carbon dioxide concentration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Light and warmth are already plentiful on a bright summer afternoon.",
+      "Which of the three main limiting factors remains at natural atmospheric levels?",
+      "Carbon dioxide concentration is the remaining limiting factor."
+     ],
+     "explanation": "Because light and warmth are already abundant, carbon dioxide concentration is in the shortest supply and acts as the limiting factor.",
+     "key_point": "A limiting factor is the factor in shortest supply, and increasing it boosts the rate until another factor limits it."
+    },
+    {
+     "id": "t3q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A grower heats a greenhouse to 50 degrees Celsius to boost growth, but crop photosynthesis plummets. Why?",
+     "options": [
+      "The photosynthetic enzymes have denatured",
+      "The stomata run out of light energy",
+      "The carbon dioxide turns into insoluble starch",
+      "Light-dependent reactions run out of oxygen"
+     ],
+     "answer": "The photosynthetic enzymes have denatured",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "50 degrees Celsius is well above the 25 to 35 degrees Celsius optimum.",
+      "Excessive heat damages protein structures.",
+      "Enzymes denature when heated well beyond their optimum."
+     ],
+     "explanation": "At 50 degrees Celsius, temperatures are far beyond the optimum range (25-35 °C), causing enzymes to denature and halting photosynthesis.",
+     "key_point": "The photosynthetic rate increases with temperature up to an optimum of 25 to 35 degrees Celsius before enzymes denature."
+    },
+    {
+     "id": "t3q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "On a cold, bright winter morning, which action would most effectively increase tomato yield in an enclosed glasshouse?",
+     "options": [
+      "Igniting paraffin heaters to add heat and carbon dioxide",
+      "Installing artificial shading to reduce light intensity",
+      "Pumping pure oxygen into the glasshouse atmosphere",
+      "Lowering the temperature to conserve moisture"
+     ],
+     "answer": "Igniting paraffin heaters to add heat and carbon dioxide",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Light is already present ('bright'), but the temperature is low ('cold').",
+      "Supplying heat alongside carbon dioxide relieves the main limiting constraints.",
+      "Paraffin heaters provide both heat and CO2."
+     ],
+     "explanation": "Because light is already available, raising the low temperature and adding carbon dioxide using paraffin heaters will maximize photosynthetic rate and crop yield.",
+     "key_point": "Greenhouse farmers can increase yields by using paraffin heaters to supply both heat and carbon dioxide."
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "title": "Uses of Glucose and Cellular Respiration",
+   "summary": "Plants utilize glucose for immediate energy, structural components, and long-term storage forms. Photosynthesis and respiration interact to determine the net gas exchange in the plant.",
+   "key_points": [
+    "Glucose is used in respiration, converted to cellulose for cell walls, made into lipids for seeds, or turned into starch for storage.",
+    "Nitrate ions from the soil combine with glucose to produce amino acids that build proteins.",
+    "Aerobic respiration occurs continuously in all living cells, using glucose and oxygen to release energy, carbon dioxide, and water.",
+    "The compensation point occurs when the rates of photosynthesis and respiration are equal, resulting in zero net gas exchange."
+   ],
+   "questions": [
+    {
+     "id": "t4q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What do plants combine with glucose to produce amino acids for building proteins?",
+     "options": [
+      "Nitrate ions",
+      "Magnesium ions",
+      "Lipids",
+      "Cellulose"
+     ],
+     "answer": "Nitrate ions",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "These are absorbed from the soil by the roots.",
+      "They provide the nitrogen needed for amino acid synthesis.",
+      "The text specifies these exact mineral ions absorbed from the soil."
+     ],
+     "explanation": "Glucose combines with nitrate ions absorbed from the soil to make amino acids, which are used to build proteins.",
+     "key_point": "Nitrate ions from the soil combine with glucose to produce amino acids that build proteins."
+    },
+    {
+     "id": "t4q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "In what form is glucose stored as an insoluble molecule in plant leaves?",
+     "options": [
+      "Starch",
+      "Cellulose",
+      "Lipids",
+      "Amino acids"
+     ],
+     "answer": "Starch",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "It tests positive with iodine solution, turning blue-black.",
+      "It is an insoluble storage carbohydrate.",
+      "It is stored in leaves when glucose is not needed immediately."
+     ],
+     "explanation": "Glucose is converted into insoluble starch for storage, which can be identified using iodine solution.",
+     "key_point": "Glucose is used in respiration, converted to cellulose for cell walls, made into lipids for seeds, or turned into starch for storage."
+    },
+    {
+     "id": "t4q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "When does a plant reach its compensation point?",
+     "options": [
+      "When the rate of photosynthesis equals the rate of respiration",
+      "When photosynthesis stops completely in the dark",
+      "When the rate of respiration reaches its maximum capacity",
+      "When all stomata close to prevent water loss"
+     ],
+     "answer": "When the rate of photosynthesis equals the rate of respiration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "It occurs at low light intensities such as dawn or dusk.",
+      "It involves a balance between two opposite metabolic processes.",
+      "At this point, there is zero net exchange of gases with the air."
+     ],
+     "explanation": "The compensation point occurs when the rates of photosynthesis and respiration are exactly equal, leading to no net gas exchange.",
+     "key_point": "The compensation point occurs when the rates of photosynthesis and respiration are equal, resulting in zero net gas exchange."
+    },
+    {
+     "id": "t4q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does cellular respiration occur continuously day and night in all living plant cells?",
+     "options": [
+      "Living cells constantly require energy to survive",
+      "Photosynthesis requires a constant supply of oxygen",
+      "Plants need to remove excess glucose at night",
+      "Light energy is not required for glucose storage"
+     ],
+     "answer": "Living cells constantly require energy to survive",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Respiration releases energy from glucose.",
+      "Unlike photosynthesis, cellular maintenance is needed 24/7.",
+      "Every living cell must sustain vital functions around the clock."
+     ],
+     "explanation": "Aerobic respiration occurs all the time in every living cell to release energy needed for cellular survival and function.",
+     "key_point": "Aerobic respiration occurs continuously in all living cells, using glucose and oxygen to release energy, carbon dioxide, and water."
+    },
+    {
+     "id": "t4q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Which structural component of a plant cell is synthesized directly from glucose?",
+     "options": [
+      "Cellulose for cell walls",
+      "Lipids in the cytoplasm",
+      "Chlorophyll in thylakoids",
+      "Stroma in chloroplasts"
+     ],
+     "answer": "Cellulose for cell walls",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "This component provides physical support and structure to the cell.",
+      "It makes up the tough outer layer surrounding plant cells.",
+      "Glucose units link together to form this rigid polymer."
+     ],
+     "explanation": "Plants use glucose to make cellulose, which is the primary structural material in plant cell walls.",
+     "key_point": "Glucose is used in respiration, converted to cellulose for cell walls, made into lipids for seeds, or turned into starch for storage."
+    },
+    {
+     "id": "t4q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What is the net exchange of carbon dioxide and oxygen between a plant and the air at the compensation point?",
+     "options": [
+      "Zero net exchange of gases",
+      "Net uptake of carbon dioxide only",
+      "Net release of oxygen only",
+      "Net uptake of oxygen and release of carbon dioxide"
+     ],
+     "answer": "Zero net exchange of gases",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "The rates of gas production and gas consumption are identical.",
+      "Photosynthesis consumes what respiration produces.",
+      "There is no overall gain or loss of gases to the atmosphere."
+     ],
+     "explanation": "Because photosynthesis and respiration proceed at equal rates at the compensation point, there is no net exchange of carbon dioxide or oxygen.",
+     "key_point": "The compensation point occurs when the rates of photosynthesis and respiration are equal, resulting in zero net gas exchange."
+    },
+    {
+     "id": "t4q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Plants synthesize ____ to strengthen and build cell walls using the glucose made during photosynthesis.",
+     "options": [],
+     "answer": "cellulose",
+     "accepted": [],
+     "distractors": [
+      "starch",
+      "chlorophyll",
+      "lipids"
+     ],
+     "hints": [
+      "It is a complex structural carbohydrate.",
+      "It forms the fibrous wall of plant cells.",
+      "Starts with the letter 'c'."
+     ],
+     "explanation": "Glucose is polymerized into cellulose to provide structural support in plant cell walls.",
+     "key_point": "Glucose is used in respiration, converted to cellulose for cell walls, made into lipids for seeds, or turned into starch for storage."
+    },
+    {
+     "id": "t4q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Aerobic respiration in plant cells uses glucose and oxygen to release energy, carbon dioxide, and ____ .",
+     "options": [],
+     "answer": "water",
+     "accepted": [
+      "H2O"
+     ],
+     "distractors": [
+      "nitrate",
+      "starch",
+      "cellulose"
+     ],
+     "hints": [
+      "It is a simple molecule with chemical formula H2O.",
+      "It is one of the two chemical products of aerobic respiration.",
+      "It is paired with carbon dioxide as a by-product."
+     ],
+     "explanation": "Aerobic respiration breaks down glucose in the presence of oxygen to release energy, carbon dioxide, and water.",
+     "key_point": "Aerobic respiration occurs continuously in all living cells, using glucose and oxygen to release energy, carbon dioxide, and water."
+    },
+    {
+     "id": "t4q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "At dawn or dusk, a plant reaches its ____ point when photosynthesis and respiration rates are equal.",
+     "options": [],
+     "answer": "compensation",
+     "accepted": [],
+     "distractors": [
+      "saturation",
+      "optimum",
+      "limiting"
+     ],
+     "hints": [
+      "It refers to the balance point of gas exchange.",
+      "It compensates for respiratory losses through photosynthesis.",
+      "The word begins with 'c'."
+     ],
+     "explanation": "The compensation point is reached when the rate of photosynthesis equals the rate of cellular respiration.",
+     "key_point": "The compensation point occurs when the rates of photosynthesis and respiration are equal, resulting in zero net gas exchange."
+    },
+    {
+     "id": "t4q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A plant is kept in total darkness for 24 hours. What will happen to its net gas exchange?",
+     "options": [
+      "It will absorb oxygen and release carbon dioxide",
+      "It will release oxygen and absorb carbon dioxide",
+      "There will be zero net gas exchange",
+      "It will absorb both oxygen and carbon dioxide"
+     ],
+     "answer": "It will absorb oxygen and release carbon dioxide",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider which process stops without light and which continues.",
+      "Photosynthesis stops, but respiration continues day and night.",
+      "Respiration consumes oxygen and produces carbon dioxide."
+     ],
+     "explanation": "In total darkness, photosynthesis stops while aerobic respiration continues, causing the plant to take in oxygen and release carbon dioxide.",
+     "key_point": "Aerobic respiration occurs continuously in all living cells, using glucose and oxygen to release energy, carbon dioxide, and water."
+    },
+    {
+     "id": "t4q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A seedling is grown in soil deficient in nitrate ions. Which process will be most directly impaired?",
+     "options": [
+      "Synthesizing proteins for new growth",
+      "Converting glucose into starch for storage",
+      "Producing cellulose for cell walls",
+      "Breaking down glucose in respiration"
+     ],
+     "answer": "Synthesizing proteins for new growth",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Nitrate ions are specifically needed to make amino acids.",
+      "Amino acids are the building blocks of proteins.",
+      "Starch and cellulose do not require nitrogen from nitrates."
+     ],
+     "explanation": "Nitrate ions combine with glucose to produce amino acids, which are required to build proteins; without nitrates, protein synthesis fails.",
+     "key_point": "Nitrate ions from the soil combine with glucose to produce amino acids that build proteins."
+    },
+    {
+     "id": "t4q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "At dawn, the light intensity is gradually increasing. How does net carbon dioxide uptake change as the plant passes its compensation point?",
+     "options": [
+      "It shifts from net release to net uptake of carbon dioxide",
+      "It shifts from net uptake to net release of carbon dioxide",
+      "It remains constantly at zero exchange",
+      "Carbon dioxide release increases continuously"
+     ],
+     "answer": "It shifts from net release to net uptake of carbon dioxide",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Before dawn, respiration dominates and releases CO2.",
+      "At the compensation point, net gas exchange is zero.",
+      "As light increases further, photosynthesis exceeds respiration."
+     ],
+     "explanation": "Before the compensation point, respiration exceeds photosynthesis (net CO2 release); as light increases past this point, photosynthesis exceeds respiration (net CO2 uptake).",
+     "key_point": "The compensation point occurs when the rates of photosynthesis and respiration are equal, resulting in zero net gas exchange."
+    }
+   ]
+  }
+ ],
+ "model": "gemini-3.7-flash",
+ "created": "2026-10-23T12:24:21Z",
+ "generation_ms": 34059.1,
+ "dropped_questions": 0,
+ "seeded": true
+}

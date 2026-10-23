@@ -1,0 +1,1130 @@
+{
+ "id": "38eedcd4f7edbb02",
+ "title": "The Water Cycle",
+ "source_name": "water-cycle.md",
+ "source_kind": "markdown",
+ "source_units": 24,
+ "chars": 2536,
+ "truncated": false,
+ "topics": [
+  {
+   "id": "t1",
+   "title": "Movement into the Atmosphere",
+   "summary": "Water moves into the atmosphere through evaporation, transpiration from plants, and sublimation from ice and snow. The Sun's energy drives these processes, with oceans contributing the vast majority of evaporated water.",
+   "key_points": [
+    "Evaporation turns liquid water from oceans, lakes, and rivers into vapour.",
+    "About 86% of global evaporation originates from the oceans.",
+    "Plants release water vapour through leaf stomata in a process called transpiration.",
+    "Sublimation occurs when ice and snow turn directly into vapour without melting."
+   ],
+   "questions": [
+    {
+     "id": "t1q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What percentage of global evaporation originates from the oceans?",
+     "options": [
+      "About 86%",
+      "About 2.5%",
+      "About 50%",
+      "About 14%"
+     ],
+     "answer": "About 86%",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think of the vast majority of evaporation coming from marine environments.",
+      "It is well over three-quarters of the total global evaporation.",
+      "The value is in the mid-eighties percent range."
+     ],
+     "explanation": "According to the text, about 86% of global evaporation comes from the oceans.",
+     "key_point": "About 86% of global evaporation originates from the oceans."
+    },
+    {
+     "id": "t1q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What process describes plants releasing water vapour through tiny pores in their leaves?",
+     "options": [
+      "Transpiration",
+      "Sublimation",
+      "Infiltration",
+      "Condensation"
+     ],
+     "answer": "Transpiration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "This biological process involves leaf stomata.",
+      "It combines with evaporation to form evapotranspiration.",
+      "It begins with the letter 'T'."
+     ],
+     "explanation": "Transpiration is the specific process where plants release water vapour through leaf pores known as stomata.",
+     "key_point": "Plants release water vapour through leaf stomata in a process called transpiration."
+    },
+    {
+     "id": "t1q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What is the process where ice and snow turn directly into vapour without melting first?",
+     "options": [
+      "Sublimation",
+      "Evaporation",
+      "Infiltration",
+      "Precipitation"
+     ],
+     "answer": "Sublimation",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "It is a phase change directly from solid to gas.",
+      "The solid water bypasses the liquid state entirely.",
+      "It starts with 'sub-'."
+     ],
+     "explanation": "Sublimation is defined as ice and snow converting directly into water vapour without becoming liquid first.",
+     "key_point": "Sublimation occurs when ice and snow turn directly into vapour without melting."
+    },
+    {
+     "id": "t1q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why do oceans contribute the vast majority of water vapour to the atmosphere compared to land?",
+     "options": [
+      "They provide vast surface areas of liquid water exposed to solar energy for evaporation.",
+      "They experience much higher rates of transpiration than continental landmasses.",
+      "They undergo rapid sublimation caused by ocean floor geothermal activity.",
+      "They prevent infiltration, forcing all surface water directly into the air."
+     ],
+     "answer": "They provide vast surface areas of liquid water exposed to solar energy for evaporation.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider which physical mechanism turns liquid water to vapour at the surface.",
+      "Oceans hold most liquid water and receive heat from the Sun.",
+      "Think about where evaporation predominantly occurs."
+     ],
+     "explanation": "Heat from the Sun drives evaporation of liquid water, and oceans cover most of the surface, accounting for ~86% of global evaporation.",
+     "key_point": "About 86% of global evaporation originates from the oceans."
+    },
+    {
+     "id": "t1q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Which of the following occurs directly as a result of solar heat acting on open water bodies?",
+     "options": [
+      "Liquid water turns into water vapour through evaporation.",
+      "Solid ice melts into groundwater aquifers.",
+      "Water vapour condenses into cloud droplets.",
+      "Surface runoff infiltrates into deep rock layers."
+     ],
+     "answer": "Liquid water turns into water vapour through evaporation.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider the direct thermal effect of sunlight on lakes, rivers, and oceans.",
+      "This is the phase change from liquid to gas.",
+      "It is the process termed evaporation."
+     ],
+     "explanation": "Heat from the Sun provides the energy required to turn liquid water from water bodies into vapour via evaporation.",
+     "key_point": "Evaporation turns liquid water from oceans, lakes, and rivers into vapour."
+    },
+    {
+     "id": "t1q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "How does water enter the atmosphere from high, sub-zero mountain peaks covered in snow?",
+     "options": [
+      "Solid snow transitions directly into vapour via sublimation.",
+      "Snow melts and immediately undergoes leaf transpiration.",
+      "Cold air causes the snow to condense onto dust particles.",
+      "The snow percolates into rock layers before vaporising."
+     ],
+     "answer": "Solid snow transitions directly into vapour via sublimation.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "The snow remains frozen rather than melting into liquid water.",
+      "Water changes straight from a solid state to a gaseous state.",
+      "Recall the term for solid-to-gas transition."
+     ],
+     "explanation": "Ice and snow can enter the atmosphere directly as vapour without melting, which is sublimation.",
+     "key_point": "Sublimation occurs when ice and snow turn directly into vapour without melting."
+    },
+    {
+     "id": "t1q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Heat from the Sun turns liquid water from oceans, lakes, and rivers into vapour through ____ .",
+     "options": [],
+     "answer": "evaporation",
+     "accepted": [],
+     "distractors": [
+      "condensation",
+      "transpiration",
+      "sublimation"
+     ],
+     "hints": [
+      "It is the primary process turning liquid water into gas.",
+      "It accounts for major moisture input from oceans and lakes.",
+      "The term starts with 'e'."
+     ],
+     "explanation": "Evaporation is the process that converts liquid water into water vapour using heat from the Sun.",
+     "key_point": "Evaporation turns liquid water from oceans, lakes, and rivers into vapour."
+    },
+    {
+     "id": "t1q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Plants release water vapour into the atmosphere through leaf pores in a process known as ____ .",
+     "options": [],
+     "answer": "transpiration",
+     "accepted": [],
+     "distractors": [
+      "infiltration",
+      "precipitation",
+      "evaporation"
+     ],
+     "hints": [
+      "This process is plant-specific.",
+      "Water exits through the microscopic pores called stomata.",
+      "It begins with the prefix 'trans-'."
+     ],
+     "explanation": "Plants lose water vapour to the air through their stomata by transpiration.",
+     "key_point": "Plants release water vapour through leaf stomata in a process called transpiration."
+    },
+    {
+     "id": "t1q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "When ice and snow turn directly into water vapour without melting first, the process is called ____ .",
+     "options": [],
+     "answer": "sublimation",
+     "accepted": [],
+     "distractors": [
+      "condensation",
+      "infiltration",
+      "transpiration"
+     ],
+     "hints": [
+      "This refers to a direct phase change from solid to gas.",
+      "Liquid water is not formed during this transition.",
+      "It starts with 'sub-'."
+     ],
+     "explanation": "Sublimation is the transition where solid water (ice or snow) transforms straight into gas.",
+     "key_point": "Sublimation occurs when ice and snow turn directly into vapour without melting."
+    },
+    {
+     "id": "t1q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "If a large forested area is completely cleared for agriculture, what direct change in atmospheric moisture input is expected?",
+     "options": [
+      "Transpiration from that area will decrease.",
+      "Sublimation rates will increase significantly.",
+      "Infiltration will replace all evaporation.",
+      "Global oceanic evaporation will immediately drop."
+     ],
+     "answer": "Transpiration from that area will decrease.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about which atmospheric transfer process relies specifically on trees and vegetation.",
+      "Fewer leaves and stomata mean less biological vapour release.",
+      "The text notes that cutting forests reduces this specific process."
+     ],
+     "explanation": "Trees release water vapour via transpiration; removing forest cover directly reduces local transpiration into the atmosphere.",
+     "key_point": "Plants release water vapour through leaf stomata in a process called transpiration."
+    },
+    {
+     "id": "t1q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A researcher observes a glacier slowly shrinking in dry, freezing weather where temperatures never rise above 0°C. Which process explains this loss?",
+     "options": [
+      "Sublimation directly turning ice into vapour",
+      "Rapid evaporation of melted glacial water",
+      "Plant transpiration around the glacier edge",
+      "Condensation releasing moisture into groundwater"
+     ],
+     "answer": "Sublimation directly turning ice into vapour",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Because temperatures remain below freezing, no liquid water forms.",
+      "Ice can transform directly into vapour without liquid melting.",
+      "Identify the solid-to-gas water transition."
+     ],
+     "explanation": "Since the temperature stays below freezing, ice cannot melt, so the loss of ice mass directly into the air occurs via sublimation.",
+     "key_point": "Sublimation occurs when ice and snow turn directly into vapour without melting."
+    },
+    {
+     "id": "t1q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "On a sunny day over an inland lake, water levels drop slightly despite no outflow. What primary process transferred this water into the air?",
+     "options": [
+      "Evaporation driven by solar heat",
+      "Transpiration through lakebed sediments",
+      "Sublimation of liquid water",
+      "Precipitation into the upper atmosphere"
+     ],
+     "answer": "Evaporation driven by solar heat",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "The lake consists of open liquid surface water exposed to sunlight.",
+      "Solar energy converts liquid water into vapour.",
+      "This is the basic phase change from liquid to gas."
+     ],
+     "explanation": "Solar energy heats open liquid water bodies like lakes, driving evaporation into the atmosphere.",
+     "key_point": "Evaporation turns liquid water from oceans, lakes, and rivers into vapour."
+    }
+   ]
+  },
+  {
+   "id": "t2",
+   "title": "Condensation and Precipitation",
+   "summary": "Rising moist air cools until water vapour condenses around tiny particles to form clouds. When these droplets grow heavy enough, they fall back to Earth as various forms of precipitation.",
+   "key_points": [
+    "Rising air cools to its dew point and condenses onto condensation nuclei like dust, salt, or smoke.",
+    "Condensation releases latent heat that warms surrounding air and can fuel storms.",
+    "Precipitation occurs when cloud droplets collide, grow heavy, and fall as rain, snow, sleet, or hail.",
+    "The form of precipitation depends on the temperature of the air it falls through."
+   ],
+   "questions": [
+    {
+     "id": "t2q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What happens when rising warm, moist air cools down to its dew point?",
+     "options": [
+      "Water vapour condenses on tiny particles to form droplets",
+      "Liquid water turns directly into ice without condensing",
+      "Water rapidly evaporates into the upper atmosphere",
+      "Sublimation occurs and absorbs surrounding heat"
+     ],
+     "answer": "Water vapour condenses on tiny particles to form droplets",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what cloud formation requires.",
+      "Consider what phase change happens when moist air cools to its dew point.",
+      "The water vapour turns back into liquid droplets around tiny particles."
+     ],
+     "explanation": "When rising air reaches its dew point, water vapour condenses onto condensation nuclei like dust or salt to form cloud droplets.",
+     "key_point": "Rising air cools to its dew point and condenses onto condensation nuclei like dust, salt, or smoke."
+    },
+    {
+     "id": "t2q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What thermal effect occurs during condensation according to the text?",
+     "options": [
+      "It releases latent heat that warms surrounding air",
+      "It absorbs latent heat and cools surrounding air",
+      "It prevents storms by cooling the atmosphere",
+      "It maintains an absolute zero heat exchange"
+     ],
+     "answer": "It releases latent heat that warms surrounding air",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Recall what happens to energy when vapour turns into liquid.",
+      "Look at the effect of condensation on surrounding air temperatures.",
+      "The process gives off latent heat and can fuel storms."
+     ],
+     "explanation": "Condensation releases latent heat into the atmosphere, warming the surrounding air and potentially fueling storms.",
+     "key_point": "Condensation releases latent heat that warms surrounding air and can fuel storms."
+    },
+    {
+     "id": "t2q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What determines whether precipitation falls as rain, snow, sleet, or hail?",
+     "options": [
+      "The temperature of the air it falls through",
+      "The total amount of salt in the clouds",
+      "The rate of transpiration beneath the cloud",
+      "The concentration of surface runoff on the ground"
+     ],
+     "answer": "The temperature of the air it falls through",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what controls whether falling water stays liquid or freezes.",
+      "Recall the atmospheric condition mentioned along with the forms of precipitation.",
+      "It depends on the thermal conditions of the air column below the clouds."
+     ],
+     "explanation": "Precipitation falls as rain, snow, sleet, or hail depending on the temperature of the air it travels through on its way down.",
+     "key_point": "The form of precipitation depends on the temperature of the air it falls through."
+    },
+    {
+     "id": "t2q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why are microscopic particles like dust, salt, or smoke essential for cloud formation?",
+     "options": [
+      "They act as condensation nuclei for water vapour to condense upon",
+      "They cool the surrounding air directly to freezing temperatures",
+      "They provide chemical nutrients needed to trigger precipitation",
+      "They lower the air pressure to force rapid evaporation"
+     ],
+     "answer": "They act as condensation nuclei for water vapour to condense upon",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what surfaces water vapour needs to condense in the air.",
+      "These particles are called condensation nuclei.",
+      "Without these particles, droplets cannot readily form clouds."
+     ],
+     "explanation": "Dust, salt, and smoke serve as condensation nuclei, giving water vapour a surface to condense onto when air reaches its dew point.",
+     "key_point": "Rising air cools to its dew point and condenses onto condensation nuclei like dust, salt, or smoke."
+    },
+    {
+     "id": "t2q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "How does the release of latent heat during cloud formation contribute to storm development?",
+     "options": [
+      "By warming the surrounding air and adding energy to the system",
+      "By instantly freezing cloud droplets into large hailstones",
+      "By causing rapid cooling of the upper atmosphere",
+      "By preventing rising air from reaching its dew point"
+     ],
+     "answer": "By warming the surrounding air and adding energy to the system",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider what thermal energy does when released into air.",
+      "Warmed air gains energy and can drive atmospheric instability.",
+      "Latent heat warms the surrounding air, which can fuel storms."
+     ],
+     "explanation": "When water vapour condenses, it releases latent heat that warms the surrounding air, providing energy that can fuel storms.",
+     "key_point": "Condensation releases latent heat that warms surrounding air and can fuel storms."
+    },
+    {
+     "id": "t2q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What direct physical process causes cloud droplets to transition into falling precipitation?",
+     "options": [
+      "Droplets collide and grow heavy enough to fall",
+      "Droplets instantly evaporate and re-freeze",
+      "Droplets undergo sublimation within the cloud",
+      "Droplets are forced down exclusively by high air pressure"
+     ],
+     "answer": "Droplets collide and grow heavy enough to fall",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what must happen to tiny cloud droplets so gravity pulls them down.",
+      "Consider how droplets interact inside a cloud.",
+      "They combine by colliding until their weight overcomes upward forces."
+     ],
+     "explanation": "Precipitation occurs when microscopic cloud droplets collide with each other, growing heavy enough to fall to Earth.",
+     "key_point": "Precipitation occurs when cloud droplets collide, grow heavy, and fall as rain, snow, sleet, or hail."
+    },
+    {
+     "id": "t2q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Water vapour condenses onto tiny particles of dust, salt, or smoke known as ____ nuclei.",
+     "options": [],
+     "answer": "condensation",
+     "accepted": [
+      "cloud condensation"
+     ],
+     "distractors": [
+      "evaporation",
+      "sublimation",
+      "precipitation"
+     ],
+     "hints": [
+      "This term refers to the phase change from gas to liquid.",
+      "It describes the specific particles required to form cloud droplets.",
+      "The missing word begins with 'c' and relates to condensing."
+     ],
+     "explanation": "The particles that water vapour condenses upon in the atmosphere are termed condensation nuclei.",
+     "key_point": "Rising air cools to its dew point and condenses onto condensation nuclei like dust, salt, or smoke."
+    },
+    {
+     "id": "t2q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Condensation releases ____ heat, which warms the surrounding air and can fuel storms.",
+     "options": [],
+     "answer": "latent",
+     "accepted": [],
+     "distractors": [
+      "sensible",
+      "radiant",
+      "solar"
+     ],
+     "hints": [
+      "This term describes heat absorbed or released during a phase change.",
+      "It is a hidden energy released as vapour turns to liquid.",
+      "The word starts with the letter 'l'."
+     ],
+     "explanation": "Latent heat is the thermal energy released during condensation that warms surrounding air.",
+     "key_point": "Condensation releases latent heat that warms surrounding air and can fuel storms."
+    },
+    {
+     "id": "t2q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Precipitation occurs when cloud droplets ____ and grow heavy enough to fall to Earth.",
+     "options": [],
+     "answer": "collide",
+     "accepted": [
+      "merge",
+      "combine"
+     ],
+     "distractors": [
+      "evaporate",
+      "separate",
+      "sublimate"
+     ],
+     "hints": [
+      "This describes droplets bumping into each other.",
+      "It is an action where individual droplets join together.",
+      "The verb starts with 'c'."
+     ],
+     "explanation": "Inside clouds, droplets collide and combine until they are large and heavy enough to fall as precipitation.",
+     "key_point": "Precipitation occurs when cloud droplets collide, grow heavy, and fall as rain, snow, sleet, or hail."
+    },
+    {
+     "id": "t2q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A rising mass of humid air cools from 25°C to its dew point of 14°C over an industrial zone with smoke. What will occur?",
+     "options": [
+      "Water vapour will condense on smoke particles, forming clouds",
+      "The air will stop rising and instantly evaporate all moisture",
+      "The smoke particles will absorb all vapour, preventing condensation",
+      "Sublimation will convert all moisture directly into ice"
+     ],
+     "answer": "Water vapour will condense on smoke particles, forming clouds",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "The air has cooled down to its dew point.",
+      "Smoke particles provide condensation nuclei.",
+      "Reaching dew point in the presence of particles leads to droplet and cloud formation."
+     ],
+     "explanation": "When air reaches its dew point, water vapour condenses on available condensation nuclei (such as smoke particles) to form cloud droplets.",
+     "key_point": "Rising air cools to its dew point and condenses onto condensation nuclei like dust, salt, or smoke."
+    },
+    {
+     "id": "t2q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A weather system experiences massive condensation as moist air ascends rapidly over a mountain. What effect will this have on the local atmosphere?",
+     "options": [
+      "Latent heat release will warm the surrounding air and potentially fuel storms",
+      "The rapid condensation will cool the surrounding air and suppress storm activity",
+      "Surrounding air temperatures will drop to absolute zero due to heat loss",
+      "Precipitation will be permanently prevented by the sudden drop in latent heat"
+     ],
+     "answer": "Latent heat release will warm the surrounding air and potentially fuel storms",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Remember what energy change accompanies condensation.",
+      "Condensation adds heat into the air mass.",
+      "This warming provides energy that can fuel storms."
+     ],
+     "explanation": "As water vapour condenses, latent heat is released into the surrounding air, warming it and potentially fueling severe storm development.",
+     "key_point": "Condensation releases latent heat that warms surrounding air and can fuel storms."
+    },
+    {
+     "id": "t2q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "Precipitation forms in high clouds and falls through an atmospheric layer that remains below 0°C all the way to the ground. What form will it likely take?",
+     "options": [
+      "Snow",
+      "Liquid rain",
+      "Warm drizzle",
+      "Water vapour"
+     ],
+     "answer": "Snow",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider how temperature along the descent path dictates the type of precipitation.",
+      "The air remains below freezing (0°C) all the way to the surface.",
+      "Frozen precipitation will remain frozen as snow when air temperatures stay below freezing."
+     ],
+     "explanation": "The type of precipitation depends on the temperature of the air it falls through; remaining below freezing results in solid precipitation such as snow.",
+     "key_point": "The form of precipitation depends on the temperature of the air it falls through."
+    }
+   ]
+  },
+  {
+   "id": "t3",
+   "title": "Collection and Groundwater",
+   "summary": "Precipitation reaching the ground either flows over the land surface or soaks deep into the soil. Water that percolates into rock layers forms groundwater that may eventually return to oceans and rivers.",
+   "key_points": [
+    "Surface runoff occurs when water flows over saturated, frozen, or paved ground into streams and rivers.",
+    "Infiltration happens when water soaks into the soil.",
+    "Water percolating deep into rock spaces forms groundwater stored in aquifers.",
+    "Groundwater can take thousands of years to flow back into rivers and the sea."
+   ],
+   "questions": [
+    {
+     "id": "t3q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What is the process called when water soaks into the soil?",
+     "options": [
+      "Infiltration",
+      "Sublimation",
+      "Evapotranspiration",
+      "Condensation"
+     ],
+     "answer": "Infiltration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what happens to rainwater when it enters the ground.",
+      "It describes water soaking into soil rather than flowing over it.",
+      "The term starts with 'in-'."
+     ],
+     "explanation": "Infiltration is specifically defined as the process where water soaks into the soil.",
+     "key_point": "Infiltration happens when water soaks into the soil."
+    },
+    {
+     "id": "t3q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Under which conditions does surface runoff primarily occur?",
+     "options": [
+      "When the ground is saturated, frozen, or paved",
+      "When air reaches its dew point",
+      "When plants close their stomata",
+      "When condensation nuclei are absent"
+     ],
+     "answer": "When the ground is saturated, frozen, or paved",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider ground conditions that prevent water from soaking in.",
+      "Think about surfaces that are impermeable, already full of water, or frozen.",
+      "Water flows over surfaces that cannot absorb any more liquid."
+     ],
+     "explanation": "Surface runoff happens when water cannot soak into the ground because it is paved, frozen, or already saturated.",
+     "key_point": "Surface runoff occurs when water flows over saturated, frozen, or paved ground into streams and rivers."
+    },
+    {
+     "id": "t3q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What are rock layers that store and transmit groundwater called?",
+     "options": [
+      "Aquifers",
+      "Glaciers",
+      "Condensation nuclei",
+      "Stomata"
+     ],
+     "answer": "Aquifers",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Look for the geological term used for deep rock storage.",
+      "This term begins with 'aqua'.",
+      "It describes rock layers filled with percolated water."
+     ],
+     "explanation": "Rock layers that store and transmit groundwater are called aquifers.",
+     "key_point": "Water percolating deep into rock spaces forms groundwater stored in aquifers."
+    },
+    {
+     "id": "t3q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why can groundwater take thousands of years to reach rivers and the sea?",
+     "options": [
+      "It moves very slowly through dense rock spaces deep underground.",
+      "It is permanently trapped and cannot move until temperatures rise.",
+      "It evaporates directly into the atmosphere from deep aquifers.",
+      "It only moves when severe surface runoff pushes it forward."
+     ],
+     "answer": "It moves very slowly through dense rock spaces deep underground.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider how water navigates underground rock layers.",
+      "Movement through rock pores is not as rapid as surface rivers.",
+      "The text notes that groundwater flows slowly back to oceans and rivers."
+     ],
+     "explanation": "Groundwater flows slowly through permeable rock layers underground, which can take up to thousands of years to discharge.",
+     "key_point": "Groundwater can take thousands of years to flow back into rivers and the sea."
+    },
+    {
+     "id": "t3q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Which scenario would result in a direct decrease in infiltration?",
+     "options": [
+      "Covering a field with concrete and asphalt",
+      "Increasing the soil's organic matter and porosity",
+      "Planting a dense forest over open grassland",
+      "Experiencing light, steady rainfall on dry soil"
+     ],
+     "answer": "Covering a field with concrete and asphalt",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Paved surfaces block water from entering the ground.",
+      "Infiltration requires permeable ground for water to soak in.",
+      "Urban surfaces reduce water soaking into the soil."
+     ],
+     "explanation": "Paving surfaces with concrete or asphalt makes the ground impermeable, preventing water from soaking into the soil.",
+     "key_point": "Infiltration happens when water soaks into the soil."
+    },
+    {
+     "id": "t3q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What happens to water that percolates deep below the soil layer?",
+     "options": [
+      "It fills spaces in rock layers to become groundwater.",
+      "It immediately returns to clouds through sublimation.",
+      "It turns into surface runoff flowing directly into streams.",
+      "It dissolves condensation nuclei in the upper atmosphere."
+     ],
+     "answer": "It fills spaces in rock layers to become groundwater.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about where water goes after it passes the upper soil layer.",
+      "It fills the pores and cracks within deeper rocks.",
+      "This deep water is stored in aquifers."
+     ],
+     "explanation": "Water percolating deeper into the Earth fills spaces in rock, forming groundwater.",
+     "key_point": "Water percolating deep into rock spaces forms groundwater stored in aquifers."
+    },
+    {
+     "id": "t3q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Water that percolates deep into rock spaces forms ____ stored in aquifers.",
+     "options": [],
+     "answer": "groundwater",
+     "accepted": [
+      "ground water"
+     ],
+     "distractors": [
+      "surface runoff",
+      "water vapour",
+      "precipitation"
+     ],
+     "hints": [
+      "This refers to water stored under the surface of the Earth.",
+      "It is formed when water fills deep rock spaces.",
+      "It combines the words 'ground' and 'water'."
+     ],
+     "explanation": "Water that percolates deep into rock formations becomes groundwater.",
+     "key_point": "Water percolating deep into rock spaces forms groundwater stored in aquifers."
+    },
+    {
+     "id": "t3q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "When water flows over saturated, frozen, or paved ground into rivers, it is called surface ____ .",
+     "options": [],
+     "answer": "runoff",
+     "accepted": [
+      "run-off",
+      "run off"
+     ],
+     "distractors": [
+      "infiltration",
+      "transpiration",
+      "percolation"
+     ],
+     "hints": [
+      "This is the term for water that travels over the land surface.",
+      "It happens when precipitation cannot soak into the ground.",
+      "It is a compound word starting with 'run'."
+     ],
+     "explanation": "Surface runoff is water flowing over the ground into bodies of water rather than soaking in.",
+     "key_point": "Surface runoff occurs when water flows over saturated, frozen, or paved ground into streams and rivers."
+    },
+    {
+     "id": "t3q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "The process of water soaking into the soil is known as ____ .",
+     "options": [],
+     "answer": "infiltration",
+     "accepted": [],
+     "distractors": [
+      "evaporation",
+      "sublimation",
+      "condensation"
+     ],
+     "hints": [
+      "It describes water entering the soil layer.",
+      "It starts with the letter 'I'.",
+      "This process is the opposite of surface runoff."
+     ],
+     "explanation": "Infiltration is the specific term used when water soaks directly into the soil.",
+     "key_point": "Infiltration happens when water soaks into the soil."
+    },
+    {
+     "id": "t3q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A city paves over a large wetland with parking lots. What will be the most likely effect on local water collection?",
+     "options": [
+      "Infiltration will decrease and surface runoff will increase.",
+      "Infiltration will increase and surface runoff will decrease.",
+      "Groundwater storage will increase significantly.",
+      "Sublimation will replace precipitation entirely."
+     ],
+     "answer": "Infiltration will decrease and surface runoff will increase.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Paved surfaces are impermeable to water.",
+      "Water cannot soak through asphalt easily.",
+      "Less water enters the ground, meaning more water flows over the surface."
+     ],
+     "explanation": "Paving prevents water from soaking into the soil (reducing infiltration), forcing excess water to flow over the surface as runoff.",
+     "key_point": "Surface runoff occurs when water flows over saturated, frozen, or paved ground into streams and rivers."
+    },
+    {
+     "id": "t3q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A researcher dates water emerging from a deep underground spring and finds it fell as rain millennia ago. Why?",
+     "options": [
+      "Groundwater can take thousands of years to slowly flow through aquifers.",
+      "Water freezes solid underground and stops flowing completely.",
+      "Infiltration prevents water from ever discharging into surface waterways.",
+      "The water was trapped because surface runoff blocked all aquifer exits."
+     ],
+     "answer": "Groundwater can take thousands of years to slowly flow through aquifers.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about the timeline of groundwater movement through deep rocks.",
+      "Subsurface flow occurs at very slow rates.",
+      "Groundwater can take thousands of years to return to the surface."
+     ],
+     "explanation": "Water in deep aquifers moves very slowly and may take thousands of years to return to rivers or the sea.",
+     "key_point": "Groundwater can take thousands of years to flow back into rivers and the sea."
+    },
+    {
+     "id": "t3q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "During winter, sudden rain falls on deep, frozen ground. What happens to the majority of this rainfall?",
+     "options": [
+      "It becomes surface runoff because the frozen ground cannot absorb it.",
+      "It quickly infiltrates into deep rock layers to replenish aquifers.",
+      "It turns immediately into water vapour through transpiration.",
+      "It remains suspended as droplets on condensation nuclei."
+     ],
+     "answer": "It becomes surface runoff because the frozen ground cannot absorb it.",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Frozen ground acts like an impermeable barrier.",
+      "Water cannot easily soak into frozen soil.",
+      "When water cannot infiltrate, it flows over the surface."
+     ],
+     "explanation": "Frozen ground prevents infiltration, causing rainwater to travel over the surface as runoff into streams and rivers.",
+     "key_point": "Surface runoff occurs when water flows over saturated, frozen, or paved ground into streams and rivers."
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "title": "Significance and Human Impacts",
+   "summary": "The hydrological cycle redistributes heat, shapes landscapes, and supplies scarce fresh water. Human actions and climate change disrupt this balance by altering runoff, infiltration, and storm intensity.",
+   "key_points": [
+    "Only about 2.5% of Earth's water is fresh, with most locked in glaciers and ice caps.",
+    "Deforestation decreases transpiration and increases runoff.",
+    "Urban concrete reduces infiltration, raising the risk of flash floods.",
+    "A warmer climate increases evaporation, leading to more atmospheric vapour and intense rainfall."
+   ],
+   "questions": [
+    {
+     "id": "t4q1",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "What percentage of Earth's water is fresh water?",
+     "options": [
+      "About 2.5%",
+      "About 14%",
+      "About 50%",
+      "About 86%"
+     ],
+     "answer": "About 2.5%",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Fresh water makes up only a tiny fraction of Earth's total water.",
+      "It is under 5%.",
+      "The text specifically identifies this value as approximately two and a half percent."
+     ],
+     "explanation": "According to the material, only about 2.5% of Earth's water is fresh, with most stored in glaciers and ice caps.",
+     "key_point": "Only about 2.5% of Earth's water is fresh, with most locked in glaciers and ice caps."
+    },
+    {
+     "id": "t4q2",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "How does cutting down forests directly affect the water cycle?",
+     "options": [
+      "It reduces transpiration and increases runoff",
+      "It increases transpiration and decreases runoff",
+      "It reduces evaporation from oceans",
+      "It increases groundwater infiltration"
+     ],
+     "answer": "It reduces transpiration and increases runoff",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what trees do with water via their leaves.",
+      "Without trees, less moisture enters the air from plants, and rain flows freely over the surface.",
+      "Cutting forests lowers biological water vapour release and boosts surface flow."
+     ],
+     "explanation": "The text states that human activity such as cutting forests reduces transpiration and increases runoff.",
+     "key_point": "Deforestation decreases transpiration and increases runoff."
+    },
+    {
+     "id": "t4q3",
+     "level": 1,
+     "kind": "choice",
+     "prompt": "Why do urban surfaces like concrete increase the risk of flash floods?",
+     "options": [
+      "They reduce infiltration",
+      "They increase plant transpiration",
+      "They speed up sublimation",
+      "They increase groundwater storage"
+     ],
+     "answer": "They reduce infiltration",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Consider whether water can soak through paved ground.",
+      "Paved surfaces prevent water from entering the soil.",
+      "When water cannot soak into the ground, infiltration is reduced."
+     ],
+     "explanation": "Urban surfaces such as concrete prevent water from soaking into the ground (reducing infiltration), causing water to flow rapidly over the surface.",
+     "key_point": "Urban concrete reduces infiltration, raising the risk of flash floods."
+    },
+    {
+     "id": "t4q4",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why does a warming global climate lead to heavier downpours?",
+     "options": [
+      "Higher evaporation rates allow the atmosphere to hold more water vapour",
+      "Higher temperatures cause cloud droplets to freeze faster",
+      "Warmer air prevents water from condensing on nuclei",
+      "Sublimation replaces all surface runoff"
+     ],
+     "answer": "Higher evaporation rates allow the atmosphere to hold more water vapour",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about what extra heat does to liquid water and atmospheric capacity.",
+      "Warmer conditions speed up evaporation and increase the moisture capacity of air.",
+      "More vapour stored in the atmosphere eventually precipitates as intense rainfall."
+     ],
+     "explanation": "As the climate warms, evaporation increases, enabling the atmosphere to hold more water vapour and intensifying heavy precipitation events.",
+     "key_point": "A warmer climate increases evaporation, leading to more atmospheric vapour and intense rainfall."
+    },
+    {
+     "id": "t4q5",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "Why is accessible fresh water for humans and land animals naturally scarce despite Earth's abundant water?",
+     "options": [
+      "Most of the 2.5% fresh water is trapped in ice caps and glaciers",
+      "All fresh water quickly sublimates directly into outer space",
+      "Fresh water only exists temporarily as falling rain",
+      "Aquifers permanently prevent water from returning to the surface"
+     ],
+     "answer": "Most of the 2.5% fresh water is trapped in ice caps and glaciers",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Fresh water makes up a tiny portion of total water, and not all of it is liquid.",
+      "Consider where most of that 2.5% is physically stored.",
+      "Most fresh water is locked away in solid form in cold polar and mountain regions."
+     ],
+     "explanation": "While fresh water is only 2.5% of all water on Earth, the majority of that small percentage is locked away in glaciers and ice caps.",
+     "key_point": "Only about 2.5% of Earth's water is fresh, with most locked in glaciers and ice caps."
+    },
+    {
+     "id": "t4q6",
+     "level": 2,
+     "kind": "choice",
+     "prompt": "What is the primary reason large-scale tree removal leads to increased surface runoff?",
+     "options": [
+      "Less water is taken up and released into the atmosphere by vegetation",
+      "Rainfall automatically doubles immediately over cleared land",
+      "Tree removal turns the soil into solid concrete",
+      "Deforestation stops all evaporation from nearby oceans"
+     ],
+     "answer": "Less water is taken up and released into the atmosphere by vegetation",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Think about the role plant roots and leaves play in moving water.",
+      "Without trees to draw up water and transpire it, more rain stays on the surface.",
+      "Reduced transpiration leaves excess water to flow over the ground as runoff."
+     ],
+     "explanation": "Deforestation eliminates trees that would otherwise absorb soil water and release it via transpiration, leaving more water to run off across the land.",
+     "key_point": "Deforestation decreases transpiration and increases runoff."
+    },
+    {
+     "id": "t4q7",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Most of Earth's fresh water is locked in glaciers and ____ .",
+     "options": [],
+     "answer": "ice caps",
+     "accepted": [
+      "polar ice caps",
+      "icecaps"
+     ],
+     "distractors": [
+      "aquifers",
+      "oceans",
+      "lakes"
+     ],
+     "hints": [
+      "This refers to large masses of frozen ice covering polar regions.",
+      "It is paired with glaciers in the text.",
+      "The phrase starts with 'ice'."
+     ],
+     "explanation": "The text states that out of the 2.5% of water that is fresh, most of it is locked in ice caps and glaciers.",
+     "key_point": "Only about 2.5% of Earth's water is fresh, with most locked in glaciers and ice caps."
+    },
+    {
+     "id": "t4q8",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "Urban surfaces made of concrete reduce ____ , which increases the risk of flash flooding.",
+     "options": [],
+     "answer": "infiltration",
+     "accepted": [
+      "water infiltration",
+      "soil infiltration"
+     ],
+     "distractors": [
+      "evaporation",
+      "transpiration",
+      "condensation"
+     ],
+     "hints": [
+      "This term describes water soaking into the soil.",
+      "Concrete acts as an impermeable barrier against this process.",
+      "It begins with the letter 'i'."
+     ],
+     "explanation": "When land is covered with impermeable materials like concrete, water cannot soak in (infiltration), resulting in fast surface flow and flash floods.",
+     "key_point": "Urban concrete reduces infiltration, raising the risk of flash floods."
+    },
+    {
+     "id": "t4q9",
+     "level": 3,
+     "kind": "blank",
+     "prompt": "A warmer climate drives higher rates of ____ , increasing the moisture held in the atmosphere.",
+     "options": [],
+     "answer": "evaporation",
+     "accepted": [
+      "surface evaporation"
+     ],
+     "distractors": [
+      "precipitation",
+      "infiltration",
+      "sublimation"
+     ],
+     "hints": [
+      "This is the phase change from liquid water to vapour caused by heat.",
+      "Higher global temperatures speed up this process across bodies of water.",
+      "It starts with 'e'."
+     ],
+     "explanation": "Warmer conditions cause more liquid water to turn into vapour via evaporation, increasing atmospheric moisture.",
+     "key_point": "A warmer climate increases evaporation, leading to more atmospheric vapour and intense rainfall."
+    },
+    {
+     "id": "t4q10",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A city converts a large natural wetland into a paved parking complex. What change to the local water cycle should be expected?",
+     "options": [
+      "Infiltration will decrease and surface runoff will increase",
+      "Transpiration and infiltration will both increase significantly",
+      "Surface runoff will decrease, preventing local flooding",
+      "Groundwater recharge will accelerate beneath the paved area"
+     ],
+     "answer": "Infiltration will decrease and surface runoff will increase",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Pavement is an impermeable urban surface like concrete.",
+      "Water cannot easily soak into paved ground.",
+      "Reduced soaking leads directly to more water flowing across the surface."
+     ],
+     "explanation": "Replacing permeable natural ground with impermeable pavement stops water from soaking into the soil (decreased infiltration), causing more water to flow across the surface (increased runoff).",
+     "key_point": "Urban concrete reduces infiltration, raising the risk of flash floods."
+    },
+    {
+     "id": "t4q11",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "A timber company clears hundreds of hectares of dense woodland. How will this alter moisture movement in the local area?",
+     "options": [
+      "Transpiration from vegetation will fall and surface runoff will rise",
+      "Transpiration will rise and surface runoff will decline",
+      "Infiltration will stop completely while transpiration doubles",
+      "Atmospheric moisture from plant stomata will increase dramatically"
+     ],
+     "answer": "Transpiration from vegetation will fall and surface runoff will rise",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Fewer trees mean fewer leaf stomata releasing water vapour.",
+      "Without tree cover and root systems, rainfall flows directly over the ground.",
+      "Look for decreased plant vapour release and increased surface flow."
+     ],
+     "explanation": "Removing trees reduces the amount of water released into the air via transpiration, leaving more precipitation to flow away over the land as runoff.",
+     "key_point": "Deforestation decreases transpiration and increases runoff."
+    },
+    {
+     "id": "t4q12",
+     "level": 4,
+     "kind": "choice",
+     "prompt": "If global average temperatures rise over the next century, how is precipitation behavior most likely to respond?",
+     "options": [
+      "Heavy rainstorms will become more intense due to more atmospheric vapour",
+      "Rainfall will cease completely because clouds can no longer form",
+      "Precipitation will only occur as snow due to higher evaporation rates",
+      "Storms will release less rain because warmer air destroys condensation nuclei"
+     ],
+     "answer": "Heavy rainstorms will become more intense due to more atmospheric vapour",
+     "accepted": [],
+     "distractors": [],
+     "hints": [
+      "Warmer air causes greater evaporation, loading the air with more moisture.",
+      "When air holds more water vapour, what happens during storm events?",
+      "More moisture leads to heavier downpours."
+     ],
+     "explanation": "Warmer air drives higher evaporation rates, allowing the atmosphere to hold more moisture, which fuels more intense heavy rainfall events.",
+     "key_point": "A warmer climate increases evaporation, leading to more atmospheric vapour and intense rainfall."
+    }
+   ]
+  }
+ ],
+ "model": "gemini-3.7-flash",
+ "created": "2026-10-23T12:26:14Z",
+ "generation_ms": 56687.4,
+ "dropped_questions": 0,
+ "seeded": true
+}
