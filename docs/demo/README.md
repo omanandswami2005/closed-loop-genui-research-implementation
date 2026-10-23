@@ -210,7 +210,7 @@ BASE=http://127.0.0.1:8000 GENUI_DEMO_CACHE=<server pack cache> node e2e/video/r
 python e2e/video/assemble.py OUT/work OUT/audio walkthrough.mp4
 ```
 
-`record.ts` drives Chromium through the whole flow (landing, onboarding, a live upload, a live
-learning, the interactive lab played level by level, the limited check, the topic summary, the component gallery, report, research mode) and captures frames; `assemble.py` places each narration
+`record.ts` drives Chromium through the whole flow (landing, onboarding, a live upload,
+the interactive lab played level by level, the limited check, the topic summary, the component gallery, report, research mode) and captures frames; `assemble.py` places each narration
 clip at its scene and plays any longer stretch faster with a visible fast-forward badge.
 Use an empty pack cache so the upload is generated live.
