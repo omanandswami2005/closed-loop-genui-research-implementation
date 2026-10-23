@@ -1,53 +1,140 @@
-import { ArrowLeft, Info, Loader2 } from "lucide-react";
+import confetti from "canvas-confetti";
+import { ArrowLeft, Check, ChevronDown, Info, LineChart, Sparkles, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { TelemetryBar } from "../TelemetryBar";
-import { TracePlot } from "../TracePlot";
 import { demoApi } from "./api";
 import { LearnContext, type LearnContextValue, LearnRenderer } from "./LearnRenderer";
+import { cn } from "./lib/utils";
+import { TraceChart } from "./TraceChart";
 import type { DemoView, Outcome } from "./types";
+import { AnimatedCircularProgressBar } from "./ui/magicui/animated-circular-progress-bar";
+import { NumberTicker } from "./ui/magicui/number-ticker";
+import { Button, Card, Eyebrow, LevelSteps, Pill, Spinner } from "./ui/primitives";
 import { go } from "./useRoute";
 
-const MODE = {
-  worked_example: "worked example first",
-  guided_scaffold: "guided practice",
-  open_symbolic: "open practice",
-};
-const LEVEL_SCREEN = {
-  1: "guided multiple choice, key ideas on screen",
-  2: "plain multiple choice",
-  3: "fill the gap",
-  4: "apply the idea to a new situation",
+const MODE = { worked_example: "worked example first", guided_scaffold: "guided practice", open_symbolic: "open practice" };
+const SCREEN = {
+  1: "a guided multiple-choice question with the key idea highlighted (or a nudge when the budget leaves no room for the card)",
+  2: "a plain multiple-choice question",
+  3: "a fill-the-gap question",
+  4: "an apply-it question in a new situation",
 } as Record<number, string>;
 
 function Explain({ v }: { v: DemoView }) {
   const t = v.telemetry;
+  const rows = [
+    <>
+      Your mastery estimate is <b className="font-mono text-cyan-300">{t.mastery.toFixed(2)}</b>; the target is {v.setpoint}.
+    </>,
+    <>
+      The PID governor set a complexity budget of <b className="font-mono text-cyan-300">{t.budget.toFixed(2)}</b> (level {t.level} of 4).
+    </>,
+    <>
+      The policy chose <b className="text-white">{MODE[t.decision.scaffolding_mode]}</b>, hints {t.decision.hint_enabled ? "on" : "off"}: {SCREEN[t.alpha]}.
+    </>,
+    t.plant === "gemini" && !t.fallback_used && !t.reason ? (
+      <>Gemini wrote this screen&apos;s text for your profile. The gate checked its structure, that it does not reveal the answer, and that it fits the budget.</>
+    ) : t.fallback_used && t.reason?.startsWith("gemini unavailable") ? (
+      <>Gemini did not answer in time ({t.reason.replace("gemini unavailable: ", "")}), so the deterministic template is shown.</>
+    ) : t.fallback_used ? (
+      <>The gate rejected the generated screen ({t.reason ?? "unknown"}) and showed the deterministic template instead.</>
+    ) : t.reason ? (
+      <>This screen is just the question, with no text to personalise, so Gemini was not called.</>
+    ) : (
+      <>The deterministic template built this screen from the question bank.</>
+    ),
+  ];
   return (
-    <div data-testid="explain" className="border border-zinc-800 p-3 text-[12px] leading-relaxed text-slate-300">
-      <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">why this screen</div>
-      <ol className="list-decimal space-y-1 pl-4">
-        <li>
-          Mastery estimate after your answers so far: <span className="font-mono text-blue-300">{t.mastery.toFixed(2)}</span> (target{" "}
-          {v.setpoint}).
-        </li>
-        <li>
-          The PID governor turned the gap to the target into a complexity budget of{" "}
-          <span className="font-mono text-blue-300">{t.budget.toFixed(2)}</span> (level {t.level} of 4).
-        </li>
-        <li>
-          The policy chose <span className="text-slate-100">{MODE[t.decision.scaffolding_mode]}</span>, hints {t.decision.hint_enabled ? "on" : "off"}:{" "}
-          {LEVEL_SCREEN[t.alpha] ?? ""}.
-        </li>
-        <li>
-          {t.plant === "gemini" && !t.fallback_used
-            ? "Gemini wrote this screen's text for your profile; the gate checked its structure, that it does not give the answer away, and that it is within the budget."
-            : t.fallback_used
-              ? `The gate rejected the generated screen (${t.reason ?? "unknown"}) and rendered the deterministic template instead.`
-              : "This screen was built by the deterministic template from the question bank."}{" "}
-          Measured complexity <span className="font-mono">{t.m_i.toFixed(3)}</span>, off by {t.abs_error.toFixed(3)}.
-        </li>
+    <Card className="p-5" data-testid="explain">
+      <div className="flex items-center gap-2 text-sm font-semibold">
+        <Info className="size-4 text-blue-300" /> Why this screen
+      </div>
+      <ol className="mt-3 space-y-2.5">
+        {rows.map((r, i) => (
+          <li key={i} className="flex gap-3 text-[13px] leading-relaxed text-slate-300">
+            <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-white/5 font-mono text-[10px] text-slate-400">{i + 1}</span>
+            <span>{r}</span>
+          </li>
+        ))}
       </ol>
-    </div>
+    </Card>
   );
+}
+
+function UnderTheHood({ v }: { v: DemoView }) {
+  const [open, setOpen] = useState(true);
+  const t = v.telemetry;
+  const cells: [string, string, string?][] = [
+    ["P(L)", t.mastery.toFixed(3), "mastery"],
+    ["e", t.error.toFixed(3), "error"],
+    ["u", t.effort.toFixed(3), "effort"],
+    ["M_I*", t.budget.toFixed(3), "budget"],
+    ["M_I", t.m_i.toFixed(3), "measured"],
+    ["|Δ|", t.abs_error.toFixed(3), "≤ 0.05"],
+    ["ρ α δ", `${t.rho} ${t.alpha} ${t.delta}`, "structure"],
+    ["writer", `${t.plant_ms < 10 ? t.plant_ms.toFixed(1) : Math.round(t.plant_ms)} ms`, t.plant],
+  ];
+  return (
+    <Card className="overflow-hidden">
+      <button type="button" onClick={() => setOpen(!open)} className="flex w-full items-center justify-between px-5 py-4 text-sm font-semibold">
+        <span className="flex items-center gap-2">
+          <LineChart className="size-4 text-violet-300" /> Under the hood
+        </span>
+        <ChevronDown className={cn("size-4 text-slate-400 transition", open && "rotate-180")} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
+            <div className="px-5 pb-5">
+              <TraceChart history={v.history} responses={v.responses} setpoint={v.setpoint} />
+              <div className="mt-4 grid grid-cols-4 gap-2" data-testid="telemetry">
+                {cells.map(([k, val, sub]) => (
+                  <div key={k} className="rounded-xl border border-white/5 bg-white/[0.02] px-2 py-1.5">
+                    <div className="font-mono text-[10px] text-slate-500">{k}</div>
+                    <div className={cn("font-mono text-[12px] tabular-nums", k === "|Δ|" && t.abs_error > 0.05 ? "text-rose-300" : "text-slate-100")}>{val}</div>
+                    <div className="truncate text-[9px] text-slate-500">{sub}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 text-xs font-medium text-slate-400">Gate log</div>
+              <div className="mt-2 max-h-56 overflow-auto rounded-xl border border-white/5">
+                <table className="w-full font-mono text-[11px] tabular-nums">
+                  <thead className="sticky top-0 bg-[#0c1220] text-slate-500">
+                    <tr>
+                      <th className="px-2 py-1.5 text-left font-normal">#</th>
+                      <th className="px-2 text-right font-normal">P(L)</th>
+                      <th className="px-2 text-right font-normal">M_I*</th>
+                      <th className="px-2 text-right font-normal">M_I</th>
+                      <th className="px-2 text-left font-normal">gate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...v.history].reverse().map((h) => (
+                      <tr key={h.item} className="border-t border-white/5">
+                        <td className="px-2 py-1 text-slate-500">{h.item + 1}</td>
+                        <td className="px-2 text-right">{h.mastery.toFixed(2)}</td>
+                        <td className="px-2 text-right">{h.budget.toFixed(3)}</td>
+                        <td className="px-2 text-right">{h.m_i.toFixed(3)}</td>
+                        <td className={cn("px-2", h.fallback_used ? "text-rose-300" : "text-emerald-300")} title={h.reason ?? ""}>
+                          {h.fallback_used ? "fallback" : h.plant === "gemini" && !h.reason ? "gemini ✓" : "template ✓"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Card>
+  );
+}
+
+function celebrate() {
+  const opts = { particleCount: 70, spread: 70, startVelocity: 38, ticks: 160, colors: ["#3b82f6", "#22d3ee", "#a78bfa", "#ffffff"] };
+  void confetti({ ...opts, origin: { x: 0.35, y: 0.7 } });
+  void confetti({ ...opts, origin: { x: 0.65, y: 0.7 } });
 }
 
 export function Learn({ sid }: { sid: string }) {
@@ -69,8 +156,11 @@ export function Learn({ sid }: { sid: string }) {
       try {
         const next = await demoApi.respond(view.session_id, answer, hints.current, justification);
         hints.current = 0;
+        const levelUp = next.telemetry.level > view.telemetry.level;
+        if (next.outcome?.correct && (levelUp || next.telemetry.mastery >= next.setpoint)) celebrate();
         setOutcome(next.outcome);
         setView(next);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -95,118 +185,121 @@ export function Learn({ sid }: { sid: string }) {
 
   if (error && !view)
     return (
-      <div className="p-4 font-mono text-xs text-red-300">
-        {error}{" "}
-        <button type="button" className="underline" onClick={() => go("/library")}>
-          back to material
-        </button>
+      <div className="mx-auto max-w-xl p-10 text-center">
+        <p className="text-rose-300">{error}</p>
+        <Button className="mt-4" variant="secondary" onClick={() => go("/library")}>
+          Back to material
+        </Button>
       </div>
     );
-  if (!view || !ctx) return <p className="p-4 font-mono text-xs text-slate-400">loading…</p>;
+  if (!view || !ctx)
+    return (
+      <div className="grid place-items-center p-24 text-slate-400">
+        <Spinner />
+      </div>
+    );
   const t = view.telemetry;
   const correct = view.responses.filter(Boolean).length;
 
   return (
-    <>
-      <TelemetryBar t={t} setpoint={view.setpoint} />
-      <main className="grid gap-4 p-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <section className="flex min-w-0 flex-col gap-3">
-          <div className="flex flex-wrap items-baseline justify-between gap-2 border border-zinc-800 bg-white px-4 py-3 text-slate-900">
-            <div className="flex items-baseline gap-3">
-              <button type="button" onClick={() => go(`/pack/${view.pack_id}`)} className="text-slate-500 hover:text-cobalt" title="Back to topics">
-                <ArrowLeft size={14} aria-hidden />
-              </button>
-              <h2 data-testid="topic-title" className="text-base font-semibold">
-                {view.topic.title}
-              </h2>
+    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_23rem]">
+      <section className="flex min-w-0 flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0">
+            <button type="button" onClick={() => go(`/pack/${view.pack_id}`)} className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-white">
+              <ArrowLeft className="size-3.5" /> Topics
+            </button>
+            <h1 data-testid="topic-title" className="truncate text-xl font-semibold tracking-tight md:text-2xl">
+              {view.topic.title}
+            </h1>
+            <div data-testid="item-label" className="mt-1 font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              Item {view.item + 1} · level {view.question.level} {view.level_name} · {correct}/{view.responses.length} correct
             </div>
-            <span data-testid="item-label" className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-500">
-              item {view.item + 1} · level {view.question.level} {view.level_name} · {correct}/{view.responses.length} correct
-            </span>
           </div>
+          <LevelSteps level={view.question.level} />
+        </div>
 
+        <AnimatePresence mode="popLayout">
           {view.notice && (
-            <div role="status" className="flex items-center gap-2 border border-amber-700 bg-amber-950/40 px-4 py-2 font-mono text-xs text-amber-300">
-              <Info size={12} aria-hidden /> {view.notice}
-            </div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} role="status" className="flex items-center gap-2 rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-200">
+              <Info className="size-4" /> {view.notice}
+            </motion.div>
           )}
-
           {outcome && (
-            <div
+            <motion.div
+              key={`o-${view.item}`}
+              initial={{ opacity: 0, y: -10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               data-testid="outcome"
               role="status"
-              className={`border px-4 py-2 text-sm ${outcome.correct ? "border-emerald-700 bg-emerald-950/40 text-emerald-200" : "border-red-700 bg-red-950/40 text-red-200"}`}
-            >
-              <span className="font-mono text-xs uppercase">{outcome.correct ? "previous: correct" : "previous: not correct"}</span>
-              {!outcome.correct && (
-                <span>
-                  {" "}
-                  · answer: <span className="font-semibold">{outcome.correct_answer}</span>
-                </span>
+              className={cn(
+                "flex gap-3 rounded-2xl border px-4 py-3.5",
+                outcome.correct ? "border-emerald-400/30 bg-emerald-500/10" : "border-rose-400/30 bg-rose-500/10",
               )}
-              <span className="block text-[13px] opacity-90">{outcome.explanation}</span>
-            </div>
-          )}
-
-          {error && <div className="border border-red-700 px-4 py-2 font-mono text-xs text-red-300">{error}</div>}
-
-          <div className="relative">
-            <div className={busy ? "pointer-events-none opacity-40" : ""}>
-              <LearnContext.Provider value={ctx}>
-                <LearnRenderer key={`${view.session_id}:${view.item}`} node={view.document.root} />
-              </LearnContext.Provider>
-            </div>
-            {busy && (
-              <div data-testid="busy" className="absolute inset-x-0 top-6 mx-auto flex w-fit items-center gap-2 border border-cobalt bg-slatebase px-3 py-2 font-mono text-xs text-blue-200">
-                <Loader2 size={12} className="animate-spin" aria-hidden />
-                marking, updating mastery, {view.plant === "gemini" ? "Gemini writing the next screen" : "building the next screen"}…
+            >
+              <span className={cn("mt-0.5 grid size-7 shrink-0 place-items-center rounded-full", outcome.correct ? "bg-emerald-500 text-white" : "bg-rose-500 text-white")}>
+                {outcome.correct ? <Check className="size-4" /> : <X className="size-4" />}
+              </span>
+              <div className="text-sm">
+                <div className={cn("font-semibold", outcome.correct ? "text-emerald-200" : "text-rose-200")}>
+                  {outcome.correct ? "Correct" : "Not quite"}
+                  {!outcome.correct && (
+                    <span className="font-normal text-slate-300">
+                      {" "}
+                      · answer: <b className="text-white">{outcome.correct_answer}</b>
+                    </span>
+                  )}
+                </div>
+                <p className="mt-0.5 text-slate-300">{outcome.explanation}</p>
               </div>
-            )}
-          </div>
-        </section>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {error && <div className="rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-2.5 text-sm text-rose-200">{error}</div>}
 
-        <aside className="flex flex-col gap-3">
-          <TracePlot history={view.history} responses={view.responses} setpoint={view.setpoint} />
-          <Explain v={view} />
-          <div className="border border-zinc-800">
-            <div className="border-b border-zinc-800 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-slate-400">gate log</div>
-            <table className="w-full font-mono text-[11px] tabular-nums">
-              <thead className="text-slate-400">
-                <tr>
-                  <th className="px-2 py-1 text-left font-normal">#</th>
-                  <th className="px-2 text-right font-normal">P(L)</th>
-                  <th className="px-2 text-right font-normal">M_I*</th>
-                  <th className="px-2 text-right font-normal">M_I</th>
-                  <th className="px-2 text-left font-normal">L</th>
-                  <th className="px-2 text-left font-normal">gate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...view.history].reverse().slice(0, 10).map((h) => (
-                  <tr key={h.item} className="border-t border-zinc-900">
-                    <td className="px-2 py-0.5 text-slate-400">{h.item + 1}</td>
-                    <td className="px-2 text-right">{h.mastery.toFixed(2)}</td>
-                    <td className="px-2 text-right">{h.budget.toFixed(3)}</td>
-                    <td className="px-2 text-right">{h.m_i.toFixed(3)}</td>
-                    <td className="px-2">L{h.level}</td>
-                    <td className={`px-2 ${h.fallback_used ? "text-red-400" : "text-emerald-400"}`} title={h.reason ?? ""}>
-                      {h.fallback_used ? "fallback" : h.plant === "gemini" ? "gemini" : "template"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="relative">
+          <div className={cn("transition duration-300", busy && "pointer-events-none scale-[0.99] opacity-40 blur-[1px]")}>
+            <LearnContext.Provider value={ctx}>
+              <LearnRenderer key={`${view.session_id}:${view.item}`} node={view.document.root} />
+            </LearnContext.Provider>
           </div>
-          <button
-            type="button"
-            data-testid="to-report"
-            onClick={() => go("/report")}
-            className="border border-zinc-700 px-3 py-1.5 font-mono text-xs text-slate-300 hover:border-slate-400"
-          >
-            open progress report
-          </button>
-        </aside>
-      </main>
-    </>
+          <AnimatePresence>
+            {busy && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                data-testid="busy"
+                className="glass absolute inset-x-0 top-10 mx-auto flex w-fit items-center gap-3 rounded-2xl px-5 py-3 text-sm shadow-2xl"
+              >
+                <Sparkles className="size-4 animate-pulse text-cyan-300" />
+                Marking, updating mastery, {view.plant === "gemini" ? "Gemini is writing your next screen" : "building your next screen"}…
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </section>
+
+      <aside className="flex flex-col gap-4">
+        <Card className="flex items-center gap-5 p-5">
+          <AnimatedCircularProgressBar className="size-24 text-lg" value={Math.round(t.mastery * 100)} gaugePrimaryColor="#22d3ee" gaugeSecondaryColor="rgba(255,255,255,0.08)" />
+          <div>
+            <Eyebrow>Mastery estimate</Eyebrow>
+            <div className="mt-1 text-3xl font-semibold tabular-nums">
+              <NumberTicker value={t.mastery} decimalPlaces={2} className="!text-white" key={view.item} startValue={view.history.at(-2)?.mastery ?? 0} />
+            </div>
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              <Pill tone="blue">budget {t.budget.toFixed(2)}</Pill>
+              <Pill tone={t.fallback_used ? "red" : "green"}>{t.fallback_used ? "fallback" : "gate pass"}</Pill>
+            </div>
+          </div>
+        </Card>
+        <Explain v={view} />
+        <UnderTheHood v={view} />
+        <Button variant="secondary" onClick={() => go("/report")} data-testid="to-report">
+          <LineChart className="size-4" /> Open progress report
+        </Button>
+      </aside>
+    </main>
   );
 }

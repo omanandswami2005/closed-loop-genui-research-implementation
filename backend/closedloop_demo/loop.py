@@ -11,7 +11,7 @@ from __future__ import annotations
 import random
 import re
 import time
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 
 from closedloop.bkt import BKTParams, BKTTracker
 from closedloop.governor import GovernorConfig, PIDGovernor
@@ -19,7 +19,7 @@ from closedloop.loop import LAPSE_H, RECENT_WINDOW, Telemetry
 from closedloop.policy import SurrogatePolicy
 
 from .bank import Pack, Question, Topic, _fold
-from .components import measure
+from .components import measure, texts_in
 from .plant import Admission, GeminiLearnPlant, admit, build, plan
 
 # Onboarding answer "how well do you know this already?" -> starting mastery P(L0).
@@ -98,6 +98,9 @@ class LogEntry:
     fallback_used: bool
 
 
+NO_TEXT = "no free text on this screen; Gemini not called"
+
+
 class DemoSession:
     def __init__(self, pack: Pack, topic: Topic, profile: dict, plant: GeminiLearnPlant | None, seed: int | None = None) -> None:
         self.pack, self.topic, self.profile = pack, topic, profile
@@ -167,15 +170,20 @@ class DemoSession:
         bp = plan(out.budget, decision, q, example_available=example is not None, key_points=len(self.topic.key_points))
         template = build(bp, q, self.topic, example)
         t1 = time.perf_counter()
-        if self.plant is not None:
+        note = None
+        if self.plant is not None and texts_in(template.root):
             emission = self.plant.generate(template, q, self.topic, self.profile)
             text, fault = emission.text, emission.fault
         else:
+            # Deterministic plant, or a bare question with no free text to personalise.
             text, fault = template.model_dump_json(), None
+            note = NO_TEXT if self.plant is not None else None
         t2 = time.perf_counter()
         adm = admit(text, out.budget, q, template) if not fault else None
         if adm is None:  # the plant did not answer: render the template, say why
             adm = Admission(template, measure(template), False, False, True, fault)
+        elif note:
+            adm = replace(adm, reason=note)
         s = adm.structure
         tel = Telemetry(
             item=len(self.history),
@@ -278,7 +286,8 @@ def topic_report(s: DemoSession) -> dict:
         "levels_seen": levels,
         "hints_opened": sum(e.hints_opened for e in s.log),
         "minutes": round((time.time() - s.started) / 60, 1),
-        "gemini_screens": sum(1 for t in s.history if t.plant == "gemini" and not t.fallback_used),
+        "gemini_screens": sum(1 for t in s.history if t.plant == "gemini" and not t.fallback_used and not t.reason),
+        "template_screens": sum(1 for t in s.history if t.plant != "gemini" or t.reason == NO_TEXT),
         "fallback_screens": sum(1 for t in s.history if t.fallback_used),
         "status": status,
         "advice": advice,

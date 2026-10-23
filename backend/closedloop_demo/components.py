@@ -58,6 +58,7 @@ class ChoiceQuestion(_Strict):
     options_shown: int = Field(ge=2, le=4)
     justify: bool = False  # optional free-text "why" box (not graded)
     evidence: int = Field(default=0, ge=0, le=4)  # apply only: tick the key ideas that support the choice (not graded)
+    key_idea: str | None = Field(default=None, min_length=1, max_length=300)  # guided only: the tested idea, shown above the options (static)
 
     @model_validator(mode="after")
     def _style_rules(self) -> "ChoiceQuestion":
@@ -65,6 +66,8 @@ class ChoiceQuestion(_Strict):
             raise ValueError("a guided question has no justification box")
         if self.style != "apply" and self.evidence:
             raise ValueError("only an apply question asks for supporting key ideas")
+        if self.style != "guided" and self.key_idea:
+            raise ValueError("only a guided question shows the key idea")
         return self
 
 
@@ -137,6 +140,8 @@ def texts_in(node) -> list[str]:
         return [node.text]
     if isinstance(node, ConceptCard):
         return [node.title, *node.points]
+    if isinstance(node, ChoiceQuestion) and node.key_idea:
+        return [node.key_idea]
     if isinstance(node, HintAccordion):
         return list(node.hints)
     return []

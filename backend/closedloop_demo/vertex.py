@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections.abc import Callable
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass, replace
 
 import httpx
@@ -28,7 +30,7 @@ class VertexJSON:
         cfg = GeminiConfig()
         cfg = replace(
             cfg,
-            model=model or os.environ.get("GENUI_DEMO_MODEL", cfg.model),
+            model=model or os.environ.get("GENUI_DEMO_MODEL", "gemini-3-flash-preview"),
             timeout_s=timeout_s or float(os.environ.get("GENUI_DEMO_TIMEOUT", "120")),
         )
         self._plant = GeminiPlant(cfg)  # owns the HTTP client and the token logic
@@ -82,3 +84,36 @@ class VertexJSON:
                 "thought_tokens": usage.get("thoughtsTokenCount", 0),
             },
         )
+
+
+
+_HEDGE_POOL = ThreadPoolExecutor(max_workers=16, thread_name_prefix="vertex-hedge")
+
+
+def hedged(fn: Callable[[], Reply], *, hedge_after_s: float, copies: int, deadline_s: float) -> Reply:
+    """Run ``fn``; while no copy has answered, start another every ``hedge_after_s``, up to ``copies``.
+
+    Vertex replies usually arrive in 2-5 s, but a few take 25 s or more. An
+    identical request sent after a short wait usually comes back first, so the
+    learner is not left waiting. The first successful reply wins; the others
+    finish in the background and are ignored. A failed copy is replaced at once.
+    """
+    start = time.monotonic()
+    running = {_HEDGE_POOL.submit(fn)}
+    launched, last_error = 1, None
+    while running:
+        remaining = deadline_s - (time.monotonic() - start)
+        if remaining <= 0:
+            break
+        done, running = wait(running, timeout=min(hedge_after_s, remaining) if launched < copies else remaining, return_when=FIRST_COMPLETED)
+        for f in done:
+            try:
+                return f.result()
+            except GeminiUnavailable as exc:
+                last_error = exc
+                if str(exc).rsplit(" ", 1)[-1] in ("401", "402", "403", "429"):
+                    raise
+        if launched < copies:
+            running.add(_HEDGE_POOL.submit(fn))
+            launched += 1
+    raise last_error if last_error is not None and not running else GeminiUnavailable("ReadTimeout")

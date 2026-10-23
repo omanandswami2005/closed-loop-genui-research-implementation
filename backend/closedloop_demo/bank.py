@@ -22,7 +22,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from .ingest import Extracted
-from .vertex import GeminiUnavailable, VertexJSON
+from .vertex import GeminiUnavailable, VertexJSON, hedged
 
 BLANK = "____"
 LEVELS = (1, 2, 3, 4)
@@ -307,18 +307,19 @@ class PackStore:
             return pack, False
 
 
+    @staticmethod
+    def _hedged(fn):
+        # A failed or stalled call is re-sent (a stalled one keeps running; the first reply wins).
+        return hedged(fn, hedge_after_s=float(os.environ.get("GENUI_DEMO_BANK_HEDGE_AFTER", "45")), copies=3, deadline_s=170)
+
     def _generate(self, ex: Extracted, pid: str, source_name: str) -> Pack:
         """Outline call, then one question call per topic in parallel."""
         n = len(ex.text)
         material = {"kind": ex.kind, "chars": n, "trunc": ", truncated" if ex.truncated else "", "text": ex.text}
         thinking = os.environ.get("GENUI_DEMO_BANK_THINKING", "LOW")
         t0 = time.perf_counter()
-        outline = self.client.call(
-            OUTLINE_PROMPT.format(min_topics=2 if n < 2500 else 3, max_topics=3 if n < 2500 else 5, audience=AUDIENCE, **material),
-            OUTLINE_SCHEMA,
-            thinking=thinking,
-            temperature=0.3,
-        ).data
+        prompt = OUTLINE_PROMPT.format(min_topics=2 if n < 2500 else 3, max_topics=3 if n < 2500 else 5, audience=AUDIENCE, **material)
+        outline = self._hedged(lambda: self.client.call(prompt, OUTLINE_SCHEMA, thinking=thinking, temperature=0.3)).data
         outlines = [o for o in outline.get("topics", []) if isinstance(o, dict) and o.get("title")][:6]
         if not outlines:
             raise GeminiUnavailable("no topics in the outline")
@@ -331,13 +332,10 @@ class PackStore:
                 audience=AUDIENCE,
                 **material,
             )
-            for attempt in range(2):  # one retry per topic on a transient failure
-                try:
-                    return self.client.call(prompt, QUESTIONS_SCHEMA, thinking=thinking, temperature=0.4).data.get("questions", [])
-                except GeminiUnavailable:
-                    if attempt:
-                        return []
-            return []
+            try:
+                return self._hedged(lambda: self.client.call(prompt, QUESTIONS_SCHEMA, thinking=thinking, temperature=0.4)).data.get("questions", [])
+            except GeminiUnavailable:
+                return []
 
         with ThreadPoolExecutor(max_workers=len(outlines)) as pool:
             replies = list(pool.map(questions, outlines))

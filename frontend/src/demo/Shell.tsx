@@ -1,59 +1,73 @@
-import { Activity, BookOpen, FlaskConical, LineChart, UserRound } from "lucide-react";
+import { BookOpen, FlaskConical, LineChart, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
+import { cn } from "./lib/utils";
 import type { Profile } from "./types";
+import { Logo } from "./ui/primitives";
 import { go, type Route } from "./useRoute";
 
-function NavLink({ active, onClick, children, testId }: { active: boolean; onClick: () => void; children: ReactNode; testId?: string }) {
+function Tab({ active, onClick, children, testId }: { active: boolean; onClick: () => void; children: ReactNode; testId?: string }) {
   return (
     <button
       type="button"
       data-testid={testId}
       onClick={onClick}
-      className={`flex items-center gap-1.5 border px-2 py-0.5 font-mono text-xs ${active ? "border-cobalt bg-cobalt text-white" : "border-zinc-700 text-slate-300 hover:border-slate-400"}`}
+      className={cn(
+        "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition",
+        active ? "bg-white/10 text-white shadow-inner" : "text-slate-400 hover:bg-white/5 hover:text-white",
+      )}
     >
       {children}
     </button>
   );
 }
 
-/** Page frame: header with navigation, the scope notice, and the page body. */
+/** Frame for the app pages: navigation bar, page body and the scope line. */
 export function Shell({ route, profile, children }: { route: Route; profile: Profile | null; children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 px-4 py-2 print:hidden">
-        <div className="flex items-center gap-3">
-          <Activity size={16} className="text-blue-400" aria-hidden />
-          <h1 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Closed-loop GenUI · your material</h1>
-          <span className="border border-amber-700 px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-amber-300">demo extension</span>
-        </div>
-        <nav className="flex flex-wrap items-center gap-2">
-          {profile && (
-            <>
-              <NavLink testId="nav-library" active={route.name === "library" || route.name === "pack"} onClick={() => go("/library")}>
-                <BookOpen size={12} aria-hidden /> material
-              </NavLink>
-              <NavLink testId="nav-report" active={route.name === "report"} onClick={() => go("/report")}>
-                <LineChart size={12} aria-hidden /> progress report
-              </NavLink>
-              <NavLink testId="nav-profile" active={route.name === "welcome"} onClick={() => go("/welcome")}>
-                <UserRound size={12} aria-hidden /> {profile.name}
-              </NavLink>
-            </>
-          )}
-          <a
-            href="/"
-            className="flex items-center gap-1.5 border border-zinc-700 px-2 py-0.5 font-mono text-xs text-slate-300 hover:border-slate-400"
-            title="The evaluated research testbed (linear equations)"
-          >
-            <FlaskConical size={12} aria-hidden /> research mode
+    <div className="relative flex min-h-screen flex-col">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_10%_-10%,rgba(37,99,235,0.18),transparent),radial-gradient(50rem_30rem_at_110%_10%,rgba(124,58,237,0.12),transparent)]" />
+      <header className="no-print sticky top-0 z-40 border-b border-white/10 bg-[#060a13]/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4">
+          <a href="#/" className="flex items-center gap-2.5" data-testid="nav-home">
+            <Logo className="size-6" />
+            <span className="hidden text-sm font-semibold tracking-tight sm:inline">Adaptive GenUI</span>
+            <span className="rounded-md border border-amber-400/30 bg-amber-500/10 px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-amber-300">demo</span>
           </a>
-        </nav>
+          {profile && (
+            <nav className="flex items-center gap-1">
+              <Tab testId="nav-library" active={route.name === "library" || route.name === "pack" || route.name === "learn"} onClick={() => go("/library")}>
+                <BookOpen className="size-4" /> <span className="hidden sm:inline">Material</span>
+              </Tab>
+              <Tab testId="nav-report" active={route.name === "report"} onClick={() => go("/report")}>
+                <LineChart className="size-4" /> <span className="hidden sm:inline">Progress</span>
+              </Tab>
+            </nav>
+          )}
+          <div className="flex items-center gap-2">
+            <a href="/" className="hidden items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:bg-white/5 hover:text-white md:flex" title="The evaluated research testbed (linear equations)">
+              <FlaskConical className="size-3.5" /> Research mode
+            </a>
+            {profile && (
+              <button
+                type="button"
+                data-testid="nav-profile"
+                onClick={() => go("/start")}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 py-1 pl-1 pr-3 text-sm hover:bg-white/10"
+              >
+                <span className="grid size-6 place-items-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-[11px] font-semibold text-white">
+                  {profile.name.slice(0, 1).toUpperCase()}
+                </span>
+                <span className="max-w-28 truncate">{profile.name}</span>
+                <UserRound className="hidden size-3.5 text-slate-400" />
+              </button>
+            )}
+          </div>
+        </div>
       </header>
       <div className="flex-1">{children}</div>
-      <footer className="border-t border-zinc-800 px-4 py-2 font-mono text-[11px] leading-relaxed text-slate-400 print:text-slate-600">
-        Demo extension: the same controller (BKT mastery estimate, PID complexity budget, policy, validation gate) on a new general-content
-        component pack. Not evaluated. The paper&apos;s results cover linear equations with simulated learners only. Mastery values are the
-        model&apos;s estimate, not a measured learning gain.
+      <footer className="no-print border-t border-white/5 px-4 py-4 text-center text-[11px] leading-relaxed text-slate-500">
+        Demo extension: the research controller (mastery estimate, PID budget, policy, validation gate) on general content. Not evaluated; the
+        paper&apos;s results cover linear equations with simulated learners only. Mastery is the model&apos;s estimate, not a measured learning gain.
       </footer>
     </div>
   );

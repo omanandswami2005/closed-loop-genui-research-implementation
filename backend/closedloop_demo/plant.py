@@ -37,7 +37,7 @@ from .components import (
     parse,
     texts_in,
 )
-from .vertex import GeminiUnavailable, VertexJSON
+from .vertex import GeminiUnavailable, VertexJSON, hedged
 
 STYLE_FOR_ALPHA = {1: "guided", 2: "plain", 4: "apply"}
 
@@ -152,6 +152,8 @@ def _pad_prompts(bp: Blueprint) -> list[str]:
 
 def _question_node(bp: Blueprint, q: Question):
     v = bp.variant
+    # A guided question without a concept card still gets a nudge (static text, no added depth).
+    key_idea = q.hints[0] if bp.alpha == 1 and not bp.concept else None
     if bp.alpha == 3:
         return BlankQuestion(type="BlankQuestion", question_id=q.id, word_bank=v.word_bank)
     return ChoiceQuestion(
@@ -161,6 +163,7 @@ def _question_node(bp: Blueprint, q: Question):
         options_shown=v.options_shown,
         justify=v.justify,
         evidence=v.evidence,
+        key_idea=key_idea,
     )
 
 
@@ -221,7 +224,63 @@ _LEARN_SCHEMA_NOTE = """Node types (JSON, "type" field selects the node):
 - ConceptCard {title, points: [1-4 strings], highlight: index or null}
 - WorkedExplanation {steps: [{label, text}]}
 - HintAccordion {hints: [strings]}
-- ChoiceQuestion / BlankQuestion: the question itself (fixed; copy it exactly)."""
+- ChoiceQuestion / BlankQuestion: the question itself (fixed; copy it exactly), except a guided
+  ChoiceQuestion's "key_idea": one short sentence (max 25 words) that nudges the learner towards the idea being tested.
+  It must never name, quote or point to the correct option."""
+
+
+def _outline(node) -> str:
+    """A one-line description of the layout, so the model keeps every count."""
+    if isinstance(node, Stack):
+        return f"Stack of {len(node.children)} children [" + ", ".join(_outline(c) for c in node.children) + "]"
+    if isinstance(node, ConceptCard):
+        return f"ConceptCard with {len(node.points)} points"
+    if isinstance(node, WorkedExplanation):
+        return f"WorkedExplanation with {len(node.steps)} steps"
+    if isinstance(node, HintAccordion):
+        return f"HintAccordion with {len(node.hints)} hints"
+    if isinstance(node, ChoiceQuestion) and node.key_idea:
+        return "ChoiceQuestion (rewrite its key_idea only)"
+    return type(node).__name__
+
+
+def _fixed(value) -> dict:
+    if isinstance(value, bool):
+        return {"type": "BOOLEAN"}
+    if isinstance(value, int):
+        return {"type": "INTEGER", "minimum": value, "maximum": value}
+    return {"type": "STRING", "enum": [value]}
+
+
+def _obj(props: dict) -> dict:
+    return {"type": "OBJECT", "properties": props, "required": list(props), "propertyOrdering": list(props)}
+
+
+def _list(item: dict, n: int) -> dict:
+    return {"type": "ARRAY", "items": item, "minItems": n, "maxItems": n}
+
+
+def layout_schema(node) -> dict:
+    """A response schema that pins the layout: node types, order and every count are fixed, only text is free."""
+    text = {"type": "STRING"}
+    if isinstance(node, Stack):
+        return _obj({"type": _fixed("Stack"), "direction": _fixed(node.direction),
+                     "children": {**_list({}, len(node.children)), "items": {"anyOf": [layout_schema(c) for c in node.children]}}})
+    if isinstance(node, Prompt):
+        return _obj({"type": _fixed("Prompt"), "text": text})
+    if isinstance(node, ConceptCard):
+        props = {"type": _fixed("ConceptCard"), "title": text, "points": _list(text, len(node.points))}
+        if node.highlight is not None:
+            props["highlight"] = _fixed(node.highlight)
+        return _obj(props)
+    if isinstance(node, WorkedExplanation):
+        return _obj({"type": _fixed("WorkedExplanation"), "steps": _list(_obj({"label": text, "text": text}), len(node.steps))})
+    if isinstance(node, HintAccordion):
+        return _obj({"type": _fixed("HintAccordion"), "hints": _list(text, len(node.hints))})
+    fields = {k: _fixed(v) for k, v in node.model_dump().items() if v is not None}
+    if getattr(node, "key_idea", None):
+        fields["key_idea"] = text
+    return _obj(fields)
 
 
 def gemini_prompt(template: LearnDocument, q: Question, topic: Topic, profile: dict) -> str:
@@ -235,6 +294,7 @@ Topic: {topic.title}. The learner will answer this question (do NOT reveal or pa
 
 Below is the screen layout the complexity controller fixed. Return the SAME JSON structure: same node types, same order,
 same number of children, points, steps and hints, same question node copied exactly, same "highlight" value.
+Do not add or remove any node. The layout is exactly: {_outline(template.root)}.
 Rewrite only the free text, for this learner:
 - Prompt.text: one short sentence (max 25 words) framing the task, linking to their interests where natural.
 - ConceptCard.points: the same facts in plain words for their level (max 25 words each); keep every fact accurate.
@@ -263,11 +323,12 @@ class GeminiLearnPlant:
         self.cap = int(os.environ.get("GENUI_DEMO_GEMINI_DAILY_CAP", "0")) if cap is None else cap
         self._day, self.calls, self.open_until = "", 0, 0.0
         self._lock = threading.Lock()
+        self.timeout_s = float(os.environ.get("GENUI_DEMO_ITEM_TIMEOUT", "25"))
 
     @property
     def client(self) -> VertexJSON:
         if self._client is None:
-            self._client = VertexJSON(timeout_s=float(os.environ.get("GENUI_DEMO_ITEM_TIMEOUT", "25")))
+            self._client = VertexJSON(model=os.environ.get("GENUI_DEMO_SCREEN_MODEL", "gemini-3.5-flash-lite"), timeout_s=self.timeout_s)
         return self._client
 
     def available(self) -> bool:
@@ -286,8 +347,15 @@ class GeminiLearnPlant:
                 self.calls += 1
         t0 = time.perf_counter()
         try:
-            # No responseSchema: the layout in the prompt is the schema and the gate enforces it.
-            reply = self.client.call(gemini_prompt(template, q, topic, profile), None, thinking="LOW", temperature=0.5)
+            # The response schema pins the layout the controller chose; the gate still checks everything.
+            prompt = gemini_prompt(template, q, topic, profile)
+            schema = _obj({"schema_version": _fixed(SCHEMA_VERSION), "question_id": _fixed(q.id), "root": layout_schema(template.root)})
+            reply = hedged(
+                lambda: self.client.call(prompt, schema, thinking="LOW", temperature=0.5),
+                hedge_after_s=float(os.environ.get("GENUI_DEMO_HEDGE_AFTER", "7")),
+                copies=int(os.environ.get("GENUI_DEMO_HEDGE_COPIES", "3")),
+                deadline_s=self.timeout_s,
+            )
         except GeminiUnavailable as exc:
             if str(exc).rsplit(" ", 1)[-1] in _PERSISTENT:
                 with self._lock:
@@ -320,12 +388,15 @@ def leaks(doc: LearnDocument, q: Question) -> bool:
 
 
 def texts_in_hints_and_prompts(node) -> list[str]:
+    """Text that must never give the answer away, even for multiple choice."""
     if isinstance(node, Stack):
         return [t for c in node.children for t in texts_in_hints_and_prompts(c)]
     if isinstance(node, Prompt):
         return [node.text]
     if isinstance(node, HintAccordion):
         return list(node.hints)
+    if isinstance(node, ChoiceQuestion) and node.key_idea:
+        return [node.key_idea]
     return []
 
 

@@ -64,6 +64,7 @@ export interface ChoiceQuestionNode {
   options_shown: number;
   justify: boolean;
   evidence: number;
+  key_idea?: string | null;
 }
 export interface BlankQuestionNode {
   type: "BlankQuestion";
@@ -137,6 +138,7 @@ export interface TopicReport {
   minutes: number;
   gemini_screens: number;
   fallback_screens: number;
+  template_screens?: number;
   status: "mastered" | "in progress" | "needs support" | "not started";
   advice: string;
   trace: number[];

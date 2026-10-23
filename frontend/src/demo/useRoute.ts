@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 export type Route =
-  | { name: "welcome" }
+  | { name: "landing" }
+  | { name: "start" }
   | { name: "library" }
   | { name: "pack"; id: string; cached: boolean }
   | { name: "learn"; sid: string }
@@ -9,11 +10,12 @@ export type Route =
 
 function parse(hash: string): Route {
   const [, name, arg, flag] = hash.replace(/^#/, "").split("/");
+  if (name === "start" || name === "welcome") return { name: "start" };
   if (name === "library") return { name: "library" };
   if (name === "pack" && arg) return { name: "pack", id: arg, cached: flag === "cached" };
   if (name === "learn" && arg) return { name: "learn", sid: arg };
   if (name === "report") return { name: "report" };
-  return { name: "welcome" };
+  return { name: "landing" };
 }
 
 export function go(path: string) {
@@ -25,7 +27,7 @@ export function useRoute(): Route {
   useEffect(() => {
     const on = () => {
       setRoute(parse(window.location.hash));
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0 });
     };
     window.addEventListener("hashchange", on);
     return () => window.removeEventListener("hashchange", on);

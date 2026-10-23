@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { demoApi } from "./api";
+import { Landing } from "./Landing";
 import { Learn } from "./Learn";
 import { Library } from "./Library";
 import { Onboarding } from "./Onboarding";
@@ -8,6 +9,7 @@ import { Report } from "./Report";
 import { Shell } from "./Shell";
 import { loadLearner, type Saved, saveLearner } from "./storage";
 import type { Profile } from "./types";
+import { Spinner } from "./ui/primitives";
 import { go, useRoute } from "./useRoute";
 
 export function DemoApp() {
@@ -49,9 +51,16 @@ export function DemoApp() {
     }
   };
 
+  if (route.name === "landing") return <Landing hasProfile={!!learner} />;
+
   let body;
-  if (!synced) body = <p className="p-4 font-mono text-xs text-slate-400">connecting…</p>;
-  else if (!learner || route.name === "welcome") body = <Onboarding initial={learner?.profile ?? null} onSave={(p) => void save(p)} busy={busy} />;
+  if (!synced)
+    body = (
+      <div className="grid place-items-center p-24 text-slate-400">
+        <Spinner />
+      </div>
+    );
+  else if (!learner || route.name === "start") body = <Onboarding initial={learner?.profile ?? null} onSave={(p) => void save(p)} busy={busy} />;
   else if (route.name === "library") body = <Library />;
   else if (route.name === "pack") body = <PackView id={route.id} learnerId={learner.learnerId} cached={route.cached} />;
   else if (route.name === "learn") body = <Learn sid={route.sid} />;
@@ -59,7 +68,7 @@ export function DemoApp() {
 
   return (
     <Shell route={route} profile={learner?.profile ?? null}>
-      {error && <div className="border-b border-red-700 bg-red-950/40 px-4 py-2 font-mono text-xs text-red-300">{error}</div>}
+      {error && <div className="border-b border-rose-400/30 bg-rose-500/10 px-4 py-2 text-center text-sm text-rose-200">{error}</div>}
       {body}
     </Shell>
   );
