@@ -25,6 +25,7 @@ paper. All commands run from `backend/` unless noted. The committed outputs in
 | Ten test seeds | `python -m closedloop.sim.run --seed SEED --out ../results/seeds/SEED` for each seed, then `python ../results/seeds/aggregate.py` | `results/seeds/across_seeds.csv` |
 | Controller tuning (tuning seed 20261004) | `python -m closedloop.sim.tune search --out ../results/tuning` | `tuning.json`, `search.csv` |
 | Parameter and weight sensitivity | `python -m closedloop.sim.tune sensitivity --out ../results/tuning` | `results/tuning/` |
+| Paired tests and effect sizes (Table V) | `python results/benchmark/paired_tests.py` (from the repo root) | `results/benchmark/paired_tests.csv` |
 
 The BKT saturation claims are checked by `backend/tests/test_bkt_saturation.py`
 (`python -m pytest tests/test_bkt_saturation.py` from `backend/`, after
