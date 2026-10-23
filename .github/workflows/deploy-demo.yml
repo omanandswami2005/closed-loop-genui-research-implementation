@@ -4,12 +4,10 @@ name: Deploy demo extension to Cloud Run
 # separate Cloud Run service "genui-demo". The research service "genui" and
 # its workflow (deploy.yml) are not touched. Same keyless auth (infra/gcp/).
 
-# Deploy from a branch by moving the "demo" tag to its head
-# (git tag -f demo && git push -f origin demo): long branch names make the
-# OIDC subject exceed the Workload Identity 127-byte limit, a short tag does not.
+# Runs on main (and by hand). Pushes from long branch names cannot use it:
+# their OIDC subject exceeds the Workload Identity 127-byte limit.
 on:
   push:
-    tags: [demo]
     branches: [main]
     paths:
       - backend/closedloop/**
