@@ -75,5 +75,5 @@ Legend: `[x]` done and verified, `[ ]` open. "Check" says how it was verified.
 - [x] Frontend: 30 React components (tap or drag, sliders, animated simulations), level shell (`Station.tsx`), lab page with toolbox and "how this lab was made" (`LabStage.tsx`), topic summary, component gallery `#/gallery`, landing updated. Check: `npx tsc -b`, `npm run build`.
 - [x] Browser test of every component: renders, 23 solved by learner-style interaction from their data, all 30 correct under the worked solution, no console errors. Check: `e2e/tests/genui.spec.ts`.
 - [x] Tests: 178 pytest pass; 9/9 Playwright pass locally (live Gemini lab included).
-- [ ] Redeploy `genui-demo` and run Playwright against the live URL.
-- [ ] Re-record the narrated walkthrough with the lab, the gallery, the limited check and the summary.
+- [x] Redeploy `genui-demo` and run Playwright against the live URL. Check: revision genui-demo-00003, 9/9 pass against https://genui-demo-151739080904.us-central1.run.app.
+- [x] Re-record the narrated walkthrough with the lab, the gallery, the limited check and the summary. Check: 5 min 48 s cut, live upload and live Gemini lab, frames reviewed.

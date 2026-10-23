@@ -76,7 +76,7 @@ type Q = { prompt: string; answer: string; options: string[]; kind: string; leve
 const norm = (s: string) => s.replace(/_{2,}/g, "").replace(/\s+/g, " ").trim().toLowerCase();
 function key(): Q[] {
   const qs: Q[] = [];
-  for (const f of fs.readdirSync(CACHE)) {
+  for (const f of fs.readdirSync(CACHE).filter((x) => x.endsWith(".json"))) {
     const p = JSON.parse(fs.readFileSync(path.join(CACHE, f), "utf8"));
     for (const t of p.topics) qs.push(...t.questions);
   }
@@ -129,6 +129,147 @@ async function answer(correct: boolean, openHint = false) {
   await page.waitForFunction((b) => document.querySelector('[data-testid="item-label"]')?.textContent !== b, before, { timeout: 90_000 });
   busy.push({ t0, t1: now() });
   await pause(900);
+}
+
+// ---- lab levels: solved from the station data, the way a learner would ----
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type St = Record<string, any> & { type: string; id: string };
+const q = (v: string) => JSON.stringify(v);
+async function place(st: Locator, chip: string, slot: string) {
+  await click(st.locator(`[data-chip=${q(chip)}]`).first());
+  await pause(150);
+  await click(st.locator(`[data-slot=${q(slot)}]`));
+  await pause(200);
+}
+async function slide(st: Locator, i: number, v: number) {
+  const s = st.getByRole("slider").nth(i);
+  await show(s);
+  await moveTo(s);
+  await s.fill(String(v));
+  await pause(500);
+}
+async function solveStation(st: Locator, s: St): Promise<boolean> {
+  switch (s.type) {
+    case "MatchPairs":
+      for (const p of s.pairs) await place(st, p.right, p.left);
+      return true;
+    case "ClozeBank": {
+      const answers = [...s.text.matchAll(/\[\[([^\]]+)\]\]/g)].map((m: RegExpMatchArray) => m[1]);
+      for (const [i, a] of answers.entries()) await place(st, a, `g${i}`);
+      return true;
+    }
+    case "CategorySort":
+      for (const c of s.categories) for (const it of c.items) await place(st, it, c.name);
+      return true;
+    case "Timeline": {
+      const sorted = [...s.events].sort((a: St, b: St) => a.value - b.value);
+      for (const [i, e] of sorted.entries()) await place(st, e.label, `t${i}`);
+      return true;
+    }
+    case "LabelDiagram":
+      for (const [i, p] of s.parts.entries()) await place(st, p.label, `d${i}`);
+      return true;
+    case "BalanceScale":
+      for (const i of s.answer) await click(st.getByTestId(`tray-${i}`));
+      return true;
+    case "ToggleSystem":
+      for (const sw of s.outcomes.find((x: St) => x.result === s.target_result).on) await click(st.getByTestId(`switch-${sw}`));
+      return true;
+    case "CauseEffect":
+      for (const [i, l] of s.links.entries()) {
+        await click(st.getByTestId(`cause-${i}`));
+        await click(st.locator('[data-testid^="effect-"]', { hasText: l.effect }).first());
+      }
+      return true;
+    case "SpotTheError":
+      for (const [i, x] of s.statements.entries()) if (x.wrong) await click(st.getByTestId(`statement-${i}`));
+      return true;
+    case "PredictObserve":
+      await click(st.getByTestId(`predict-${s.options.indexOf(s.answer)}`));
+      await click(st.getByTestId("run-experiment"));
+      await pause(1200);
+      return true;
+    case "ParameterLab":
+    case "FunctionPlot":
+      for (const [i, p] of s.params.entries()) await slide(st, i, p.answer);
+      return true;
+    case "Pendulum":
+      await slide(st, 0, s.length.answer);
+      return true;
+    case "Projectile":
+      await slide(st, 0, s.speed.answer);
+      await slide(st, 1, s.angle.answer);
+      await click(st.getByTestId("launch"));
+      await pause(2200);
+      return true;
+    case "Mixer":
+      for (const [i, g] of s.ingredients.entries()) await slide(st, i, g.answer);
+      return true;
+    case "NumberLine":
+      for (const [i, m] of s.markers.entries()) await slide(st, i, m.value);
+      return true;
+    case "ForceArrows": {
+      let k = 0;
+      for (const [i, f] of s.forces.entries()) if (f.adjustable) await slide(st, k++, s.answer[i]);
+      return true;
+    }
+    case "WaveExplorer":
+      await slide(st, 0, s.amplitude.answer);
+      await slide(st, 1, s.frequency.answer);
+      await slide(st, 2, s.phase.answer);
+      return true;
+    case "GrowthCurve":
+      await slide(st, 0, s.rate.answer);
+      return true;
+    case "DraggableBars":
+      for (const [i, b] of s.bars.entries()) await slide(st, i, b.value);
+      return true;
+    case "ExploreDiagram":
+      for (let i = 0; i < s.parts.length; i++) {
+        await click(st.getByTestId(`part-${i}`));
+        await pause(500);
+      }
+      return true;
+    case "ScenarioBranch":
+      for (const step of s.steps) {
+        await click(st.getByTestId(`choice-${step.choices.findIndex((c: St) => c.correct)}`));
+        await pause(900);
+        await click(st.getByTestId("scenario-next"));
+      }
+      return true;
+    case "Flashcards":
+      for (let i = 0; i < s.cards.length; i++) {
+        await click(st.getByTestId("flashcard"));
+        await pause(900);
+        await click(st.getByTestId("knew"));
+      }
+      return true;
+    default:
+      return false;
+  }
+}
+/** Plays one level: a hint, the solve, then Check. Levels without a scripted solve are skipped after a hint. */
+async function playLevel(s: St, first: boolean) {
+  const st = page.getByTestId("station");
+  await st.waitFor();
+  await pause(700);
+  if (first) await hl('[data-testid="station-goal"]', "a clear goal for every level", 2400);
+  if (first && (await page.getByTestId("station-hint").isVisible())) {
+    await click(page.getByTestId("station-hint"));
+    await pause(1500);
+  }
+  if (await solveStation(st, s)) {
+    const check = page.getByTestId("station-check");
+    if (await check.isVisible().catch(() => false)) await click(check);
+    await page.getByTestId("station-result").waitFor({ timeout: 10_000 });
+    await show(page.getByTestId("station-result"));
+  } else {
+    await click(page.getByTestId("skip-level"));
+    await page.getByTestId("station-result").waitFor();
+  }
+  await pause(1800);
+  await click(page.getByTestId("station-next"));
+  await pause(600);
 }
 
 await cdp.send("Page.startScreencast", { format: "jpeg", quality: 90, maxWidth: 1920, maxHeight: 1080, everyNthFrame: 1 });
@@ -210,12 +351,38 @@ await scene("topics", async () => {
   await pause(500);
 });
 await click(page.getByTestId("learn-t1"));
-await page.getByTestId("question-prompt").waitFor({ timeout: 90_000 });
+await page.getByTestId("lab-title").waitFor({ timeout: 150_000 });
+await pause(800);
+
+// ---- interactive lab ----
+const sid = page.url().split("/learn/")[1];
+const lab = await page.evaluate(async (id) => (await fetch(`/api/demo/sessions/${id}/lab`, { method: "POST" })).json(), sid);
+await scene("lab_intro", async () => {
+  await ov("cap", "05", "Step 1: an interactive lab", "designed by Gemini for this learner · validated");
+  await hl('[data-testid="lab-steps"]', `${lab.stations.length} levels, getting harder`, 2600);
+  await show(page.getByTestId("toolbox"));
+  await hl('[data-testid="toolbox"]', "toolbox: key facts from the material", 2600);
+  await show(page.getByTestId("lab-gate"));
+  await hl('[data-testid="lab-gate"]', "how this lab was made: model, time, gate", 3400);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  await pause(500);
+});
+await scene("lab_play", async () => {
+  await ov("cap", "06", "Learn by doing", "manipulate · check · hints · worked solution");
+  for (const [i, s] of (lab.stations as St[]).entries()) await playLevel(s, i === 0);
+});
+await scene("lab_done", async () => {
+  await page.getByTestId("lab-done").waitFor();
+  await hl('[data-testid="lab-done"]', "lab summary", 2400);
+  await click(page.getByTestId("start-check"));
+  await page.getByTestId("question-prompt").waitFor({ timeout: 90_000 });
+});
 await pause(600);
 
 // ---- first screen ----
 await scene("first", async () => {
-  await ov("cap", "05", "The adaptive screen", "low mastery → small budget → guided question");
+  await ov("cap", "07", "Step 2: the check (max 10 questions)", "low mastery → small budget → guided question");
+  await hl('[data-testid="item-label"]', "question 1 of 10", 2200);
   await hl('[data-testid="question-prompt"]', "guided question, few options", 2800);
   if (await page.getByTestId("key-idea").isVisible().catch(() => false)) await hl('[data-testid="key-idea"]', "nudge written by Gemini for this learner", 3000);
   await hl('[data-testid="explain"]', "why this screen, in plain words", 3600);
@@ -227,40 +394,71 @@ await scene("first", async () => {
 
 // ---- answering ----
 await scene("answering", async () => {
-  await ov("cap", "06", "Answer → update → regenerate", "BKT update · PID step · new screen");
+  await ov("cap", "08", "Answer → update → regenerate", "BKT update · PID step · new screen");
   await answer(true);
   await answer(true);
 });
 await scene("wrong", async () => {
-  await ov("cap", "07", "A wrong answer", "the estimate drops · the screen steps back");
+  await ov("cap", "09", "A wrong answer", "the estimate drops · the screen steps back");
   await answer(false);
   await hl('[data-testid="outcome"]', "marked against the bank, with the explanation", 3200);
 });
 
 // ---- climb ----
 await scene("higher", async () => {
-  await ov("cap", "08", "Climbing the levels", "recognise → understand → recall → apply");
-  let sawBlank = false;
-  let sawApply = false;
-  for (let i = 0; i < 14 && !(sawBlank && sawApply && i >= 4); i++) {
-    const q = await currentQuestion();
-    if (q.kind === "blank") sawBlank = true;
-    if (q.level === 4) {
-      sawApply = true;
-      await hl('[data-testid="question-prompt"]', "level 4: apply the idea", 2400);
+  await ov("cap", "10", "Climbing the levels", "stops at 10 questions or mastery 0.95");
+  for (let i = 0; i < 12; i++) {
+    if (await page.getByTestId("topic-done").isVisible().catch(() => false)) break;
+    if (i === 0) {
+      await show(page.locator("table").first());
+      await hl("table", "gate log: budget vs. measured complexity, every screen", 3200);
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
     }
+    const q = await currentQuestion();
+    if (q.level === 4) await hl('[data-testid="question-prompt"]', "level 4: apply the idea", 2200);
     await answer(true, i === 1);
   }
-  await show(page.locator("table").first());
-  await hl("table", "gate log: budget vs. measured complexity, every screen", 3600);
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+});
+
+// ---- topic summary ----
+await page.getByTestId("topic-done").waitFor({ timeout: 90_000 });
+await scene("summary", async () => {
+  await ov("cap", "11", "Topic summary", "why it ended · mastery · lab · trace");
+  await pause(1200);
+  await hl('[data-testid="end-reason"]', "why the check ended", 2600);
+  await page.mouse.wheel(0, 400);
+  await pause(1600);
+  await page.mouse.wheel(0, -400);
+});
+
+// ---- component gallery ----
+const gallery = await page.evaluate(async () => (await fetch("/api/demo/gallery")).json());
+const byType = Object.fromEntries((gallery.stations as St[]).map((x) => [x.type, x]));
+await scene("gallery", async () => {
+  await click(page.getByTestId("nav-gallery"));
+  await page.getByTestId("station").waitFor();
+  await ov("cap", "12", "30 interactive components", "15 hands-on · 15 simulations · the lab-ui/1 catalog");
+  for (const t of ["Projectile", "BalanceScale", "ParameterLab", "CauseEffect"]) {
+    await click(page.getByTestId(`gallery-item-${t}`));
+    await page.locator(`[data-testid="station"][data-type="${t}"]`).waitFor();
+    await pause(500);
+    const st = page.getByTestId("station");
+    await solveStation(st, byType[t]);
+    await click(page.getByTestId("station-check"));
+    await page.getByTestId("station-result").waitFor();
+    await pause(1300);
+  }
+  for (const t of ["WaveExplorer", "ConceptMap", "LabelDiagram", "GrowthCurve"]) {
+    await click(page.getByTestId(`gallery-item-${t}`));
+    await pause(1500);
+  }
 });
 
 // ---- report ----
-await click(page.getByTestId("to-report"));
+await click(page.getByTestId("nav-report"));
 await page.getByTestId("report-name").waitFor();
 await scene("report", async () => {
-  await ov("cap", "09", "Progress report", "per topic · printable · for learner or teacher");
+  await ov("cap", "13", "Progress report", "per topic · printable · for learner or teacher");
   await hl('[data-testid="report-status"]', "status and advice", 2600);
   await hl('svg[aria-label="mastery estimate over answers"]', "mastery estimate over answers", 2600);
   await page.mouse.wheel(0, 500);
@@ -269,11 +467,11 @@ await scene("report", async () => {
 
 // ---- research mode ----
 await scene("research", async () => {
-  await ov("cap", "10", "Research mode, unchanged", "linear equations · evaluated in simulation");
+  await ov("cap", "14", "Research mode, unchanged", "linear equations · evaluated in simulation");
   await click(page.getByRole("link", { name: "Research mode" }));
   await page.getByText("linear equations testbed").waitFor();
   await pause(800);
-  await ov("cap", "10", "Research mode, unchanged", "linear equations · evaluated in simulation");
+  await ov("cap", "14", "Research mode, unchanged", "linear equations · evaluated in simulation");
 });
 
 // ---- outro ----
